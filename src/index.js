@@ -1,56 +1,75 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Main from './main/Main';
-import {
-    emitter,
-    SNACKBAR
-} from './util/EventEmitter';
+import Main from './Main';
+import Order from './Main/Orders';
+import Top from './Top';
+import Nav from './Nav';
+import Snack from './component/Snack';
+import Loading from './component/Loading';
+import ErrorDialog from './component/ErrorDialog';
 
+import history from './util/history';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            snackBarOpen: false,
-            snackbarText: '',
+            routers: [
+                {
+                    path: '/',
+                    component: Main,
+                },
+                {
+                    path: '/orders',
+                    component: Order,
+                },
+                {
+                    path: '/',
+                    component: Main,
+                }
+            ]
         }
     }
 
     componentWillMount() {
-        emitter.on(SNACKBAR, (text) => {
-            console.log(text)
-            this.snackbarOpen(text);
-        });
+
     }
 
-    snackbarClose() {
-        this.setState({ snackBarOpen: false, snackbarText: '' });
-    }
 
-    snackbarOpen(text) {
-        this.setState({ snackBarOpen: true, snackbarText: text });
-        if (this.timer) {
-            clearTimeout(this.timer);
-        }
-        this.timer = setTimeout(() => {
-            this.snackbarClose();
-        }, 2000)
-    }
 
     render() {
-        const { snackBarOpen, snackbarText } = this.state;
+        const { routers } = this.state;
         return (
-            <div className="paper-drawer-panel">
-                <Main />
-                <div class= {`mdc-snackbar ${snackBarOpen?'mdc-snackbar--open':''}`}>
-                    <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
-                        <div class="mdc-snackbar__label" aria-atomic="false">
-                        {snackbarText}
-    </div>
+            <Router history={history}>
+                <div id="main">
+                    <Top />
+                    <div className="main-box">
+                        <Route render={props => <Nav {...props} />} />
+                        <Switch>
+                            {
+                                (routers || []).map((data, k) => {
+                                    return (
+                                        <Route exact key={k} path={data.path}
+                                            component={data.component} />
+                                    )
+                                })
+                            }
+                            <Route exact path='/' component={Main} />
+
+                        </Switch>
                     </div>
-                </div>
-            </div>
+
+                    <Snack />
+                    <Loading />
+                    <ErrorDialog />
+
+                </div >
+
+            </Router>
+
+
         )
     }
 }

@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/mdl/material.min.css">
-    <script src="/mdl/material.min.js"></script>
-    <link rel="stylesheet" href="/style/material-fontfamily.css">
-    <link rel='stylesheet' href='/style/app.css' />
-  </head>
-  <body>
-    <div id="page"></div>
-  </body>
 
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/mdl/material.min.css">
+  <script src="/mdl/material.min.js"></script>
+  <link rel="stylesheet" href="/style/material-fontfamily.css">
+  <link rel='stylesheet' href='/style/app.css' />
+</head>
+
+<body>
+  <div id="page"></div>
+</body>
+<script>
+  var USER = '<%= USER %>';
+</script>
 <script src="/dist/echarts.min.js"></script>
 <script src="/dist/jquery.min.js"></script>
 
 <script src="/dist/bundle_index.js"></script>
+
 </html>

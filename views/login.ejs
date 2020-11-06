@@ -1,0 +1,623 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <META HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <META HTTP-EQUIV="expires" CONTENT="0">
+    <title>用户登录</title>
+    <!--<script type="text/javascript" src="./outside/js/main.js?ran=1573969498652"></script>-->
+    <!-- 密码rsa加密用到的js文件 -->
+    <!--[if lte IE 7]>
+    <style>
+        .content {
+            margin-right: -1px;
+        }
+
+        /* 此 1px 负边距可以放置在此布局中的任何列中，且具有相同的校正效果。 */
+        ul.nav a {
+            zoom: 1;
+        }
+
+        /* 缩放属性将为 IE 提供其需要的 hasLayout 触发器，用于校正链接之间的额外空白 */
+    </style>
+    <![endif]-->
+    <style>
+        @charset "utf-8";
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+        }
+
+        body {
+            /*font: 100%/1.4;*/
+            min-height: 610px;
+            font-family: '微软雅黑';
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+            color: #000;
+            list-style: none;
+        }
+
+        ul,
+        li,
+        ol,
+        dl,
+        dt,
+        dd,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        h7,
+        h8,
+        h9,
+        p,
+        input {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        a img {
+            border: none;
+        }
+
+        a:link {
+            color: #002669;
+            text-decoration: none;
+        }
+
+        a:visited {
+            color: #64522A;
+            text-decoration: none;
+        }
+
+        a:hover,
+        a:active,
+        a:focus {
+            text-decoration: none;
+        }
+
+        input,
+        textarea,
+        select,
+        label {
+            font-family: inherit;
+            font-size: 13px;
+            border: none;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        /*-------------------header---------------------------*/
+
+        .logoBar {
+            width: 1300px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logoBar img {
+            height: 100%;
+        }
+
+        .logoBar h1 {
+            float: right;
+        }
+
+        .logoBar span {
+            text-align: center;
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            margin-left: -40px;
+        }
+
+        .header {
+            height: 130px;
+            padding: 25px 0;
+
+        }
+
+        /* html{min-width:1200px} */
+        .banner {
+            background: url(../images/login_bg.jpg) no-repeat center center;
+            height: 64%;
+            position: relative;
+            background-size: cover;
+        }
+
+        .banner .loginAre {
+            position: absolute;
+            top: 50%;
+            left: 70%;
+            margin-left: -121px;
+            margin-top: -130px;
+        }
+
+
+
+        input,
+        button,
+        select,
+        img {
+            margin: 0;
+            line-height: normal;
+        }
+
+        select,
+        input,
+        button,
+        button img,
+        label {
+            vertical-align: middle;
+        }
+
+        .her-login {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-top: -170px;
+            width: 415px;
+            height: 335px;
+            border-radius: 5px;
+            background-image: -webkit-radial-gradient(cover, #FFFFFF, #fafafa);
+            background-image: -moz-radial-gradient(cover, #FFFFFF, #fafafa);
+            background-image: -o-radial-gradient(cover, #FFFFFF, #fafafa);
+            background-image: radial-gradient(cover, #FFFFFF, #fafafa);
+            -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), inset 0 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), inset 0 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 10px rgba(0, 0, 0, 0.5);
+            background: rgba(250, 250, 250, .4);
+            filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#3fffffff, endColorstr=#3fffffff);
+        }
+
+        #login {
+            width: 315px;
+            /* height: 300px; */
+            padding: 35px;
+            color: #848585;
+            margin: 15px;
+            /*position: absolute;
+    right:0;
+    top: 50%;
+    margin-top:-162px;
+    margin-right: 230px;
+    text-align: left;*/
+
+            z-index: 2;
+            /* width: 300px; */
+            background: #fefdfd;
+            background-clip: padding-box;
+            /* border: 10px solid #698CC9;
+    border-style:solid;
+    border-width:15px;
+    border-color:#fefdfd;
+    border-color:rgba(250,250,250,.4);
+
+    border-radius: 5px;*/
+
+        }
+
+        #idInputTest {
+            visibility: hidden;
+            float: left;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .loginFormIpt {
+            position: relative;
+            /* width: 240px; */
+            width: 308px;
+            height: 42px;
+            border: 1px solid #ddd;
+            line-height: 42px;
+            margin: 0 0 18px 0;
+            padding-right: 5px;
+            clear: both;
+            border-radius: 5px;
+            /* background-position: 0 -352px; */
+            z-index: 2;
+        }
+
+        .loginFormIpt .ico {
+            position: absolute;
+            left: 9px;
+            top: 13px;
+            z-index: 1;
+        }
+
+        .ico-uid {
+            width: 14px;
+            height: 16px;
+            background-position: -154px -64px;
+        }
+
+        .loginFormTdIpt {
+            width: 255px;
+            padding: 0 0 0 10px;
+            +padding: 0 0 0 10 px;
+            ime-mode: disabled;
+            height: 42px;
+            top: 1px;
+            left: 48px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            font-family: verdana;
+            line-height: 42px;
+            color: #92a4bf;
+            background: transparent !important;
+            outline: none;
+            border-left: 1px solid #ddd;
+        }
+
+        #mobtips {
+            height: 18px;
+            border: 1px solid #c6c6a8;
+            top: 29px;
+            left: 46px;
+            line-height: 18px;
+            background: #ffffe1;
+            padding-left: 6px;
+            padding-right: 20px;
+            display: none;
+            color: #565656;
+            zoom: 1;
+        }
+
+        .showPlaceholder .placeholder {
+            visibility: visible;
+            cursor: text;
+        }
+
+        .placeholder {
+            color: #C9C9C9;
+            font-size: 14px;
+            position: absolute;
+            left: 30px;
+            top: 14px;
+            line-height: 14px;
+            background: none;
+            visibility: hidden;
+        }
+
+        .loginFormIpt .ico {
+            position: absolute;
+            left: 18px;
+            top: 13px;
+            z-index: 1;
+        }
+
+        .ico-pwd {
+            width: 14px;
+            height: 16px;
+            background-position: -178px -64px;
+        }
+
+        .loginFormTdIpt-focus {
+            color: #333;
+            font-weight: 100;
+        }
+
+        #capsLockHint {
+            position: absolute;
+            top: 42px;
+            left: 0px;
+            padding: 4px 8px;
+            line-height: 12px;
+            background-color: #ffffcc;
+            border: 1px solid #d7d7d7;
+            color: #555;
+            z-index: 2;
+        }
+
+        .loginFormCheck {
+            height: 13px;
+            line-height: 13px;
+            color: #555;
+            /* margin-left: 25px; */
+            clear: both;
+            /* width: 245px; */
+            position: relative;
+            z-index: 1;
+        }
+
+        .loginFormCheckInner {
+            height: 14px;
+            width: 150px;
+            float: left;
+            position: relative;
+        }
+
+        .ico-checkbox {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            background-position: -40px -160px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        .autoLogin-checked .ico-checkbox {
+            background-position: -40px -180px;
+        }
+
+        .loginFormCbx {
+            width: 13px;
+            height: 13px;
+            padding: 0;
+            overflow: hidden;
+            margin: 0;
+            vertical-align: middle;
+        }
+
+        #remAutoLoginTxt,
+        .forgetPwd {
+            color: #848585;
+        }
+
+        #remAutoLogin {
+            /*
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    */
+        }
+
+        .forgetPwdLine {
+            text-align: right;
+        }
+
+        .loginFormBtn {
+            position: relative;
+            /* width: 245px; */
+            height: 43px;
+            margin: 18px 0 0 0;
+        }
+
+        .btn-login {
+            background-position: 0 -208px;
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 28, 88, .3);
+        }
+
+        .btn-reg {
+            background-position: -117px -208px;
+            color: #6d798c;
+            float: right !important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+        }
+
+        .btn {
+            width: 100%;
+            height: 38px;
+            float: left;
+            text-align: center;
+            cursor: pointer;
+            border: 0;
+            padding: 0;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-block;
+            vertical-align: baseline;
+            line-height: 38px;
+            outline: 0;
+            /*background-color: transparent;*/
+            border-radius: 3px;
+            background: #3985FF;
+        }
+
+        .btn:hover {
+            background: #6985F0;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="header">
+        <div class="logoBar" style="height:100%">
+        </div>
+    </div>
+    <div class="banner">
+        <div class="loginForm her-login" style="height: 400px">
+            <div id="login">
+                <div style="margin-bottom:20px;">
+                    <span style="margin-left:25px;">温馨提示：请使用IE9及以上版本IE浏览器</span>
+                </div>
+                <div id="idInputLine" class="loginFormIpt" style="margin-top:3px;">
+                    <b class="ico ico-uid"></b>
+                    <input class="loginFormTdIpt loginFormTdIpt-focus" autocomplete="off" tabindex="1" title="请输入帐号"
+                        id="username" name="" type="text" maxlength="50" value="" autocomplete="on" placeholder="帐号" />
+                    <input type="hidden" id="hideusername" autocomplete="off" name="username" value="" />
+                    <div id="mobtips"></div>
+                    <label for="username" class="placeholder" id="idPlaceholder">账号</label>
+                </div>
+                <div id="pwdInputLine" class="loginFormIpt"><b class="ico ico-pwd"></b>
+                    <input class="loginFormTdIpt loginFormTdIpt-focus" autocomplete="off" tabindex="2" title="请输入密码"
+                        id="password" name='' type="password" value='' placeholder="密码" />
+                    <input type="hidden" id="hidepassword" autocomplete="off" name="password" value="" />
+                    <label for="password" class="placeholder" id="pwdPlaceholder">密码</label>
+                </div>
+                <div id="" class="loginFormIpt" style="float:left;width: 70%"><b class="ico ico-pwd"></b>
+                    <input style="width: 80%" type="text" id="verCode" name="captcha"
+                        class="loginFormTdIpt loginFormTdIpt-focus" tabindex="3" autocomplete="off" title="请输入验证码"
+                        placeholder="验证码" />
+                    <label for="pwdInput" class="placeholder" id="pwdPlaceholder">验证码</label>
+                </div>
+                <div style="float:left;margin-left: 10px;height: 42px;" align="center">
+                    <canvas id="canvas" width="70" height="40" onclick="dj()" style="border: 1px solid #ccc;
+        border-radius: 5px;"></canvas>
+
+                </div>
+                <div class="loginFormCheck">
+                    <div id="lfAutoLogin" class="loginFormCheckInner">
+
+                        <label id="remAutoLoginTxt" for="remAutoLogin">
+
+                            <!--  <input tabindex="3" title="十天内免登录" style='margin-top:-2px' class="loginFormCbx" type="checkbox" id="remAutoLogin" name="remAutoLoginChk" value="10">
+                         十天内免登录</label> -->
+
+                    </div>
+                    <div class="forgetPwdLine">
+                        <a class="forgetPwd" style="color:#848585" href="javascript:getpwd();" title="找回密码">忘记密码了?</a>
+                    </div>
+                </div>
+                <div class="loginFormBtn">
+                    <input type="hidden" name="lt" value="LT-110535-LrsfJl3um7o0JF7SopnJSuyK9KrWgt-ths.com.cn" />
+                    <input type="hidden" name="execution" value="e2s1" />
+                    <input type="hidden" name="_eventId" value="submit" />
+                    <input type="hidden" id="AUTH_SESSION_KEY" value="ttBq" />
+                    <button id="loginBtn" class="btn btn-login" tabindex="6">登&nbsp;&nbsp;录</button>
+
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;clear:both"></div>
+    </div>
+
+    <div id="footer" style='margin:0 auto;margin-top:50px;overflow:hidden; color:#ccc ;text-align: center'>
+        <p>版权所有：圆通 | 华北转运中心-IT部 | © 2020 - 2021 Inc. All Rights Reserved.</p>
+    </div>
+    <script type="text/javascript" src="/dist/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+
+        const draw = (show_num) => {
+            let canvas_width = document.getElementById('canvas').clientWidth;
+            let canvas_height = document.getElementById('canvas').clientHeight;
+            let canvas = document.getElementById("canvas");//获取到canvas的对象，演员
+            let context = canvas.getContext("2d");//获取到canvas画图的环境，演员表演的舞台
+            canvas.width = canvas_width;
+            canvas.height = canvas_height;
+            let sCode = "A,B,C,E,F,G,H,J,K,L,M,N,P,Q,R,S,T,W,X,Y,Z,1,2,3,4,5,6,7,8,9,0,q,w,e,r,t,y,u,i,o,p,a,s,d,f,g,h,j,k,l,z,x,c,v,b,n,m";
+            let aCode = sCode.split(",");
+            let aLength = aCode.length;//获取到数组的长度
+
+            for (let i = 0; i <= 3; i++) {
+                let j = Math.floor(Math.random() * aLength);//获取到随机的索引值
+                let deg = Math.random() * 30 * Math.PI / 180;//产生0~30之间的随机弧度
+                let txt = aCode[j];//得到随机的一个内容
+                show_num[i] = txt;
+                let x = 5 + i * 13;//文字在canvas上的x坐标
+                let y = 20 + Math.random() * 8;//文字在canvas上的y坐标
+                context.font = "bold 23px 微软雅黑";
+
+                context.translate(x, y);
+                context.rotate(deg);
+
+                context.fillStyle = randomColor();
+                context.fillText(txt, 0, 0);
+
+                context.rotate(-deg);
+                context.translate(-x, -y);
+            }
+            for (let i = 0; i <= 3; i++) { //验证码上显示线条
+                context.strokeStyle = randomColor();
+                context.beginPath();
+                context.moveTo(Math.random() * canvas_width, Math.random() * canvas_height);
+                context.lineTo(Math.random() * canvas_width, Math.random() * canvas_height);
+                context.stroke();
+            }
+            for (let i = 0; i <= 30; i++) { //验证码上显示小点
+                context.strokeStyle = randomColor();
+                context.beginPath();
+                let x = Math.random() * canvas_width;
+                let y = Math.random() * canvas_height;
+                context.moveTo(x, y);
+                context.lineTo(x + 1, y + 1);
+                context.stroke();
+            }
+        };
+        const randomColor = () => {//得到随机的颜色值
+            let r = Math.floor(Math.random() * 256);
+            let g = Math.floor(Math.random() * 256);
+            let b = Math.floor(Math.random() * 256);
+            return "rgb(" + r + "," + g + "," + b + ")";
+        };
+        let show_num = [];
+
+        const dj = () => {
+            draw(show_num);
+        };
+        $(document).ready(() => {
+            if ($("#dError") && $("#dError").text() != "") {
+                alert("登录失败," + $("#dError").text())
+            }
+            //给整个窗口注册回车keydown事件
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    $("input[name=submit]").click();
+                }
+            });
+            //让帐号文本框获得焦点
+            $("#username").focus();
+
+            draw(show_num);
+
+            $("#loginBtn").click(function (e) {
+                let id = $("#username").val();
+                if (null == username || username == '') {
+                    alert("账号不能为空，请填写账号");
+                    return false;
+                }
+                let password = $("#password").val();
+                if (null == password || password == '') {
+                    alert("密码不能为空，请填写密码");
+                    return false;
+                }
+                let verCode = $("#verCode").val();
+                if (null == verCode || "" == verCode) {
+                    alert("请先输入验证码");
+                    return false;
+                }
+
+                let data = { id, password };
+                $.ajax({
+                    url: '/api/userlogin',// 获取自己系统后台用户信息接口
+                    data,
+                    type: "post",
+                    dataType: "json",
+                    success: (data) => {
+                        if (data.code == 200) {
+                            window.location.href = '/'
+                        } else {
+                            alert(data.msg);//显示登录失败的原因
+                            console.log(data);
+                        }
+                        $("#username").val('');
+                        $("#password").val('');
+                        $("#verCode").val('');
+                        draw(show_num);
+                    },
+                    error: (e) => {
+                        // alert(e.message);//显示登录失败的原因
+                        console.log(e);
+                        return false;
+                    }
+                });
+
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
