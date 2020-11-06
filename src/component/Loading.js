@@ -14,6 +14,7 @@ export default class Loading extends React.Component {
 
     componentWillMount() {
         emitter.on(PAGELOADING, (status) => {
+            console.log(status)
             this.loadState(status);
         });
     }

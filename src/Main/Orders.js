@@ -9,6 +9,8 @@ import {
 import { axios } from '../util/server'
 import Moment from 'moment'
 
+import { order, orderViews } from '../../config/config.json'
+
 
 export default class Orders extends React.Component {
     constructor(props) {
@@ -72,6 +74,7 @@ export default class Orders extends React.Component {
         const {
             viewData, ids
         } = this.state;
+        console.log(viewData)
         return (
             <div className='views'>
                 <div className="filter-control">
@@ -109,23 +112,42 @@ export default class Orders extends React.Component {
                                 <table class="mdc-data-table__table" aria-label="Dessert calories">
                                     <thead>
                                         <tr class="mdc-data-table__header-row">
-                                            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Dessert</th>
-                                            <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Carbs (g)</th>
-                                            <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Protein (g)</th>
-                                            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Comments</th>
+
+
+
+                                            {
+                                                order.map((m, i) => {
+                                                    return (
+                                                        <th class="mdc-data-table__header-cell" role="columnheader" key={'trhead' + i} scope="col">{orderViews[m]}</th>
+
+                                                    )
+                                                })
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody class="mdc-data-table__content">
-                                        {
+                                       {
                                             viewData.map((m, i) => {
                                                 return (<tr class="mdc-data-table__row">
-                                                    <th class="mdc-data-table__cell" scope="row">Frozen yogurt</th>
-                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24</td>
-                                                    <td class="mdc-data-table__cell mdc-data-table__cell--numeric">4.0</td>
-                                                    <td class="mdc-data-table__cell">Super tasty</td>
+
+                                                    {
+                                                        order.map((mm, ii) => {
+
+
+
+                                                            let views=m[mm];
+                                                            if(mm==='CREATE_TIME'){
+                                                                views=Moment(views).format('yyyy/MM/DD HH:mm')
+                                                            }
+                                                            return (
+                                                                <th class="mdc-data-table__header-cell" role="columnheader" key={'trsss' + ii + 'tr' + i} scope="col">{views}</th>
+
+                                                            )
+                                                        })
+                                                    }
                                                 </tr>)
                                             })
-                                        }
+                                        } 
                                     </tbody>
                                 </table>
                             </div>

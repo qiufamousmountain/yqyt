@@ -32,7 +32,7 @@ module.exports = {
         } else {
             data = {
                 code: 500,
-                data: '密码错误',
+                msg: '密码错误',
             }
         }
 

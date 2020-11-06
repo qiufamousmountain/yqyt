@@ -175,7 +175,7 @@ module.exports = {
     orders: async (req, res) => {
 
         let { ids } = req.params;
-        if(!ids&&ids!=='0'){
+        if (!ids && ids !== '0') {
             res.send({
                 code: 500,
                 msg: 'params is invaid'
@@ -191,7 +191,7 @@ module.exports = {
             })
             return;
         }
-        let sql = `select * from t_exp_waybill_check_${page} where WAYBILL_NO = '${ids}'`
+        let sql = `select WAYBILL_NO, OP_CODE,CREATE_TIME, CONTAINER_NO,MODIFY_TERMINAL from t_exp_waybill_check_${page} where WAYBILL_NO = '${ids}'`
 
         let connection = mysql.createConnection(config.sql);
         connection.connect(function (err) {

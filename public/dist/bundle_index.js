@@ -72627,7 +72627,7 @@ var pick = exports.pick = function pick(obj, keys) {
 /* 458 */
 /***/ (function(module, exports) {
 
-module.exports = {"sql":{"host":"172.19.4.245","user":"admin","password":"yto12345","database":"ytodb","port":"3306"},"webConfig":{"env":"dev"},"groupsView":{"进港":{"172.19.11.53":"DWS1","172.19.11.52":"DWS2","172.19.11.51":"DWS3","172.19.11.50":"DWS4","172.19.11.49":"DWS5","172.19.11.48":"DWS6","172.19.11.47":"DWS7","172.19.11.46":"DWS8","172.19.11.45":"DWS9","172.19.11.44":"DWS10","172.19.11.43":"DWS11","172.19.11.42":"DWS12","172.19.11.41":"DWS13","172.19.11.40":"DWS14","172.19.11.39":"DWS15","172.19.11.38":"DWS16","172.19.11.37":"DWS17","172.19.11.36":"DWS18","172.19.11.35":"DWS19"},"出港":{"172.19.11.34":"DWS20","172.19.11.33":"DWS21","172.19.11.32":"DWS22","172.19.11.31":"DWS23","172.19.11.30":"DWS24","172.19.11.29":"DWS25","172.19.11.28":"DWS26","172.19.11.27":"DWS27","172.19.11.26":"DWS28","172.19.11.25":"DWS29","172.19.11.24":"DWS30","172.19.11.23":"DWS31","172.19.11.22":"DWS32","172.19.11.21":"DWS33","172.19.11.20":"DWS34","172.19.11.19":"DWS35","172.19.11.18":"DWS36","172.19.11.17":"DWS37","172.19.11.16":"DWS38","172.19.11.15":"DWS39","172.19.11.14":"DWS40","172.19.11.13":"DWS41","172.19.11.12":"DWS42","172.19.11.11":"DWS43"}},"groups":{"进港":["172.19.11.53","172.19.11.52","172.19.11.51","172.19.11.50","172.19.11.49","172.19.11.48","172.19.11.47","172.19.11.46","172.19.11.45","172.19.11.44","172.19.11.43","172.19.11.42","172.19.11.41","172.19.11.40","172.19.11.39","172.19.11.38","172.19.11.37","172.19.11.36","172.19.11.35"],"出港":["172.19.11.34","172.19.11.33","172.19.11.32","172.19.11.31","172.19.11.30","172.19.11.29","172.19.11.28","172.19.11.27","172.19.11.26","172.19.11.25","172.19.11.24","172.19.11.23","172.19.11.22","172.19.11.21","172.19.11.20","172.19.11.19","172.19.11.18","172.19.11.17","172.19.11.16","172.19.11.15","172.19.11.14","172.19.11.13","172.19.11.12","172.19.11.11"]},"users":{"100901":{"id":"100901","user":"华北转运中心","password":"100901"}}}
+module.exports = {"sql":{"host":"172.19.4.245","user":"admin","password":"yto12345","database":"ytodb","port":"3306"},"webConfig":{"env":"dev"},"groupsView":{"进港":{"172.19.11.53":"DWS1","172.19.11.52":"DWS2","172.19.11.51":"DWS3","172.19.11.50":"DWS4","172.19.11.49":"DWS5","172.19.11.48":"DWS6","172.19.11.47":"DWS7","172.19.11.46":"DWS8","172.19.11.45":"DWS9","172.19.11.44":"DWS10","172.19.11.43":"DWS11","172.19.11.42":"DWS12","172.19.11.41":"DWS13","172.19.11.40":"DWS14","172.19.11.39":"DWS15","172.19.11.38":"DWS16","172.19.11.37":"DWS17","172.19.11.36":"DWS18","172.19.11.35":"DWS19"},"出港":{"172.19.11.34":"DWS20","172.19.11.33":"DWS21","172.19.11.32":"DWS22","172.19.11.31":"DWS23","172.19.11.30":"DWS24","172.19.11.29":"DWS25","172.19.11.28":"DWS26","172.19.11.27":"DWS27","172.19.11.26":"DWS28","172.19.11.25":"DWS29","172.19.11.24":"DWS30","172.19.11.23":"DWS31","172.19.11.22":"DWS32","172.19.11.21":"DWS33","172.19.11.20":"DWS34","172.19.11.19":"DWS35","172.19.11.18":"DWS36","172.19.11.17":"DWS37","172.19.11.16":"DWS38","172.19.11.15":"DWS39","172.19.11.14":"DWS40","172.19.11.13":"DWS41","172.19.11.12":"DWS42","172.19.11.11":"DWS43"}},"groups":{"进港":["172.19.11.53","172.19.11.52","172.19.11.51","172.19.11.50","172.19.11.49","172.19.11.48","172.19.11.47","172.19.11.46","172.19.11.45","172.19.11.44","172.19.11.43","172.19.11.42","172.19.11.41","172.19.11.40","172.19.11.39","172.19.11.38","172.19.11.37","172.19.11.36","172.19.11.35"],"出港":["172.19.11.34","172.19.11.33","172.19.11.32","172.19.11.31","172.19.11.30","172.19.11.29","172.19.11.28","172.19.11.27","172.19.11.26","172.19.11.25","172.19.11.24","172.19.11.23","172.19.11.22","172.19.11.21","172.19.11.20","172.19.11.19","172.19.11.18","172.19.11.17","172.19.11.16","172.19.11.15","172.19.11.14","172.19.11.13","172.19.11.12","172.19.11.11"]},"users":{"yto":{"id":"yto","user":"华北转运中心","password":"Yto@100901"}},"orderViews":{"WAYBILL_NO":"单号","OP_CODE":"操作码","CREATE_TIME":"操作时间","CONTAINER_NO":"容器号","MODIFY_TERMINAL":"IP"},"order":["WAYBILL_NO","OP_CODE","CREATE_TIME","CONTAINER_NO","MODIFY_TERMINAL"]}
 
 /***/ }),
 /* 459 */
@@ -72675,6 +72675,8 @@ var _server = __webpack_require__(92);
 var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
+
+var _config = __webpack_require__(458);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -72741,6 +72743,7 @@ var Orders = function (_React$Component) {
                 viewData = _state.viewData,
                 ids = _state.ids;
 
+            console.log(viewData);
             return _react2.default.createElement(
                 'div',
                 { className: 'views' },
@@ -72803,26 +72806,13 @@ var Orders = function (_React$Component) {
                                     _react2.default.createElement(
                                         'tr',
                                         { 'class': 'mdc-data-table__header-row' },
-                                        _react2.default.createElement(
-                                            'th',
-                                            { 'class': 'mdc-data-table__header-cell', role: 'columnheader', scope: 'col' },
-                                            'Dessert'
-                                        ),
-                                        _react2.default.createElement(
-                                            'th',
-                                            { 'class': 'mdc-data-table__header-cell mdc-data-table__header-cell--numeric', role: 'columnheader', scope: 'col' },
-                                            'Carbs (g)'
-                                        ),
-                                        _react2.default.createElement(
-                                            'th',
-                                            { 'class': 'mdc-data-table__header-cell mdc-data-table__header-cell--numeric', role: 'columnheader', scope: 'col' },
-                                            'Protein (g)'
-                                        ),
-                                        _react2.default.createElement(
-                                            'th',
-                                            { 'class': 'mdc-data-table__header-cell', role: 'columnheader', scope: 'col' },
-                                            'Comments'
-                                        )
+                                        _config.order.map(function (m, i) {
+                                            return _react2.default.createElement(
+                                                'th',
+                                                { 'class': 'mdc-data-table__header-cell', role: 'columnheader', key: 'trhead' + i, scope: 'col' },
+                                                _config.orderViews[m]
+                                            );
+                                        })
                                     )
                                 ),
                                 _react2.default.createElement(
@@ -72832,26 +72822,18 @@ var Orders = function (_React$Component) {
                                         return _react2.default.createElement(
                                             'tr',
                                             { 'class': 'mdc-data-table__row' },
-                                            _react2.default.createElement(
-                                                'th',
-                                                { 'class': 'mdc-data-table__cell', scope: 'row' },
-                                                'Frozen yogurt'
-                                            ),
-                                            _react2.default.createElement(
-                                                'td',
-                                                { 'class': 'mdc-data-table__cell mdc-data-table__cell--numeric' },
-                                                '24'
-                                            ),
-                                            _react2.default.createElement(
-                                                'td',
-                                                { 'class': 'mdc-data-table__cell mdc-data-table__cell--numeric' },
-                                                '4.0'
-                                            ),
-                                            _react2.default.createElement(
-                                                'td',
-                                                { 'class': 'mdc-data-table__cell' },
-                                                'Super tasty'
-                                            )
+                                            _config.order.map(function (mm, ii) {
+
+                                                var views = m[mm];
+                                                if (mm === 'CREATE_TIME') {
+                                                    views = (0, _moment2.default)(views).format('yyyy/MM/DD HH:mm');
+                                                }
+                                                return _react2.default.createElement(
+                                                    'th',
+                                                    { 'class': 'mdc-data-table__header-cell', role: 'columnheader', key: 'trsss' + ii + 'tr' + i, scope: 'col' },
+                                                    views
+                                                );
+                                            })
                                         );
                                     })
                                 )
@@ -73366,6 +73348,7 @@ var Loading = function (_React$Component) {
             var _this2 = this;
 
             _EventEmitter.emitter.on(_EventEmitter.PAGELOADING, function (status) {
+                console.log(status);
                 _this2.loadState(status);
             });
         }
