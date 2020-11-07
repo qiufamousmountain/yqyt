@@ -2,11 +2,10 @@
 const config = require('../config/config.json');
 
 const mysql = require('mysql');
-const connection = mysql.createConnection(config.sql);
+
+const pool = mysql.createPool(config.sql);
+// 从连接池中获取一个连接
 
 
 
-
-module.exports = {
-    connection: connection,
-};
+module.exports = { pool };

@@ -382,45 +382,48 @@ export default class Main extends React.Component {
 
                         <div className="filter-item">
                             选择操作组：
-    <button class="mdc-button"
+    <button className="mdc-button"
                                 onClick={(e) => {
                                     this.groupMenuToggle(e)
                                 }}
                             >
-                                <div class="mdc-button__ripple"></div>
-                                <span class="mdc-button__label">{params.group.join('、') || '选择组'}</span>
+                                <div className="mdc-button__ripple"></div>
+                                <span className="mdc-button__label">{params.group.join('、') || '选择组'}</span>
                             </button>
 
 
 
-                            <div class={`openGroupBox mdc-menu mdc-menu-surface ${openGroup ? 'mdc-menu-surface--open' : ''}`}
+                            <div className={`openGroupBox mdc-menu mdc-menu-surface ${openGroup ? 'mdc-menu-surface--open' : ''}`}
 
                                 ref="openGroupBox"
                                 id="openGroupBox"
                             >
-                                <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                                <ul className="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabIndex="-1">
                                     {
                                         groupsList.map((m, i) => {
-                                            return <li class="mdc-list-item" role="menuitem"
+                                            return <li className="mdc-list-item" role="menuitem"
                                                 key={'group' + i}
                                                 onClick={this.changeGroup.bind(this, m.name)}
 
                                             >
-                                                <div class="mdc-form-field">
-                                                    <div class="mdc-checkbox">
+                                                <div className="mdc-form-field">
+                                                    <div className="mdc-checkbox">
                                                         <input type="checkbox"
-                                                            class="mdc-checkbox__native-control"
+                                                            className="mdc-checkbox__native-control"
+                                                            onChange={() => {
+
+                                                            }}
                                                             checked={m.check} />
-                                                        <div class="mdc-checkbox__background">
-                                                            <svg class="mdc-checkbox__checkmark"
+                                                        <div className="mdc-checkbox__background">
+                                                            <svg className="mdc-checkbox__checkmark"
                                                                 viewBox="0 0 24 24">
-                                                                <path class="mdc-checkbox__checkmark-path"
+                                                                <path className="mdc-checkbox__checkmark-path"
                                                                     fill="none"
                                                                     d="M1.73,12.91 8.1,19.28 22.79,4.59" />
                                                             </svg>
-                                                            <div class="mdc-checkbox__mixedmark"></div>
+                                                            <div className="mdc-checkbox__mixedmark"></div>
                                                         </div>
-                                                        <div class="mdc-checkbox__ripple"></div>
+                                                        <div className="mdc-checkbox__ripple"></div>
                                                     </div>
                                                     <label >{m.name}</label>
                                                 </div>
@@ -434,81 +437,92 @@ export default class Main extends React.Component {
                         </div>
                         <div className="filter-item">
                             开始时间：
-    <button class="mdc-button"
-                            >
-                                <div class="mdc-button__ripple"></div>
-                                <DatePickers
-                                    todayButton={"今天"}
-                                    timeFormat="HH:mm"
-                                    selected={params.btime ? new Date(params.btime) : null}
-                                    showTimeSelect
-                                    onChange={(date) => {
+                            <DatePickers
+                                todayButton={"今天"}
+                                timeFormat="HH:mm"
+                                selected={params.btime ? new Date(params.btime) : null}
+                                showTimeSelect
+                                onChange={(date) => {
 
-                                        if (params.etime && !Moment(date).isBefore(params.etime)) {
-                                            this.setState({
-                                                errorDialog: true,
-                                                errorText: '结束时间不能早于开始时间'
-                                            })
-                                            return
-                                        }
-                                        ;
+                                    if (params.etime && !Moment(date).isBefore(params.etime)) {
 
+
+                                        emitter.emit(SNACKBAR, '结束时间不能早于开始时间');
+                                        params.btime=''
+
+                                    } else {
                                         params.btime = Moment(date).format('yyyy/MM/DD HH:mm');
-                                        console.log(params)
-                                        this.setState({
-                                            params
-                                        })
-                                    }}
-                                    customInput={<span className='pick-button'
-                                        style={{ paddingRight: '90px' }}>{params.btime || '请选择'}</span>}
-                                    dateFormat='yyyy/MM/dd HH:mm'
 
-                                />
-                            </button>
+
+                                    }
+
+
+
+
+                                    this.setState({
+                                        params
+                                    })
+                                }}
+                                customInput={<button className="mdc-button">
+
+                                    <div className="mdc-button__ripple"></div>
+
+                                    <span className='pick-button'>
+
+                                        {params.btime || '请选择'}
+
+
+
+                                    </span></button>}
+                                dateFormat='yyyy/MM/dd HH:mm'
+
+                            />
                         </div>
                         <div className="filter-item">
                             结束时间：
-    <button class="mdc-button"
-                            >
-                                <div class="mdc-button__ripple"></div>
-                                <DatePickers
-                                    todayButton={"今天"}
-                                    timeFormat="HH:mm"
-                                    selected={params.etime ? new Date(params.etime) : null}
-                                    showTimeSelect
-                                    onChange={(date) => {
+                            <DatePickers
+                                todayButton={"今天"}
+                                timeFormat="HH:mm"
+                                selected={params.etime ? new Date(params.etime) : null}
+                                showTimeSelect
+                                onChange={(date) => {
 
+                                    if (params.btime && !Moment(params.btime).isBefore(date)) {
+                                        emitter.emit(SNACKBAR, '开始时间不能晚于结束时间');
+                                        params.etime=''
 
-                                        if (params.btime && !Moment(params.btime).isBefore(date)) {
-                                            this.setState({
-                                                errorDialog: true,
-                                                errorText: '开始时间不能晚于结束时间'
-                                            })
-                                            return
-                                        };
-                                        console.log(date)
+                                    } else {
                                         params.etime = Moment(date).format('yyyy/MM/DD HH:mm');
-                                        this.setState({
-                                            params
-                                        })
-                                    }}
-                                    customInput={<span className='pick-button'
-                                        style={{ paddingRight: '90px' }}>{params.etime || '请选择'}</span>}
-                                    dateFormat='yyyy/MM/dd HH:mm'
-                                />
 
-                            </button>
+                                    }
 
+                                    this.setState({
+                                        params
+                                    })
+                                }}
+                                customInput={<button className="mdc-button">
+
+                                    <div className="mdc-button__ripple"></div>
+
+                                    <span className='pick-button'>
+
+                                        {params.etime || '请选择'}
+
+
+
+                                    </span></button>}
+                                dateFormat='yyyy/MM/dd HH:mm'
+                            />
 
 
                         </div>
-                        <button class="mdc-button mdc-button--raised"
+                        <button className="mdc-button mdc-button--raised"
                             onClick={this.getData.bind(this)}
                         >
-                            <span class="mdc-button__label">查看</span>
+                            <span className="mdc-button__label">查看</span>
                         </button>
                     </div> : <div className="filter-control">
-                            <button class="mdc-button"
+                            <button className="mdc-button"
                                 onClick={() => {
                                     this.setState({
                                         showDetail: false,
@@ -517,8 +531,8 @@ export default class Main extends React.Component {
                                     })
                                 }}
                             >
-                                <div class="mdc-button__ripple"></div>
-                                <span class="mdc-button__label"
+                                <div className="mdc-button__ripple"></div>
+                                <span className="mdc-button__label"
 
 
                                 >返回上一级</span>
@@ -558,19 +572,19 @@ export default class Main extends React.Component {
                     }
 
                 </div>
-                <div class={`mdc-dialog ${detailDialog ? 'mdc-dialog--open' : ''}`}>
-                    <div class="mdc-dialog__container">
-                        <div class="mdc-dialog__surface"
+                <div className={`mdc-dialog ${detailDialog ? 'mdc-dialog--open' : ''}`}>
+                    <div className="mdc-dialog__container">
+                        <div className="mdc-dialog__surface"
                             role="alertdialog"
                             aria-modal="true"
                             aria-labelledby="my-dialog-title"
                             aria-describedby="my-dialog-content">
-                            <div class="mdc-dialog__content" id="my-dialog-content">
+                            <div className="mdc-dialog__content" id="my-dialog-content">
                                 需要查看-{groupDetail}-详细信息？
                             </div>
-                            <div class="mdc-dialog__actions">
+                            <div className="mdc-dialog__actions">
 
-                                <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="discard"
+                                <button type="button" className="mdc-button mdc-dialog__button"
                                     onClick={() => {
                                         this.setState({
                                             showDetail: true,
@@ -581,24 +595,24 @@ export default class Main extends React.Component {
 
                                         })
                                     }}>
-                                    <div class="mdc-button__ripple"></div>
-                                    <span class="mdc-button__label">确定</span>
+                                    <div className="mdc-button__ripple"></div>
+                                    <span className="mdc-button__label">确定</span>
                                 </button>
-                                <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="discard"
+                                <button type="button" className="mdc-button mdc-dialog__button"
                                     onClick={e => {
                                         this.setState({
                                             detailDialog: false,
                                             groupDetail: ''
                                         })
                                     }}>
-                                    <div class="mdc-button__ripple"></div>
-                                    <span class="mdc-button__label">取消</span>
+                                    <div className="mdc-button__ripple"></div>
+                                    <span className="mdc-button__label">取消</span>
                                 </button>
 
                             </div>
                         </div>
                     </div>
-                    <div class="mdc-dialog__scrim"></div>
+                    <div className="mdc-dialog__scrim"></div>
                 </div>
 
 

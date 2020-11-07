@@ -5,8 +5,8 @@ axios.interceptors.response.use(function (response) {
     // Do something with response data
     // console.log(response);
     // console.log('--------------',response)
-    if (response.data.code === 302) {
-        if (response.data.data.hasOwnProperty('redirectUrl')) {
+    if (response.data.code == 302) {
+        if (response.data.hasOwnProperty('data')) {
             window.location.href = '/';
         }
         return
@@ -17,8 +17,8 @@ axios.interceptors.response.use(function (response) {
 
     // console.dir(error.response,'----error----');
     //  status
-    console.dir (error);
-    console.dir (JSON.stringify(error));
+    console.dir(error);
+    console.dir(JSON.stringify(error));
     // console.dir (error);
 
 
@@ -27,4 +27,4 @@ axios.interceptors.response.use(function (response) {
 });
 
 
-export {axios};
+export { axios };

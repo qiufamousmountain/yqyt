@@ -2,13 +2,13 @@
  * Created by zhengliuyang on 2018/10/9.
  */
 
-// const { connection } = require('../models/sql')
+const { pool } = require('../models/sql')
 const { groups, groupsView } = require('../config/config.json')
-const config = require('../config/config.json');
+// const config = require('../config/config.json');
 
-const mysql = require('mysql');
+// const mysql = require('mysql');
+
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
-
 module.exports = {
 
 
@@ -23,31 +23,38 @@ module.exports = {
             return;
         }
         btime = btime.split('/').join('-')
+
         etime = etime.split('/').join('-')
+
         let connectionPromise = ({ ip, sql }) => {
-            let connection = mysql.createConnection(config.sql);
+
             return new Promise(function (resolve, reject) {
-                connection.connect(function (err) {
+
+                pool.getConnection((err, conn) => {
                     if (err) {
+                        console.log('和mysql数据库建立连接失败' + sql)
+                        console.log(err)
                         return reject(sql)
+
+                    } else {
+                        // console.log('和mysql数据库连接成功');
+                        conn.query(sql, (err2, result) => {
+                            if (err2) {
+                                console.log('查询数据库失败' + sql);
+                                return reject(sql)
+
+                            } else {
+
+
+                                conn.release();
+                                return resolve({
+                                    ip, count: result[0]["count(0)"]
+                                })
+                            }
+                        })
                     }
                 });
-                connection.query(sql, function (err, result) {
-                    connection.end();
 
-                    if (err) {
-                        return reject(sql)
-
-                    }
-                    if (!(result && result[0])) {
-                        return reject(sql)
-
-                    }
-                    return resolve({
-                        ip, count: result[0]["count(0)"]
-                    })
-
-                });
 
 
             })
@@ -64,7 +71,7 @@ module.exports = {
 
         let promistList = totalList.map(m => connectionPromise(m))
         Promise.all(promistList).then((result) => {
-            console.log(result,)               //['成功了', 'success']
+            // console.log(result,)               //['成功了', 'success']
             let data = {}
             for (let i = 0; i < result.length; i++) {
                 if (data.hasOwnProperty(result[i].ip)) {
@@ -84,6 +91,8 @@ module.exports = {
                 }
 
             }
+            // pool.end()
+
             res.send({ code: 200, data: arr, group })
         }).catch((error) => {
             console.log(error)
@@ -105,34 +114,73 @@ module.exports = {
 
         btime = btime.split('/').join('-')
         etime = etime.split('/').join('-')
+
+        // const pool = mysql.createPool(config.sql);
+
         let connectionPromise = ({ g, sql }) => {
-            let connection = mysql.createConnection(config.sql);
             return new Promise(function (resolve, reject) {
-                connection.connect(function (err) {
+
+                pool.getConnection((err, conn) => {
                     if (err) {
+                        // console.log('和mysql数据库建立连接失败' + sql)
+                        console.log(err)
                         return reject(sql)
+
+                    } else {
+                        // console.log('和mysql数据库连接成功');
+                        conn.query(sql, (err2, result) => {
+                            if (err2) {
+                                console.log('查询数据库失败' + sql);
+                                return reject(sql)
+
+                            } else {
+                                // console.log(result[0]["count(0)"]);
+                                conn.release();
+                                return resolve({
+                                    g, count: result[0]["count(0)"]
+                                })
+                            }
+                        })
                     }
                 });
-                connection.query(sql, function (err, result) {
-                    connection.end();
-
-                    if (err) {
-                        return reject(sql)
-
-                    }
-                    if (!(result && result[0])) {
-                        return reject(sql)
-
-                    }
-                    return resolve({
-                        g, count: result[0]["count(0)"]
-                    })
-
-                });
-
 
             })
         }
+
+
+
+
+        // let connectionPromise = ({ g, sql }) => {
+        //     let connection = mysql.createConnection(config.sql);
+        //     return new Promise(function (resolve, reject) {
+        //         connection.connect(function (err) {
+        //             if (err) {
+        //                 return reject(sql)
+        //             }
+        //         });
+        //         connection.query(sql, function (err, result) {
+        //             connection.end();
+
+        //             if (err) {
+        //                 return reject(sql)
+
+        //             }
+        //             if (!(result && result[0])) {
+        //                 return reject(sql)
+
+        //             }
+        //             return resolve({
+        //                 g, count: result[0]["count(0)"]
+        //             })
+
+        //         });
+
+
+        //     })
+        // }
+
+
+
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < group.length; j++) {
@@ -146,8 +194,9 @@ module.exports = {
 
         let promistList = totalList.map(m => connectionPromise(m))
         Promise.all(promistList).then((result) => {
-            console.log(result,)               //['成功了', 'success']
+            //console.log(result,)               //['成功了', 'success']
             let data = {}
+
             for (let i = 0; i < result.length; i++) {
                 if (data.hasOwnProperty(result[i].g)) {
                     data[result[i].g] = data[result[i].g] + result[i].count
@@ -166,6 +215,7 @@ module.exports = {
                 }
 
             }
+            // pool.end()
             res.send({ code: 200, data: arr })
         }).catch((error) => {
             console.log(error)
@@ -193,37 +243,37 @@ module.exports = {
         }
         let sql = `select WAYBILL_NO, OP_CODE,CREATE_TIME, CONTAINER_NO,MODIFY_TERMINAL from t_exp_waybill_check_${page} where WAYBILL_NO = '${ids}'`
 
-        let connection = mysql.createConnection(config.sql);
-        connection.connect(function (err) {
+        pool.getConnection((err, conn) => {
             if (err) {
+                // console.log('和mysql数据库建立连接失败' + sql)
                 res.send({
                     code: 500,
                     msg: 'db connect error'
                 })
                 return
-            }
-        });
+
+            } else {
+                // console.log('和mysql数据库连接成功');
+                conn.query(sql, (err2, result) => {
+                    if (err2) {
+                        res.send({
+                            code: 500,
+                            msg: 'db error'
+                        })
+                        return
+
+                    } else {
+                        // console.log(result[0]["count(0)"]);
+                        conn.release();
+                        res.send({ code: 200, data: result })
+
+                    }
 
 
-        connection.query(sql, function (err, result) {
-            connection.end();
 
-            if (err) {
-                res.send({
-                    code: 500,
-                    msg: 'db error'
                 })
-                return
             }
-
-            res.send({ code: 200, data: result })
-
         });
-
-
-
-
-
 
     },
     testttt: async (req, res) => {

@@ -76,16 +76,16 @@ export default class Top extends React.Component {
         return (
 
 
-            <header class="mdc-top-app-bar">
-                <div class="mdc-top-app-bar__row">
-                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-                        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Close">menu</button>
-                        <span class="mdc-top-app-bar__title">业务查询内部平台</span>
+            <header className="mdc-top-app-bar">
+                <div className="mdc-top-app-bar__row">
+                    <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                        <button className="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Close">menu</button>
+                        <span className="mdc-top-app-bar__title">业务查询内部平台</span>
                     </section>
-                    <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-                        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Share">share</button>
-                        {/* <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Delete">delete</button> */}
-                        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Open menu"
+                    <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                        <button className="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Share">share</button>
+                        {/* <button className="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Delete">delete</button> */}
+                        <button className="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Open menu"
                             onClick={(e) => {
                                 this.logout(e)
                             }}

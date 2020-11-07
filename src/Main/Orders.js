@@ -81,15 +81,15 @@ export default class Orders extends React.Component {
 
                     <div className="filter-item">
                         请填写单号：
-                        <label class="mdc-text-field mdc-text-field--outlined">
-                            <span class="mdc-notched-outline">
-                                <span class="mdc-notched-outline__leading"></span>
-                                <span class="mdc-notched-outline__notch">
-                                    <span class="mdc-floating-label" id="my-label-id"></span>
+                        <label className="mdc-text-field mdc-text-field--outlined">
+                            <span className="mdc-notched-outline">
+                                <span className="mdc-notched-outline__leading"></span>
+                                <span className="mdc-notched-outline__notch">
+                                    <span className="mdc-floating-label" id="my-label-id"></span>
                                 </span>
-                                <span class="mdc-notched-outline__trailing"></span>
+                                <span className="mdc-notched-outline__trailing"></span>
                             </span>
-                            <input type="text" class="mdc-text-field__input" aria-labelledby="my-label-id" value={ids}
+                            <input type="text" className="mdc-text-field__input" aria-labelledby="my-label-id" value={ids}
                                 onChange={(e) => {
                                     this.setState({
                                         ids: e.target.value
@@ -98,37 +98,37 @@ export default class Orders extends React.Component {
                         </label>
 
                     </div>
-                    <button class="mdc-button mdc-button--raised"
+                    <button className="mdc-button mdc-button--raised"
                         onClick={this.getData.bind(this)}
                     >
-                        <span class="mdc-button__label">查看</span>
+                        <span className="mdc-button__label">查看</span>
                     </button>
                 </div>
                 <div className="echart-box">
                     {viewData.length > 0
                         ?
-                        <div class="mdc-data-table">
-                            <div class="mdc-data-table__table-container">
-                                <table class="mdc-data-table__table" aria-label="Dessert calories">
+                        <div className="mdc-data-table">
+                            <div className="mdc-data-table__table-container">
+                                <table className="mdc-data-table__table" aria-label="Dessert calories">
                                     <thead>
-                                        <tr class="mdc-data-table__header-row">
+                                        <tr className="mdc-data-table__header-row">
 
 
 
                                             {
                                                 order.map((m, i) => {
                                                     return (
-                                                        <th class="mdc-data-table__header-cell" role="columnheader" key={'trhead' + i} scope="col">{orderViews[m]}</th>
+                                                        <th className="mdc-data-table__header-cell" role="columnheader" key={'trhead' + i} scope="col">{orderViews[m]}</th>
 
                                                     )
                                                 })
                                             }
                                         </tr>
                                     </thead>
-                                    <tbody class="mdc-data-table__content">
+                                    <tbody className="mdc-data-table__content">
                                        {
                                             viewData.map((m, i) => {
-                                                return (<tr class="mdc-data-table__row">
+                                                return (<tr className="mdc-data-table__row">
 
                                                     {
                                                         order.map((mm, ii) => {
@@ -140,7 +140,7 @@ export default class Orders extends React.Component {
                                                                 views=Moment(views).format('yyyy/MM/DD HH:mm')
                                                             }
                                                             return (
-                                                                <th class="mdc-data-table__header-cell" role="columnheader" key={'trsss' + ii + 'tr' + i} scope="col">{views}</th>
+                                                                <th className="mdc-data-table__header-cell" role="columnheader" key={'trsss' + ii + 'tr' + i} scope="col">{views}</th>
 
                                                             )
                                                         })

@@ -15,7 +15,6 @@ export default class Snack extends React.Component {
 
     componentWillMount() {
         emitter.on(SNACKBAR, (text) => {
-            console.log(text)
             this.snackbarOpen(text);
         });
     }
@@ -40,9 +39,9 @@ export default class Snack extends React.Component {
         const { snackBarOpen, snackbarText } = this.state;
         return (
 
-            <div class={`mdc-snackbar ${snackBarOpen ? 'mdc-snackbar--open' : ''}`}>
-                <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
-                    <div class="mdc-snackbar__label" aria-atomic="false">
+            <div className={`mdc-snackbar ${snackBarOpen ? 'mdc-snackbar--open' : ''}`}>
+                <div className="mdc-snackbar__surface" role="status" aria-relevant="additions">
+                    <div className="mdc-snackbar__label" aria-atomic="false">
                         {snackbarText}
                     </div>
                 </div>

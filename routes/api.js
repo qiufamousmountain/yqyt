@@ -19,7 +19,6 @@ router.post('/userout', (req, res) => {
 });
 router.use((req, res, next) => {
     let users = req.session.users;
-    console.log(11111111)
     if (!users) {
         res.json({ code: 302, data: '/' });
         return

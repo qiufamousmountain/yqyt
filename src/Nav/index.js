@@ -47,16 +47,16 @@ export default class Nav extends React.Component {
             pages, nav
         } = this.state;
         return (
-            <aside class="mdc-drawer">
-                <div class="mdc-drawer__content">
-                    <nav class="mdc-list">
+            <aside className="mdc-drawer">
+                <div className="mdc-drawer__content">
+                    <nav className="mdc-list">
                         {nav.map((m, i) => {
                             return <div key={'nav' + i}
-                                class={`mdc-list-item ${(pages === m.path) ? 'mdc-list-item--activated' : ''}`}
+                                className={`mdc-list-item ${(pages === m.path) ? 'mdc-list-item--activated' : ''}`}
                                 onClick={this.handleRouter.bind(this, m.path)} >
-                                <span class="mdc-list-item__ripple"></span>
-                                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">{m.icon}</i>
-                                <span class="mdc-list-item__text">{m.name}</span>
+                                <span className="mdc-list-item__ripple"></span>
+                                <i className="material-icons mdc-list-item__graphic" aria-hidden="true">{m.icon}</i>
+                                <span className="mdc-list-item__text">{m.name}</span>
                             </div>
                         })}
                     </nav>
