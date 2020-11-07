@@ -4,6 +4,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const config = {
     entry: {
         index: ['./src/index.js'],
+        login: ['./src/login.js'],
     },
     output: {
         path: path.resolve(__dirname, 'public/dist'),

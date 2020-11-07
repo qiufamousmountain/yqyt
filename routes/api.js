@@ -18,13 +18,15 @@ router.post('/userout', (req, res) => {
     user.logout(req, res);
 });
 router.use((req, res, next) => {
-    let users = req.session.users;
+    let users = req.session.yto_u;
     if (!users) {
         res.json({ code: 302, data: '/' });
         return
     }
     next();
 });
+
+
 router.post('/count/groups', (req, res) => {
     count.countGroups(req, res);
 });

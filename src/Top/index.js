@@ -87,7 +87,7 @@ export default class Top extends React.Component {
                         {/* <button className="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Delete">delete</button> */}
                         <button className="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Open menu"
                             onClick={(e) => {
-                                this.logout(e)
+                                this.userMenuToggle(e)
                             }}
                         >more_vert</button>
                         {
@@ -96,7 +96,7 @@ export default class Top extends React.Component {
 
                                     <div className="userbox">
                                         <div className="name">你好,{USER}</div>
-                                        <div className="logout" onClick={this.loginOut.bind(this)}>
+                                        <div className="logout" onClick={this.logout.bind(this)}>
                                             <i className="iconfont"></i>
                                             <span>退出</span>
                                         </div>

@@ -8,15 +8,17 @@ router.get('/login', async (req, res, next) => {
     });
 });
 router.use((req, res, next) => {
-    let users = req.session.users;
+    let users = req.session.yto_u;
     if (!users) {
         res.redirect('/login');
         return
     }
     next();
 });
+
+
 router.get('/*', async (req, res, next) => {
-    let USER = req.session.users || {};
+    let USER = req.session.yto_u || '';
 
     res.render('index', {
         title: '华北圆通',

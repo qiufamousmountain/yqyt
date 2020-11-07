@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "./node_modules/.bin/webpack -w"
+    "dev": "./node_modules/.bin/webpack -w",
+    "pro": "./node_modules/.bin/webpack -p"
   },
   "author": "",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
-    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "echarts-for-react": "^2.0.16",
     "ejs": "~2.5.7",
@@ -36,6 +36,7 @@
     "babel-runtime": "^6.26.0",
     "bundle-loader": "^0.5.6",
     "copy-to-clipboard": "^3.0.8",
+    "crypto": "^1.0.1",
     "css-loader": "^1.0.0",
     "express-session": "^1.17.1",
     "extract-text-webpack-plugin": "^3.0.2",

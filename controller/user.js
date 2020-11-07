@@ -2,6 +2,9 @@
  */
 // const path = require('path');//解析需要遍历的文件夹
 const { users } = require('../config/config.json')
+// const utils = require('./utils');
+const crypto = require('crypto');
+
 module.exports = {
 
     login: async (req, res) => {
@@ -13,7 +16,12 @@ module.exports = {
             });
             return
         }
-        if (!users[id]) {
+
+
+
+        let user = users[id]
+
+        if (!user) {
             res.json({
                 code: 500,
                 msg: '该用户不存在 '
@@ -21,10 +29,12 @@ module.exports = {
             return
         }
         let data = {}
-
-        if (users[id]['id'] === id && users[id]['password'] == password) {
-            let USER = users[id]['user'];
-            req.session.users = USER;
+        let hash = crypto.createHmac('sha256', "b4345e81163a950f")
+            .update(user['password'])
+            .digest('hex');
+        if (user['id'] === id && hash == password) {
+            let USER = user['user'];
+            req.session.yto_u = USER;
             data = {
                 code: 200,
                 data: '登录成功',
