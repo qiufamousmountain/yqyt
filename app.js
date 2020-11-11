@@ -39,61 +39,6 @@ app.use(expressSession({
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 
-
-
-// app.use('/*', function (req, res, next) {
-//     //redisKey作为redis的key,最终取到redis里面的value为token值
-//     var redisKey = req.cookies._i1_us || '';
-//     if(redisKey) {
-//         redisKey = utils.decrypt(config.webConfig.cookiePwd, redisKey);
-//     }
-//     // console.log('redisKey:' + redisKey);
-//     if (redisKey) {
-//         //已经登录
-//         client.get(redisKey, function (err, reply) {
-//             // reply is null when the key is missing
-//             if (reply) {
-//                 let r;
-//                 try {
-//                     r = JSON.parse(reply);
-//                 }catch (e) {
-//                     res.redirect('/login');
-//                     return;
-//                 }
-//                 req.session.token = r.token;
-//                 // console.log(r)
-//                 var admin = r.admin;  //布尔值,是否管理员
-//                 if (!admin) {
-//                     res.redirect('/user/');
-//                 } else {
-//                     next();
-//                 }
-//             } else {
-//                 res.redirect('/login');
-//             }
-//         });
-//     } else {
-//         //尚未登录,
-//         req.session.token = null;
-//         if (req.headers['x-requested-with'] && req.headers['x-requested-with'].toLowerCase() == 'xmlhttprequest') {
-//             //ajax请求
-//             next();
-//         } else {
-//             //普通请求
-//             // req.session.historyUrl = req.originalUrl;  //记录访问的url地址信息,以便登录后直接返回
-//             var domain = req.cookies.domain || '';
-//             var hostname = req.headers.host;
-//             var url;
-//             if (hostname && hostname != config.webConfig.domain.replace(/(http:\/\/|https:\/\/)/g,'')) {
-//                 url = '/login';
-//             } else {
-//                 url = domain ? '/login?domain=' + domain : '/login';
-//             }
-//             res.redirect(url);
-//         }
-//     }
-
-// });
 app.use('/api', apiRouter);
 app.use('/', pageRouter);
 

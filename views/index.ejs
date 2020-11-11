@@ -13,7 +13,7 @@
   <div id="page"></div>
 </body>
 <script>
-  var USER = '<%= USER %>';
+  var USER = <%-JSON.stringify(USER)%>
 </script>
 <script src="/dist/echarts.min.js"></script>
 <script src="/dist/jquery.min.js"></script>

@@ -4,12 +4,11 @@
 const express = require('express');
 const router = express.Router();
 
-router.use((req, res, next) => {
-    next()
 
-});
 const count = require('../controller/count');
 const user = require('../controller/user');
+const client = require('../models/redis');
+
 //users 
 router.post('/userlogin', (req, res) => {
     user.login(req, res);
@@ -17,14 +16,51 @@ router.post('/userlogin', (req, res) => {
 router.post('/userout', (req, res) => {
     user.logout(req, res);
 });
+// router.use((req, res, next) => {
+//     let users = req.session.yto_u;
+//     if (!users) {
+//         res.json({ code: 302, data: '/' });
+//         return
+//     }
+//     next();
+// });
+
+
 router.use((req, res, next) => {
-    let users = req.session.yto_u;
-    if (!users) {
+
+
+    if (!req.session.yto_u) {
         res.json({ code: 302, data: '/' });
         return
     }
-    next();
+    let { id, clientID } = req.session.yto_u;
+
+    client.get(id, async (err, reply) => {
+        if (err) {
+            next(err);
+        } else {
+            if (reply) {
+                let r = JSON.parse(reply);
+                if (clientID != r.clientID) {
+                    req.session.destroy((err) => {
+                        res.json({ code: 402, data: '/' })
+                        return
+                    })
+                } else {
+                    next();
+
+                }
+            } else {
+
+                res.json({ code: 302, data: '/' });
+                return
+
+            }
+        }
+    });
+
 });
+
 
 
 router.post('/count/groups', (req, res) => {

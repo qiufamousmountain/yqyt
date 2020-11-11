@@ -95,7 +95,7 @@ export default class Top extends React.Component {
                                 <div className="menu-detail user-menu" ref="userMenuBox">
 
                                     <div className="userbox">
-                                        <div className="name">你好,{USER}</div>
+                                        <div className="name">你好,{USER.USER}</div>
                                         <div className="logout" onClick={this.logout.bind(this)}>
                                             <i className="iconfont"></i>
                                             <span>退出</span>
