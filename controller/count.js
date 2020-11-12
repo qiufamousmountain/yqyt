@@ -6,7 +6,7 @@ const { pool } = require('../models/sql')
 const { groups, groupsView } = require('../config/config.json')
 // const config = require('../config/config.json');
 
-// const mysql = require('mysql');
+const mysql = require('mysql');
 
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
 module.exports = {
@@ -242,38 +242,66 @@ module.exports = {
             return;
         }
         let sql = `select WAYBILL_NO, OP_CODE,CREATE_TIME, CONTAINER_NO,MODIFY_TERMINAL from t_exp_waybill_check_${page} where WAYBILL_NO = '${ids}'`
+        let connection = mysql.createConnection({
+            "host": "172.19.4.245",
+            "user": "admin",
+            "password": "yto12345",
+            "database": "ytodb",
+            "port": "3306",
+        });
+        connection.connect(function (err) {
+            res.send({
+                code: 500,
+                msg: 'db connect error'
+            })
+            return
+        });
+        connection.query(sql, function (err, result) {
+            connection.end();
 
-        pool.getConnection((err, conn) => {
             if (err) {
-                // console.log('和mysql数据库建立连接失败' + sql)
                 res.send({
                     code: 500,
-                    msg: 'db connect error'
+                    msg: 'db error'
                 })
                 return
 
-            } else {
-                // console.log('和mysql数据库连接成功');
-                conn.query(sql, (err2, result) => {
-                    if (err2) {
-                        res.send({
-                            code: 500,
-                            msg: 'db error'
-                        })
-                        return
-
-                    } else {
-                        // console.log(result[0]["count(0)"]);
-                        conn.release();
-                        res.send({ code: 200, data: result })
-
-                    }
-
-
-
-                })
             }
+            res.send({ code: 200, data: result })
+
         });
+
+        // pool.getConnection((err, conn) => {
+        //     if (err) {
+        //         // console.log('和mysql数据库建立连接失败' + sql)
+        //         res.send({
+        //             code: 500,
+        //             msg: 'db connect error'
+        //         })
+        //         return
+
+        //     } else {
+        //         // console.log('和mysql数据库连接成功');
+        //         conn.query(sql, (err2, result) => {
+        //             if (err2) {
+        //                 res.send({
+        //                     code: 500,
+        //                     msg: 'db error'
+        //                 })
+        //                 return
+
+        //             } else {
+        //                 // console.log(result[0]["count(0)"]);
+        //                 conn.release();
+        //                 res.send({ code: 200, data: result })
+
+        //             }
+
+
+
+        //         })
+        //     }
+        // });
 
     },
     testttt: async (req, res) => {
