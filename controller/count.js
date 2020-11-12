@@ -250,11 +250,16 @@ module.exports = {
             "port": "3306",
         });
         connection.connect(function (err) {
-            res.send({
-                code: 500,
-                msg: 'db connect error'
-            })
-            return
+
+
+            if (err) {
+                res.send({
+                    code: 500,
+                    msg: 'db connect error'
+                })
+                return
+            }
+
         });
         connection.query(sql, function (err, result) {
             connection.end();
