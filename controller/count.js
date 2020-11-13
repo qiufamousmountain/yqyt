@@ -250,6 +250,7 @@ module.exports = {
 
         let mainData = await connectionPromise(sql_m, sql);
         let oData = await connectionPromise(sql_moni, osql);
+        console.log(oData,'------------------------------')
         if (mainData.code == 500) {
 
             res.send(mainData);
