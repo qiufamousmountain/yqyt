@@ -35184,6 +35184,7 @@ $(document).ready(function () {
             alert("请先输入验证码");
             return false;
         }
+        console.log(show_num, verCode);
 
         var data = { id: id, password: password };
 
