@@ -258,7 +258,7 @@ module.exports = {
 
         mainData = mainData.map(m => {
 
-
+            m['latticeNo']=''
             if (!(oData.code == 500)) {
                 for (let i = 0; i < oData.length; i++) {
                     if (m.CREATE_TIME == oData[i].createDate) {
