@@ -98,7 +98,11 @@ $(document).ready(() => {
             alert("请先输入验证码");
             return false;
         }
-        console.log(show_num, verCode)
+
+        if (show_num.join('').toLocaleLowerCase() != verCode.toLocaleLowerCase()) {
+            alert("验证码错误");
+            return false;
+        }
 
         let data = { id, password };
 

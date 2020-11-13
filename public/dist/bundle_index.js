@@ -72794,7 +72794,7 @@ var Orders = function (_React$Component) {
                                     viewData.map(function (m, i) {
                                         return _react2.default.createElement(
                                             'tr',
-                                            { className: 'mdc-data-table__row' },
+                                            { className: 'mdc-data-table__row', key: 'table__row' + i },
                                             _views.order.map(function (mm, ii) {
 
                                                 var views = m[mm];

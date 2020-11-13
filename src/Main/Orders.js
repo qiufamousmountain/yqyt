@@ -126,18 +126,18 @@ export default class Orders extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody className="mdc-data-table__content">
-                                       {
+                                        {
                                             viewData.map((m, i) => {
-                                                return (<tr className="mdc-data-table__row">
+                                                return (<tr className="mdc-data-table__row" key={'table__row' + i}>
 
                                                     {
                                                         order.map((mm, ii) => {
 
 
 
-                                                            let views=m[mm];
-                                                            if(mm==='CREATE_TIME'){
-                                                                views=Moment(views).format('yyyy/MM/DD HH:mm')
+                                                            let views = m[mm];
+                                                            if (mm === 'CREATE_TIME') {
+                                                                views = Moment(views).format('yyyy/MM/DD HH:mm')
                                                             }
                                                             return (
                                                                 <th className="mdc-data-table__header-cell" role="columnheader" key={'trsss' + ii + 'tr' + i} scope="col">{views}</th>
@@ -147,7 +147,7 @@ export default class Orders extends React.Component {
                                                     }
                                                 </tr>)
                                             })
-                                        } 
+                                        }
                                     </tbody>
                                 </table>
                             </div>
