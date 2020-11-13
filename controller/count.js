@@ -250,7 +250,8 @@ module.exports = {
 
         let mainData = await connectionPromise(sql_m, sql);
         let oData = await connectionPromise(sql_moni, osql);
-        console.log(oData,'------------------------------')
+        console.log(mainData,'------------mainData------------------')
+        console.log(oData,'----------------oData--------------')
         if (mainData.code == 500) {
 
             res.send(mainData);
@@ -260,6 +261,8 @@ module.exports = {
         mainData = mainData.map(m => {
 
             m['latticeNo']=''
+
+            
             if (!(oData.code == 500)) {
                 for (let i = 0; i < oData.length; i++) {
                     if (m.CREATE_TIME == oData[i].createDate) {
