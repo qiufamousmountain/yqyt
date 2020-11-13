@@ -3,8 +3,8 @@
  */
 
 const { pool } = require('../models/sql')
-const { groups, groupsView } = require('../config/config.json')
-// const config = require('../config/config.json');
+const { groups, groupsView } = require('../config/views.json')
+const { sql_m, sql_moni, sql_s } = require('../config/config.json');
 
 const mysql = require('mysql');
 
@@ -96,6 +96,8 @@ module.exports = {
             res.send({ code: 200, data: arr, group })
         }).catch((error) => {
             console.log(error)
+            res.send({ code: 500, msg: error })
+
         })
 
     },
@@ -150,37 +152,6 @@ module.exports = {
 
 
 
-        // let connectionPromise = ({ g, sql }) => {
-        //     let connection = mysql.createConnection(config.sql);
-        //     return new Promise(function (resolve, reject) {
-        //         connection.connect(function (err) {
-        //             if (err) {
-        //                 return reject(sql)
-        //             }
-        //         });
-        //         connection.query(sql, function (err, result) {
-        //             connection.end();
-
-        //             if (err) {
-        //                 return reject(sql)
-
-        //             }
-        //             if (!(result && result[0])) {
-        //                 return reject(sql)
-
-        //             }
-        //             return resolve({
-        //                 g, count: result[0]["count(0)"]
-        //             })
-
-        //         });
-
-
-        //     })
-        // }
-
-
-
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < group.length; j++) {
@@ -219,6 +190,8 @@ module.exports = {
             res.send({ code: 200, data: arr })
         }).catch((error) => {
             console.log(error)
+            res.send({ code: 500, msg: error })
+
         })
 
     },
@@ -241,40 +214,97 @@ module.exports = {
             })
             return;
         }
-        let sql = `select WAYBILL_NO, OP_CODE,CREATE_TIME, CONTAINER_NO,MODIFY_TERMINAL from t_exp_waybill_check_${page} where WAYBILL_NO = '${ids}'`
-        let connection = mysql.createConnection({
-            "host": "172.19.4.245",
-            "user": "admin",
-            "password": "yto12345",
-            "database": "ytodb",
-            "port": "3306",
-        });
-        connection.connect(function (err) {
+        let sql = `select WAYBILL_NO, OP_CODE,CREATE_TIME, CONTAINER_NO,MODIFY_TERMINAL from t_exp_waybill_check_${page} where WAYBILL_NO = '${ids}'`;
+
+        let osql = `select waybillNo, latticeNo,createDate from t_exp_waybill_check_${page} where waybillNo = '${ids}' and opCode='171'`;
 
 
-            if (err) {
-                res.send({
-                    code: 500,
-                    msg: 'db connect error'
-                })
-                return
+
+
+        let connectionPromise = (db, sql) => {
+
+            let connection = mysql.createConnection(db);
+
+            return new Promise(function (resolve, reject) {
+
+                connection.connect(function (err) {
+                    if (err) {
+                        console.log(err)
+                        return resolve({ code: 500, msg: 'connect db error' })
+                    }
+
+                });
+                connection.query(sql, function (err, result) {
+                    connection.end();
+
+                    if (err) {
+                        console.log('查询数据库失败' + sql);
+                        return resolve({ code: 500, msg: 'select db error' })
+
+                    }
+                    return resolve(result)
+
+                });
+            })
+        }
+
+        let mainData = await connectionPromise(sql_m, sql);
+        let oData = await connectionPromise(sql_moni, osql);
+        if (mainData.code == 500) {
+
+            res.send(mainData);
+            return
+        }
+
+        mainData = mainData.map(m => {
+
+
+            if (!(oData.code == 500)) {
+                for (let i = 0; i < oData.length; i++) {
+                    if (m.CREATE_TIME == oData[i].createDate) {
+
+                        m['latticeNo'] = oData[i].latticeNo
+                    }
+
+                }
             }
 
-        });
-        connection.query(sql, function (err, result) {
-            connection.end();
 
-            if (err) {
-                res.send({
-                    code: 500,
-                    msg: 'db error'
-                })
-                return
+            return m
+        })
 
-            }
-            res.send({ code: 200, data: result })
+        res.send({ code: 200, data: mainData })
 
-        });
+
+        // let connection = mysql.createConnection(db);
+
+
+        // connection.connect(function (err) {
+
+
+        //     if (err) {
+        //         res.send({
+        //             code: 500,
+        //             msg: 'db connect error'
+        //         })
+        //         return
+        //     }
+
+        // });
+        // connection.query(sql, function (err, result) {
+        //     connection.end();
+
+        //     if (err) {
+        //         res.send({
+        //             code: 500,
+        //             msg: 'db error'
+        //         })
+        //         return
+
+        //     }
+        //     res.send({ code: 200, data: result })
+
+        // });
 
         // pool.getConnection((err, conn) => {
         //     if (err) {

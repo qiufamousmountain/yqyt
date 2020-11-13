@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 
 import {
     emitter,
@@ -9,7 +9,7 @@ import {
 import { axios } from '../util/server'
 import Moment from 'moment'
 
-import { order, orderViews } from '../../config/config.json'
+import { order, orderViews } from '../../config/views.json'
 
 
 export default class Orders extends React.Component {

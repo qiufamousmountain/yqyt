@@ -20,7 +20,7 @@ const styles = {
         fontSize: '12px',
     },
 };
-import { groups, groupsView } from '../../config/config.json'
+import { groups, groupsView } from '../../config/views.json'
 
 export default class Main extends React.Component {
     constructor(props) {
