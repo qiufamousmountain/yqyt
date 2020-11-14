@@ -5,21 +5,25 @@
     "password": "yto12345",
     "database": "ytodb",
     "port": "3306",
-    "connectionLimit": "180"
+    "connectionLimit": "180",
+    "timezone": "SYSTEM"
   },
   "sql_s": {
     "host": "172.19.4.245",
     "user": "admin",
     "password": "yto12345",
     "database": "ytodb",
-    "port": "3306"
+    "port": "3306",
+    "connectionLimit": "180",
+    "timezone": "SYSTEM"
   },
   "sql_moni": {
     "host": "172.19.4.250",
     "user": "admin",
     "password": "yto12345",
     "database": "yto_monitor",
-    "port": "3306"
+    "port": "3306",
+    "timezone": "SYSTEM"
   },
   "redis": {
     "host": "127.0.0.1",
@@ -27,7 +31,7 @@
   },
   "webConfig": {
     "env": "dev",
-    "port": "80"
+    "port": "8100"
   },
   "users": {
     "yto": {

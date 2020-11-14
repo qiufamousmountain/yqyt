@@ -124,11 +124,23 @@ export default class Orders extends React.Component {
                                                     )
                                                 })
                                             }
+                                            <th className="mdc-data-table__header-cell" role="columnheader" scope="col">设备编号</th>
                                         </tr>
                                     </thead>
                                     <tbody className="mdc-data-table__content">
                                         {
                                             viewData.map((m, i) => {
+
+
+                                                let ips = m['MODIFY_TERMINAL'];
+                                                let vv = {}
+                                                for (let a in orderViews) {
+                                                    if(orderViews.hasOwnProperty(a)){
+                                                        vv = Object.assign(vv, orderViews[a]);
+
+                                                    }
+                                                }
+
                                                 return (<tr className="mdc-data-table__row" key={'table__row' + i}>
 
                                                     {
@@ -145,7 +157,15 @@ export default class Orders extends React.Component {
 
                                                             )
                                                         })
+
+
+
+
                                                     }
+
+                                                    <th className="mdc-data-table__header-cell" role="columnheader" scope="col">{vv[ips] }</th>
+
+
                                                 </tr>)
                                             })
                                         }
