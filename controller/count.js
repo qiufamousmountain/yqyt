@@ -6,6 +6,8 @@ const { pool } = require('../models/sql')
 const { groups, groupsView } = require('../config/views.json')
 const { sql_m, sql_moni, sql_s } = require('../config/config.json');
 
+
+const Moment = require('moment')
 const mysql = require('mysql');
 
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
@@ -250,8 +252,8 @@ module.exports = {
 
         let mainData = await connectionPromise(sql_m, sql);
         let oData = await connectionPromise(sql_moni, osql);
-        console.log(mainData,'------------mainData------------------')
-        console.log(oData,'----------------oData--------------')
+        console.log(mainData, '------------mainData------------------')
+        console.log(oData, '----------------oData--------------')
         if (mainData.code == 500) {
 
             res.send(mainData);
@@ -260,12 +262,15 @@ module.exports = {
 
         mainData = mainData.map(m => {
 
-            m['latticeNo']=''
+            m['latticeNo'] = ''
 
-            
+
             if (!(oData.code == 500)) {
                 for (let i = 0; i < oData.length; i++) {
-                    if (m.CREATE_TIME == oData[i].createDate) {
+
+                    let tm = Moment(m.CREATE_TIME).diff(Moment(oData[i].createDate), 'minute')
+
+                    if (Math.abs(tm) < 2) {
 
                         m['latticeNo'] = oData[i].latticeNo
                     }

@@ -17,7 +17,7 @@ export default class Orders extends React.Component {
         super(props);
         this.state = {
             ids: '',
-            viewData: [],
+            viewData: []
 
         }
     }
@@ -54,7 +54,8 @@ export default class Orders extends React.Component {
 
                 let data = resData.data;
                 this.setState({
-                    viewData: data
+                    viewData: data,
+
                 })
             } else {
                 emitter.emit(SNACKBAR, resData.msg)
