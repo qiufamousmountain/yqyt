@@ -72805,9 +72805,9 @@ var Orders = function (_React$Component) {
 
                                         var ips = m['MODIFY_TERMINAL'];
                                         var vv = {};
-                                        for (var a in _views.orderViews) {
-                                            if (_views.orderViews.hasOwnProperty(a)) {
-                                                vv = (0, _assign2.default)(vv, _views.orderViews[a]);
+                                        for (var a in _views.groupsView) {
+                                            if (_views.groupsView.hasOwnProperty(a)) {
+                                                vv = (0, _assign2.default)(vv, _views.groupsView[a]);
                                             }
                                         }
 

@@ -9,7 +9,7 @@ import {
 import { axios } from '../util/server'
 import Moment from 'moment'
 
-import { order, orderViews } from '../../config/views.json'
+import { order, orderViews,groupsView } from '../../config/views.json'
 
 
 export default class Orders extends React.Component {
@@ -134,9 +134,9 @@ export default class Orders extends React.Component {
 
                                                 let ips = m['MODIFY_TERMINAL'];
                                                 let vv = {}
-                                                for (let a in orderViews) {
-                                                    if(orderViews.hasOwnProperty(a)){
-                                                        vv = Object.assign(vv, orderViews[a]);
+                                                for (let a in groupsView) {
+                                                    if(groupsView.hasOwnProperty(a)){
+                                                        vv = Object.assign(vv, groupsView[a]);
 
                                                     }
                                                 }
