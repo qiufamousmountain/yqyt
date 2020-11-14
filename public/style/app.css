@@ -168,6 +168,7 @@ p {
 #main .main-box .filter-control .filter-item .openGroupBox {
   position: absolute;
   left: 105px;
+  top: 0;
 }
 
 .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle, .react-datepicker-popper[data-placement^="top"] .react-datepicker__triangle, .react-datepicker__year-read-view--down-arrow,
