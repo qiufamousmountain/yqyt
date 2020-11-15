@@ -2,7 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Main from './Main';
+
+
+
+
 import Order from './Main/Orders';
+import Gitc from './Main/Gitc';
+// import Packages from './Main/Packages';
+
+
+
 import Top from './Top';
 import Nav from './Nav';
 import Snack from './component/Snack';
@@ -27,18 +36,19 @@ class App extends React.Component {
                 },
                 {
                     path: '/gitc',
-                    component: Main,
+                    component: Gitc,
                 },
-                {
-                    path: '/gitc',
-                    component: Main,
-                }
+                // {
+                //     path: '/package',
+                //     component: Packages,
+                // }
             ]
         }
     }
 
     componentWillMount() {
 
+        
     }
 
 

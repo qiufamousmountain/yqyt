@@ -1,22 +1,22 @@
 let fs = require('fs');
 let groupsView = {
-    '夹层': {},
-    '拆包组': {},
+    '出港上车一': {},
+    '出港上车二': {},
 };
 let groups = {
-    '夹层': [],
-    '拆包组': []
+    '出港上车一': [],
+    '出港上车二': []
 
 }
-for (let i = 150; i < 164; i++) {
-    let ips = "172.19.12."
-    groupsView['夹层'][ips + i] = '大件快手' + (i - 149) + '';
-    groups['夹层'].push(ips + i)
+for (let i = 61; i < 111; i++) {
+    let ips = "172.19.11."
+    groupsView['出港上车一'][ips + i] = '狂扫' + (i - 60) + '';
+    groups['出港上车一'].push(ips + i)
 }
-for (let i = 11; i < 21; i++) {
-    let ips = "172.19.12."
-    groupsView['拆包组'][ips + i] = '小件快手' + (i - 10) + '';
-    groups['拆包组'].push(ips + i)
+for (let i = 201; i < 225; i++) {
+    let ips = "172.19.11."
+    groupsView['出港上车二'][ips + i] = '狂扫' + (i - 200) + '';
+    groups['出港上车二'].push(ips + i)
 }
 // for (let i = 31; i < 67; i++) {
 //     let ips = "172.19.6."

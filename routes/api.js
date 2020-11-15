@@ -63,19 +63,25 @@ router.use((req, res, next) => {
 
 
 
-router.post('/count/groups', (req, res) => {
-    count.countGroups(req, res);
+router.post('/count/gotc', (req, res) => {
+    count.countgotc(req, res);
 });
-router.get('/count/egroup', (req, res) => {
-    count.countGroupOne(req, res);
+router.get('/count/egotc', (req, res) => {
+    count.countgotcOne(req, res);
+});
+router.post('/count/gitc', (req, res) => {
+    count.countgitc(req, res);
+});
+router.get('/count/egitc', (req, res) => {
+    count.countgitcOne(req, res);
+});
+router.get('/count/package', (req, res) => {
+    count.countPackage(req, res);
 });
 router.get('/orders/:ids', (req, res) => {
     count.orders(req, res);
 });
 
-router.get('/testttt', (req, res) => {
-    count.testttt(req, res);
-});
 
 
 

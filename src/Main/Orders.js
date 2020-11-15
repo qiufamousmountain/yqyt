@@ -9,7 +9,7 @@ import {
 import { axios } from '../util/server'
 import Moment from 'moment'
 
-import { order, orderViews,dViews } from '../../config/views.json'
+import { order, orderViews,dViews } from '../../config/order.json'
 
 
 export default class Orders extends React.Component {

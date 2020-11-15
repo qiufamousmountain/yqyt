@@ -12,9 +12,9 @@ import Moment from 'moment'
 
 import ReactEchartsCore from 'echarts-for-react/lib/core';
 
-import { gotc } from '../../config/gotc.json'
+import { gitc } from '../../config/gitc.json'
 
-export default class Main extends React.Component {
+export default class Gitc extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +26,7 @@ export default class Main extends React.Component {
             },
             viewData: [],
             showDetail: false,
-            gotcList: [],
+            gitcList: [],
             groupDetail: '',
             viewDetail: [],
             detailDialog: false
@@ -37,17 +37,17 @@ export default class Main extends React.Component {
     componentWillMount() {
 
 
-        let gotcList = []
-        for (let i in gotc) {
-            if (gotc.hasOwnProperty(i)) {
-                gotcList.push({
+        let gitcList = []
+        for (let i in gitc) {
+            if (gitc.hasOwnProperty(i)) {
+                gitcList.push({
                     check: false,
                     name: i,
                 })
             }
         }
         this.setState({
-            gotcList
+            gitcList
         })
     }
 
@@ -79,7 +79,7 @@ export default class Main extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.get(`/api/count/egroup`, {
+        axios.get(`/api/count/eggroup`, {
             params: {
                 group: groupDetail,
                 btime: params.btime,
@@ -125,7 +125,7 @@ export default class Main extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.post(`/api/count/gotc`, params
+        axios.post(`/api/count/gitc`, params
         ).then((response) => {
 
             let resData = response.data
@@ -332,22 +332,22 @@ export default class Main extends React.Component {
     }
 
     changeGroup(name) {
-        let { params, gotcList } = this.state
-        gotcList = gotcList.map(m => {
+        let { params, gitcList } = this.state
+        gitcList = gitcList.map(m => {
             if (m.name == name) {
                 m.check = !m.check
             }
             return m
         })
 
-        console.log(gotcList)
-        params.group = gotcList.filter(m => m.check).map(m => m.name)
+        console.log(gitcList)
+        params.group = gitcList.filter(m => m.check).map(m => m.name)
 
         this.setState({
             params,
-            gotcList
+            gitcList
         })
-        gotcList
+        gitcList
     }
 
 
@@ -365,7 +365,7 @@ export default class Main extends React.Component {
 
     render() {
         const {
-            openGroup, params, gotcList, groupDetail, showDetail, detailDialog
+            openGroup, params, gitcList, groupDetail, showDetail, detailDialog
         } = this.state;
         return (
             <div className='views'>
@@ -392,7 +392,7 @@ export default class Main extends React.Component {
                             >
                                 <ul className="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabIndex="-1">
                                     {
-                                        gotcList.map((m, i) => {
+                                        gitcList.map((m, i) => {
                                             return <li className="mdc-list-item" role="menuitem"
                                                 key={'group' + i}
                                                 onClick={this.changeGroup.bind(this, m.name)}
