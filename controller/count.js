@@ -550,7 +550,7 @@ module.exports = {
         res.send({ code: 200 ,data:[]})
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
-            let t = `select COUNT(0)from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#98%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
+            let u = `select COUNT(0)from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#98%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
             let t = `select COUNT(0)from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
             totalList.push({ t })
         }
