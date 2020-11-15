@@ -1,25 +1,22 @@
 let fs = require('fs');
 let groupsView = {
-    '出港夹层': {},
-    '进港夹层': {},
+    '夹层': {},
+    '拆包组': {},
 };
 let groups = {
-    '自动化五': [],
-    '自动化四': [],
-    '自动化三': [],
-    '自动化二': [],
-    '自动化一': []
+    '夹层': [],
+    '拆包组': []
 
 }
-for (let i = 201; i < 206; i++) {
+for (let i = 150; i < 164; i++) {
     let ips = "172.19.12."
-    groupsView['出港夹层'][ips + i] = '出港夹层'+(i - 200) + '';
-    // groups['自动化五'].push(ips + i)
+    groupsView['夹层'][ips + i] = '大件快手' + (i - 149) + '';
+    groups['夹层'].push(ips + i)
 }
-for (let i = 150; i < 166; i++) {
+for (let i = 11; i < 21; i++) {
     let ips = "172.19.12."
-    groupsView['进港夹层'][ips + i] = '进港夹层'+(i - 149) + '';
-    // groups['自动化四'].push(ips + i)
+    groupsView['拆包组'][ips + i] = '小件快手' + (i - 10) + '';
+    groups['拆包组'].push(ips + i)
 }
 // for (let i = 31; i < 67; i++) {
 //     let ips = "172.19.6."
@@ -47,7 +44,7 @@ for (let i = 150; i < 166; i++) {
 // }
 
 let data = {
-    groupsView
+    groupsView, groups
 }
 data = JSON.stringify(data)
 
