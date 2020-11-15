@@ -79,7 +79,7 @@ export default class Gitc extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.get(`/api/count/eggroup`, {
+        axios.get(`/api/count/egitc`, {
             params: {
                 group: groupDetail,
                 btime: params.btime,

@@ -72973,7 +72973,7 @@ var Gitc = function (_React$Component) {
             }
             _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, true);
 
-            _server.axios.get('/api/count/eggroup', {
+            _server.axios.get('/api/count/egitc', {
                 params: {
                     group: groupDetail,
                     btime: params.btime,
