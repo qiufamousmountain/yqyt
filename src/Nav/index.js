@@ -5,22 +5,22 @@ export default class Nav extends React.Component {
         this.state = {
             pages: '/',
             nav: [{
-                name: '数据统计',
+                name: '下车操作统计',
                 path: '/',
                 icon: 'inbox'
             }, {
-                name: '下车操作统计',
-                path: '/orders',
-                icon: 'drafts'
-
-            }, {
                 name: '上车操作统计',
+                path: '/gitc',
+                icon: 'drafts'
+
+            }, {
+                name: '详单查询',
                 path: '/orders',
                 icon: 'drafts'
 
             }, {
-                name: '未完待续..',
-                path: '/1',
+                name: '环保袋使用率',
+                path: '/package',
                 icon: 'drafts'
 
             }]

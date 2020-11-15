@@ -26,7 +26,11 @@ class App extends React.Component {
                     component: Order,
                 },
                 {
-                    path: '/',
+                    path: '/gitc',
+                    component: Main,
+                },
+                {
+                    path: '/gitc',
                     component: Main,
                 }
             ]
