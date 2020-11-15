@@ -57281,7 +57281,7 @@ var Main = function (_React$Component) {
             }
             _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, true);
 
-            _server.axios.get('/api/count/egroup', {
+            _server.axios.get('/api/count/egotc', {
                 params: {
                     group: groupDetail,
                     btime: params.btime,

@@ -79,7 +79,7 @@ export default class Main extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.get(`/api/count/egroup`, {
+        axios.get(`/api/count/egotc`, {
             params: {
                 group: groupDetail,
                 btime: params.btime,
