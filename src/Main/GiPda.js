@@ -12,7 +12,7 @@ import Moment from 'moment'
 
 import ReactEchartsCore from 'echarts-for-react/lib/core';
 
-import { gitc } from '../../config/gipda.json'
+import { gipda } from '../../config/gipda.json'
 
 export default class GiPda extends React.Component {
     constructor(props) {
@@ -26,7 +26,7 @@ export default class GiPda extends React.Component {
             },
             viewData: [],
             showDetail: false,
-            gitcList: [],
+            gipdaList: [],
             groupDetail: '',
             viewDetail: [],
             detailDialog: false
@@ -37,17 +37,17 @@ export default class GiPda extends React.Component {
     componentWillMount() {
 
 
-        let gitcList = []
-        for (let i in gitc) {
-            if (gitc.hasOwnProperty(i)) {
-                gitcList.push({
+        let gipdaList = []
+        for (let i in gipda) {
+            if (gipda.hasOwnProperty(i)) {
+                gipdaList.push({
                     check: false,
                     name: i,
                 })
             }
         }
         this.setState({
-            gitcList
+            gipdaList
         })
     }
 
@@ -79,7 +79,7 @@ export default class GiPda extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.get(`/api/count/egitc`, {
+        axios.get(`/api/count/egipda`, {
             params: {
                 group: groupDetail,
                 btime: params.btime,
@@ -125,7 +125,7 @@ export default class GiPda extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.post(`/api/count/gitc`, params
+        axios.post(`/api/count/gipda`, params
         ).then((response) => {
 
             let resData = response.data
@@ -332,22 +332,22 @@ export default class GiPda extends React.Component {
     }
 
     changeGroup(name) {
-        let { params, gitcList } = this.state
-        gitcList = gitcList.map(m => {
+        let { params, gipdaList } = this.state
+        gipdaList = gipdaList.map(m => {
             if (m.name == name) {
                 m.check = !m.check
             }
             return m
         })
 
-        console.log(gitcList)
-        params.group = gitcList.filter(m => m.check).map(m => m.name)
+        console.log(gipdaList)
+        params.group = gipdaList.filter(m => m.check).map(m => m.name)
 
         this.setState({
             params,
-            gitcList
+            gipdaList
         })
-        gitcList
+        gipdaList
     }
 
 
@@ -365,7 +365,7 @@ export default class GiPda extends React.Component {
 
     render() {
         const {
-            openGroup, params, gitcList, groupDetail, showDetail, detailDialog
+            openGroup, params, gipdaList, groupDetail, showDetail, detailDialog
         } = this.state;
         return (
             <div className='views'>
@@ -392,7 +392,7 @@ export default class GiPda extends React.Component {
                             >
                                 <ul className="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabIndex="-1">
                                     {
-                                        gitcList.map((m, i) => {
+                                        gipdaList.map((m, i) => {
                                             return <li className="mdc-list-item" role="menuitem"
                                                 key={'group' + i}
                                                 onClick={this.changeGroup.bind(this, m.name)}

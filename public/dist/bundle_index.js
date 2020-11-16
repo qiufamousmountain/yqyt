@@ -73663,7 +73663,7 @@ var GiPda = function (_React$Component) {
             },
             viewData: [],
             showDetail: false,
-            gitcList: [],
+            gipdaList: [],
             groupDetail: '',
             viewDetail: [],
             detailDialog: false
@@ -73676,17 +73676,17 @@ var GiPda = function (_React$Component) {
         key: 'componentWillMount',
         value: function componentWillMount() {
 
-            var gitcList = [];
-            for (var i in _gipda.gitc) {
-                if (_gipda.gitc.hasOwnProperty(i)) {
-                    gitcList.push({
+            var gipdaList = [];
+            for (var i in _gipda.gipda) {
+                if (_gipda.gipda.hasOwnProperty(i)) {
+                    gipdaList.push({
                         check: false,
                         name: i
                     });
                 }
             }
             this.setState({
-                gitcList: gitcList
+                gipdaList: gipdaList
             });
         }
     }, {
@@ -73718,7 +73718,7 @@ var GiPda = function (_React$Component) {
             }
             _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, true);
 
-            _server.axios.get('/api/count/egitc', {
+            _server.axios.get('/api/count/egipda', {
                 params: {
                     group: groupDetail,
                     btime: params.btime,
@@ -73766,7 +73766,7 @@ var GiPda = function (_React$Component) {
             }
             _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, true);
 
-            _server.axios.post('/api/count/gitc', params).then(function (response) {
+            _server.axios.post('/api/count/gipda', params).then(function (response) {
 
                 var resData = response.data;
                 _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, false);
@@ -73982,17 +73982,17 @@ var GiPda = function (_React$Component) {
         value: function changeGroup(name) {
             var _state4 = this.state,
                 params = _state4.params,
-                gitcList = _state4.gitcList;
+                gipdaList = _state4.gipdaList;
 
-            gitcList = gitcList.map(function (m) {
+            gipdaList = gipdaList.map(function (m) {
                 if (m.name == name) {
                     m.check = !m.check;
                 }
                 return m;
             });
 
-            console.log(gitcList);
-            params.group = gitcList.filter(function (m) {
+            console.log(gipdaList);
+            params.group = gipdaList.filter(function (m) {
                 return m.check;
             }).map(function (m) {
                 return m.name;
@@ -74000,9 +74000,9 @@ var GiPda = function (_React$Component) {
 
             this.setState({
                 params: params,
-                gitcList: gitcList
+                gipdaList: gipdaList
             });
-            gitcList;
+            gipdaList;
         }
     }, {
         key: 'echarsClick',
@@ -74023,7 +74023,7 @@ var GiPda = function (_React$Component) {
             var _state5 = this.state,
                 openGroup = _state5.openGroup,
                 params = _state5.params,
-                gitcList = _state5.gitcList,
+                gipdaList = _state5.gipdaList,
                 groupDetail = _state5.groupDetail,
                 showDetail = _state5.showDetail,
                 detailDialog = _state5.detailDialog;
@@ -74062,7 +74062,7 @@ var GiPda = function (_React$Component) {
                             _react2.default.createElement(
                                 'ul',
                                 { className: 'mdc-list', role: 'menu', 'aria-hidden': 'true', 'aria-orientation': 'vertical', tabIndex: '-1' },
-                                gitcList.map(function (m, i) {
+                                gipdaList.map(function (m, i) {
                                     return _react2.default.createElement(
                                         'li',
                                         { className: 'mdc-list-item', role: 'menuitem',
