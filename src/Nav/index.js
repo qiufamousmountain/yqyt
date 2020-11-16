@@ -9,8 +9,13 @@ export default class Nav extends React.Component {
                 path: '/',
                 icon: 'inbox'
             }, {
-                name: '上车操作统计',
+                name: '上车狂扫统计',
                 path: '/gitc',
+                icon: 'drafts'
+
+            }, , {
+                name: '上车PDA统计',
+                path: '/gipda',
                 icon: 'drafts'
 
             }, {
