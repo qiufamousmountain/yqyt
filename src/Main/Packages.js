@@ -49,7 +49,7 @@ export default class Main extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.post(`/api/count/package`, params
+        axios.get(`/api/count/package`, {params}
         ).then((response) => {
 
             let resData = response.data

@@ -76485,7 +76485,7 @@ var Main = function (_React$Component) {
             }
             _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, true);
 
-            _server.axios.post('/api/count/package', params).then(function (response) {
+            _server.axios.get('/api/count/package', { params: params }).then(function (response) {
 
                 var resData = response.data;
                 _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, false);
