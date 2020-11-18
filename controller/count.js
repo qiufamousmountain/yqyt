@@ -480,9 +480,15 @@ module.exports = {
         Promise.all(promistList).then((result) => {
             //console.log(result,)               //['成功了', 'success']
 
+            let arr = []
 
+            let useds = countGroup(result).filter(m => m.group == '已使用')
+            let totals = countGroup(result).filter(m => m.group == '总数');
+
+            arr.push(useds)
+            arr.push({ "group": "未使用", "count": (totals.count || 0) - useds.count })
             // pool.end()
-            res.send({ code: 200, data: countGroup(result) })
+            res.send({ code: 200, data: arr })
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
