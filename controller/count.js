@@ -447,8 +447,8 @@ module.exports = {
 
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
-            let u = `select COUNT(0) from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#98%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
-            let t = `select COUNT(0) from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
+            let u = `select count(0) from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#98%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
+            let t = `select count(0) from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
             totalList.push({ g: '总数', sql: t }, { g: '已使用', sql: u })
         }
 
