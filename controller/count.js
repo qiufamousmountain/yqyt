@@ -461,7 +461,7 @@ module.exports = {
                         console.log(err)
                         return resolve({ g, count: 0 })
                     }
-                    connection.query(sql, function (err, result) {
+                    connection.query(sql, function (err2, result) {
                         connection.end();
                         if (err2) {
                             console.log('查询数据库失败' + sql);
