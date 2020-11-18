@@ -75,55 +75,39 @@ export default class Main extends React.Component {
         let { viewData, params } = this.state
         let option = {
             title: {
-                text: params.group,
-                subtext: params.btime + '-' + params.etime,
-                // sublink: 'http://e.weibo.com/1341556070/Aj1J2x5a5'
+                text: '华北转运中心环保袋使用情况',
+                subtext: `${params.btime}-${params.etime}`,
+                left: 'center'
             },
-            color: ['#61a0a8'],
             tooltip: {
-                trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'cross'        // 默认为直线，可选为：'line' | 'shadow'
-
-                },
-                formatter: function (params) {
-                    var tar = params[0];
-                    return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
-                }
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
             },
             legend: {
-                data: ['操作量']
+                orient: 'vertical',
+                left: 'left',
+                data: viewData.map(m => m.group)
+
             },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: viewData.map(m => m['group']),
-                    axisTick: {
-                        alignWithLabel: true
-                    }
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
             series: [
                 {
-                    name: '操作量',
-                    type: 'bar',
-                    label: {
-                        show: true,
-                        position: 'top'
-                    },
-                    barWidth: '60%',
-                    data: viewData.map(m => m['count'])
+                    name: '使用量',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: viewData.map(m => {
+                        return {
+                            name: m.group,
+                            value: m.count
+                        }
+                    }),
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
                 }
             ]
         };
@@ -241,7 +225,7 @@ export default class Main extends React.Component {
 
                     <ReactEchartsCore
                         echarts={echarts}
-                        option={this.getDetailOption()}
+                        option={this.getOption()}
                         style={{ height: '100%', width: '100%' }}
                         notMerge={true}
                         lazyUpdate={true}

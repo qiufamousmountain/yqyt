@@ -100,8 +100,7 @@ const connectionIPPromise = ({ ip, sql }) => {
 
     })
 }
-
-
+   
 const countIP = (result, view) => {
     let data = {}
     for (let i = 0; i < result.length; i++) {
@@ -303,10 +302,7 @@ module.exports = {
             return;
         }
         btime = btime.split('/').join('-')
-
         etime = etime.split('/').join('-')
-
-
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < gitc[group].length; j++) {
@@ -375,9 +371,7 @@ module.exports = {
     },
     //上车pda
     countgipdaOne: async (req, res) => {
-
         let { btime, etime, group } = req.query;
-
         if (!btime || !etime || !gipda[group] || gipda[group].length < 1) {
             res.send({
                 code: 500,
@@ -386,7 +380,6 @@ module.exports = {
             return;
         }
         btime = btime.split('/').join('-')
-
         etime = etime.split('/').join('-')
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
@@ -394,21 +387,15 @@ module.exports = {
                 let ip = gipda[group][j]
                 let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL='${ip}' and (create_time between '${btime}' and '${etime}')`
                 totalList.push({ ip, sql })
-
             }
         }
 
         let promistList = totalList.map(m => connectionIPPromise(m))
         Promise.all(promistList).then((result) => {
-            // console.log(result,)               //['成功了', 'success']
-
-            // pool.end()
-
             res.send({ code: 200, data: countIP(result, gipdaView[group]), group })
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
-
         })
 
     },
@@ -427,12 +414,9 @@ module.exports = {
         btime = btime.split('/').join('-')
         etime = etime.split('/').join('-')
 
-        // const pool = mysql.createPool(config.sql);
-
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < group.length; j++) {
-
                 let ips = [group[j]].join("','")
                 let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
                 totalList.push({ g: group[j], sql })
@@ -442,9 +426,6 @@ module.exports = {
 
         let promistList = totalList.map(m => connectionPromise(m))
         Promise.all(promistList).then((result) => {
-            //console.log(result,)               //['成功了', 'success']
-
-            // pool.end()
             res.send({ code: 200, data: countGroup(result) })
         }).catch((error) => {
             console.log(error)

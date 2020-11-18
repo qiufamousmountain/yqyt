@@ -354,10 +354,10 @@ export default class GiPda extends React.Component {
     echarsClick(e) {
         console.log(e.name)
         if (e.name) {
-            this.setState({
-                groupDetail: e.name,
-                detailDialog: true
-            })
+            // this.setState({
+            //     groupDetail: e.name,
+            //     detailDialog: true
+            // })
         }
     }
 
