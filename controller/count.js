@@ -7,14 +7,128 @@ const { sql_m, sql_moni } = require('../config/config.json');
 
 const { gotc, gotcView } = require('../config/gotc.json')
 const { gitc, gitcView } = require('../config/gitc.json')
+const { gipda, gipdaView } = require('../config/gipda.json')
 
 const Moment = require('moment')
 const mysql = require('mysql');
+const { result } = require('underscore');
 
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
+
+
+const connectionPromise = ({ g, sql }) => {
+    return new Promise(function (resolve, reject) {
+
+        pool.getConnection((err, conn) => {
+            if (err) {
+                // console.log('和mysql数据库建立连接失败' + sql)
+                console.log(err)
+                return resolve({ g, count: 0 })
+
+            }
+            // console.log('和mysql数据库连接成功');
+            conn.query(sql, (err2, result) => {
+                conn.release();
+
+                if (err2) {
+                    console.log('查询数据库失败' + sql);
+                    return resolve({ g, count: 0 })
+
+                }
+                // console.log(result[0]["count(0)"]);
+                return resolve({ g, count: result[0]["count(0)"] })
+
+            })
+
+        });
+
+    })
+}
+
+const countGroup = (result) => {
+    let data = {}
+
+    for (let i = 0; i < result.length; i++) {
+        if (data.hasOwnProperty(result[i].g)) {
+            data[result[i].g] = data[result[i].g] + result[i].count
+
+        } else {
+            data[result[i].g] = result[i].count
+
+        }
+    }
+    let arr = []
+    for (let g in data) {
+        if (data.hasOwnProperty(g)) {
+            arr.push({
+                group: g, count: data[g]
+            })
+        }
+
+    }
+
+    return arr
+}
+
+const connectionIPPromise = ({ ip, sql }) => {
+
+    return new Promise(function (resolve, reject) {
+
+        pool.getConnection((err, conn) => {
+            if (err) {
+                console.log('和mysql数据库建立连接失败' + sql)
+                console.log(err)
+                return resolve({ ip, count: 0 })
+
+            }
+            // console.log('和mysql数据库连接成功');
+            conn.query(sql, (err2, result) => {
+                conn.release();
+
+                if (err2) {
+                    console.log('查询数据库失败' + sql);
+                    return resolve({ ip, count: 0 })
+
+                }
+                return resolve({ ip, count: result[0]["count(0)"] })
+
+            })
+
+        });
+
+
+
+    })
+}
+
+
+const countIP = (result, view) => {
+    let data = {}
+    for (let i = 0; i < result.length; i++) {
+        if (data.hasOwnProperty(result[i].ip)) {
+            data[result[i].ip] = data[result[i].ip] + result[i].count
+
+        } else {
+            data[result[i].ip] = result[i].count
+
+        }
+    }
+    let arr = []
+    for (let ip in data) {
+        if (data.hasOwnProperty(ip)) {
+            arr.push({
+                ip: view[ip], count: data[ip]
+            })
+        }
+
+
+
+    }
+    return arr
+}
 module.exports = {
 
-
+    //下车
     countgotcOne: async (req, res) => {
 
         let { btime, etime, group } = req.query;
@@ -30,39 +144,6 @@ module.exports = {
 
         etime = etime.split('/').join('-')
 
-        let connectionPromise = ({ ip, sql }) => {
-
-            return new Promise(function (resolve, reject) {
-
-                pool.getConnection((err, conn) => {
-                    if (err) {
-                        console.log('和mysql数据库建立连接失败' + sql)
-                        console.log(err)
-                        return reject(sql)
-
-                    } else {
-                        // console.log('和mysql数据库连接成功');
-                        conn.query(sql, (err2, result) => {
-                            if (err2) {
-                                console.log('查询数据库失败' + sql);
-                                return reject(sql)
-
-                            } else {
-
-
-                                conn.release();
-                                return resolve({
-                                    ip, count: result[0]["count(0)"]
-                                })
-                            }
-                        })
-                    }
-                });
-
-
-
-            })
-        }
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < gotc[group].length; j++) {
@@ -73,31 +154,13 @@ module.exports = {
             }
         }
 
-        let promistList = totalList.map(m => connectionPromise(m))
+        let promistList = totalList.map(m => connectionIPPromise(m))
         Promise.all(promistList).then((result) => {
             // console.log(result,)               //['成功了', 'success']
-            let data = {}
-            for (let i = 0; i < result.length; i++) {
-                if (data.hasOwnProperty(result[i].ip)) {
-                    data[result[i].ip] = data[result[i].ip] + result[i].count
 
-                } else {
-                    data[result[i].ip] = result[i].count
-
-                }
-            }
-            let arr = []
-            for (let ip in data) {
-                if (data.hasOwnProperty(ip)) {
-                    arr.push({
-                        ip: gotcView[group][ip], count: data[ip]
-                    })
-                }
-
-            }
             // pool.end()
 
-            res.send({ code: 200, data: arr, group })
+            res.send({ code: 200, data: countIP(result, gotcView[group]), group })
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
@@ -122,40 +185,6 @@ module.exports = {
         etime = etime.split('/').join('-')
 
         // const pool = mysql.createPool(config.sql);
-
-        let connectionPromise = ({ g, sql }) => {
-            return new Promise(function (resolve, reject) {
-
-                pool.getConnection((err, conn) => {
-                    if (err) {
-                        // console.log('和mysql数据库建立连接失败' + sql)
-                        console.log(err)
-                        return reject(sql)
-
-                    } else {
-                        // console.log('和mysql数据库连接成功');
-                        conn.query(sql, (err2, result) => {
-                            if (err2) {
-                                console.log('查询数据库失败' + sql);
-                                return reject(sql)
-
-                            } else {
-                                // console.log(result[0]["count(0)"]);
-                                conn.release();
-                                return resolve({
-                                    g, count: result[0]["count(0)"]
-                                })
-                            }
-                        })
-                    }
-                });
-
-            })
-        }
-
-
-
-
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < group.length; j++) {
@@ -170,28 +199,9 @@ module.exports = {
         let promistList = totalList.map(m => connectionPromise(m))
         Promise.all(promistList).then((result) => {
             //console.log(result,)               //['成功了', 'success']
-            let data = {}
 
-            for (let i = 0; i < result.length; i++) {
-                if (data.hasOwnProperty(result[i].g)) {
-                    data[result[i].g] = data[result[i].g] + result[i].count
-
-                } else {
-                    data[result[i].g] = result[i].count
-
-                }
-            }
-            let arr = []
-            for (let g in data) {
-                if (data.hasOwnProperty(g)) {
-                    arr.push({
-                        group: g, count: data[g]
-                    })
-                }
-
-            }
             // pool.end()
-            res.send({ code: 200, data: arr })
+            res.send({ code: 200, data: countGroup(result) })
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
@@ -199,8 +209,9 @@ module.exports = {
         })
 
     },
-    orders: async (req, res) => {
 
+    //详单查询
+    orders: async (req, res) => {
         let { ids } = req.params;
         if (!ids && ids !== '0') {
             res.send({
@@ -219,18 +230,10 @@ module.exports = {
             return;
         }
         let sql = `select WAYBILL_NO, OP_CODE,CREATE_TIME, CONTAINER_NO,MODIFY_TERMINAL from t_exp_waybill_check_${page} where WAYBILL_NO = '${ids}'`;
-
         let osql = `select waybillNo, latticeNo,createDate from t_exp_waybill_check_${page} where waybillNo = '${ids}' and opCode='171'`;
-
-
-
-
         let connectionPromise = (db, sql) => {
-
             let connection = mysql.createConnection(db);
-
             return new Promise(function (resolve, reject) {
-
                 connection.connect(function (err) {
                     if (err) {
                         console.log(err)
@@ -240,11 +243,9 @@ module.exports = {
                 });
                 connection.query(sql, function (err, result) {
                     connection.end();
-
                     if (err) {
                         console.log('查询数据库失败' + sql);
                         return resolve({ code: 500, msg: 'select db error' })
-
                     }
                     return resolve(result)
 
@@ -254,8 +255,8 @@ module.exports = {
 
         let mainData = await connectionPromise(sql_m, sql);
         let oData = await connectionPromise(sql_moni, osql);
-        console.log(mainData, '------------mainData------------------')
-        console.log(oData, '----------------oData--------------')
+        // console.log(mainData, '------------mainData------------------')
+        // console.log(oData, '----------------oData--------------')
         if (mainData.code == 500) {
 
             res.send(mainData);
@@ -286,71 +287,10 @@ module.exports = {
 
         res.send({ code: 200, data: mainData })
 
-
-        // let connection = mysql.createConnection(db);
-
-
-        // connection.connect(function (err) {
-
-
-        //     if (err) {
-        //         res.send({
-        //             code: 500,
-        //             msg: 'db connect error'
-        //         })
-        //         return
-        //     }
-
-        // });
-        // connection.query(sql, function (err, result) {
-        //     connection.end();
-
-        //     if (err) {
-        //         res.send({
-        //             code: 500,
-        //             msg: 'db error'
-        //         })
-        //         return
-
-        //     }
-        //     res.send({ code: 200, data: result })
-
-        // });
-
-        // pool.getConnection((err, conn) => {
-        //     if (err) {
-        //         // console.log('和mysql数据库建立连接失败' + sql)
-        //         res.send({
-        //             code: 500,
-        //             msg: 'db connect error'
-        //         })
-        //         return
-
-        //     } else {
-        //         // console.log('和mysql数据库连接成功');
-        //         conn.query(sql, (err2, result) => {
-        //             if (err2) {
-        //                 res.send({
-        //                     code: 500,
-        //                     msg: 'db error'
-        //                 })
-        //                 return
-
-        //             } else {
-        //                 // console.log(result[0]["count(0)"]);
-        //                 conn.release();
-        //                 res.send({ code: 200, data: result })
-
-        //             }
-
-
-
-        //         })
-        //     }
-        // });
-
     },
 
+
+    //上车狂扫
     countgitcOne: async (req, res) => {
 
         let { btime, etime, group } = req.query;
@@ -366,39 +306,7 @@ module.exports = {
 
         etime = etime.split('/').join('-')
 
-        let connectionPromise = ({ ip, sql }) => {
 
-            return new Promise(function (resolve, reject) {
-
-                pool.getConnection((err, conn) => {
-                    if (err) {
-                        console.log('和mysql数据库建立连接失败' + sql)
-                        console.log(err)
-                        return reject(sql)
-
-                    } else {
-                        // console.log('和mysql数据库连接成功');
-                        conn.query(sql, (err2, result) => {
-                            if (err2) {
-                                console.log('查询数据库失败' + sql);
-                                return reject(sql)
-
-                            } else {
-
-
-                                conn.release();
-                                return resolve({
-                                    ip, count: result[0]["count(0)"]
-                                })
-                            }
-                        })
-                    }
-                });
-
-
-
-            })
-        }
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < gitc[group].length; j++) {
@@ -409,31 +317,13 @@ module.exports = {
             }
         }
 
-        let promistList = totalList.map(m => connectionPromise(m))
+        let promistList = totalList.map(m => connectionIPPromise(m))
         Promise.all(promistList).then((result) => {
             // console.log(result,)               //['成功了', 'success']
-            let data = {}
-            for (let i = 0; i < result.length; i++) {
-                if (data.hasOwnProperty(result[i].ip)) {
-                    data[result[i].ip] = data[result[i].ip] + result[i].count
 
-                } else {
-                    data[result[i].ip] = result[i].count
-
-                }
-            }
-            let arr = []
-            for (let ip in data) {
-                if (data.hasOwnProperty(ip)) {
-                    arr.push({
-                        ip: gitcView[group][ip], count: data[ip]
-                    })
-                }
-
-            }
             // pool.end()
 
-            res.send({ code: 200, data: arr, group })
+            res.send({ code: 200, data: countIP(result, gitcView[group]), group })
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
@@ -459,39 +349,6 @@ module.exports = {
 
         // const pool = mysql.createPool(config.sql);
 
-        let connectionPromise = ({ g, sql }) => {
-            return new Promise(function (resolve, reject) {
-
-                pool.getConnection((err, conn) => {
-                    if (err) {
-                        // console.log('和mysql数据库建立连接失败' + sql)
-                        console.log(err)
-                        return reject(sql)
-
-                    } else {
-                        // console.log('和mysql数据库连接成功');
-                        conn.query(sql, (err2, result) => {
-                            if (err2) {
-                                console.log('查询数据库失败' + sql);
-                                return reject(sql)
-
-                            } else {
-                                // console.log(result[0]["count(0)"]);
-                                conn.release();
-                                return resolve({
-                                    g, count: result[0]["count(0)"]
-                                })
-                            }
-                        })
-                    }
-                });
-
-            })
-        }
-
-
-
-
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < group.length; j++) {
@@ -506,28 +363,89 @@ module.exports = {
         let promistList = totalList.map(m => connectionPromise(m))
         Promise.all(promistList).then((result) => {
             //console.log(result,)               //['成功了', 'success']
-            let data = {}
 
-            for (let i = 0; i < result.length; i++) {
-                if (data.hasOwnProperty(result[i].g)) {
-                    data[result[i].g] = data[result[i].g] + result[i].count
-
-                } else {
-                    data[result[i].g] = result[i].count
-
-                }
-            }
-            let arr = []
-            for (let g in data) {
-                if (data.hasOwnProperty(g)) {
-                    arr.push({
-                        group: g, count: data[g]
-                    })
-                }
-
-            }
             // pool.end()
-            res.send({ code: 200, data: arr })
+            res.send({ code: 200, data: countGroup(result) })
+        }).catch((error) => {
+            console.log(error)
+            res.send({ code: 500, msg: error })
+
+        })
+
+    },
+    //上车pda
+    countgipdaOne: async (req, res) => {
+
+        let { btime, etime, group } = req.query;
+
+        if (!btime || !etime || !gipda[group] || gipda[group].length < 1) {
+            res.send({
+                code: 500,
+                msg: 'params is invaid'
+            })
+            return;
+        }
+        btime = btime.split('/').join('-')
+
+        etime = etime.split('/').join('-')
+        let totalList = [];
+        for (let i = 0; i < list.length; i++) {
+            for (let j = 0; j < gipda[group].length; j++) {
+                let ip = gipda[group][j]
+                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL='${ip}' and (create_time between '${btime}' and '${etime}')`
+                totalList.push({ ip, sql })
+
+            }
+        }
+
+        let promistList = totalList.map(m => connectionIPPromise(m))
+        Promise.all(promistList).then((result) => {
+            // console.log(result,)               //['成功了', 'success']
+
+            // pool.end()
+
+            res.send({ code: 200, data: countIP(result, gipdaView[group]), group })
+        }).catch((error) => {
+            console.log(error)
+            res.send({ code: 500, msg: error })
+
+        })
+
+    },
+    countgipda: async (req, res) => {
+
+        let { btime, etime, group } = req.body;
+        console.log(btime, etime, group)
+        if (!btime || !etime || group.length < 1) {
+            res.send({
+                code: 500,
+                msg: 'params is invaid'
+            })
+            return;
+        }
+
+        btime = btime.split('/').join('-')
+        etime = etime.split('/').join('-')
+
+        // const pool = mysql.createPool(config.sql);
+
+        let totalList = [];
+        for (let i = 0; i < list.length; i++) {
+            for (let j = 0; j < group.length; j++) {
+
+                let ips = [group[j]].join("','")
+                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
+                totalList.push({ g: group[j], sql })
+
+            }
+        }
+
+        let promistList = totalList.map(m => connectionPromise(m))
+        Promise.all(promistList).then((result) => {
+            //console.log(result,)               //['成功了', 'success']
+
+            // pool.end()
+            res.send({ code: 200, data: countGroup(result) })
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
@@ -536,6 +454,7 @@ module.exports = {
 
     },
 
+    //包使用量
     countPackage: async (req, res) => {
 
         let { btime, etime } = req.query;
@@ -547,14 +466,26 @@ module.exports = {
             return;
         }
 
-        res.send({ code: 200 ,data:[]})
+        res.send({ code: 200, data: [] })
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             let u = `select COUNT(0)from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#98%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
             let t = `select COUNT(0)from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
-            totalList.push({ t })
+            totalList.push({ g: 'total', sql: t }, { g: 'used', sql: u })
         }
 
+        let promistList = totalList.map(m => connectionPromise(m))
+        Promise.all(promistList).then((result) => {
+            //console.log(result,)               //['成功了', 'success']
+
+
+            // pool.end()
+            res.send({ code: 200, data: countGroup(result) })
+        }).catch((error) => {
+            console.log(error)
+            res.send({ code: 500, msg: error })
+
+        })
 
     },
 };
