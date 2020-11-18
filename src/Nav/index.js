@@ -24,12 +24,12 @@ export default class Nav extends React.Component {
                 icon: 'drafts'
 
             },
-            //  {
-            //     name: '环保袋使用率',
-            //     path: '/package',
-            //     icon: 'drafts'
+             {
+                name: '环保袋使用率',
+                path: '/package',
+                icon: 'drafts'
 
-            // }
+            }
         ]
 
         }

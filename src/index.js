@@ -9,7 +9,7 @@ import Main from './Main';
 import Order from './Main/Orders';
 import Gitc from './Main/Gitc';
 import GiPda from './Main/GiPda';
-// import Packages from './Main/Packages';
+import Packages from './Main/Packages';
 
 
 
@@ -39,22 +39,22 @@ class App extends React.Component {
                     path: '/gitc',
                     component: Gitc,
                 },
-                
+
                 {
                     path: '/gipda',
                     component: GiPda,
                 },
-                // {
-                //     path: '/package',
-                //     component: Packages,
-                // }
+                {
+                    path: '/package',
+                    component: Packages,
+                }
             ]
         }
     }
 
     componentWillMount() {
 
-        
+
     }
 
 

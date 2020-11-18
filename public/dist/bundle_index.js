@@ -27771,6 +27771,10 @@ var _GiPda = __webpack_require__(565);
 
 var _GiPda2 = _interopRequireDefault(_GiPda);
 
+var _Packages = __webpack_require__(685);
+
+var _Packages2 = _interopRequireDefault(_Packages);
+
 var _Top = __webpack_require__(567);
 
 var _Top2 = _interopRequireDefault(_Top);
@@ -27820,6 +27824,9 @@ var App = function (_React$Component) {
             }, {
                 path: '/gipda',
                 component: _GiPda2.default
+            }, {
+                path: '/package',
+                component: _Packages2.default
             }]
         };
         return _this;
@@ -27865,8 +27872,6 @@ var App = function (_React$Component) {
     }]);
     return App;
 }(_react2.default.Component);
-// import Packages from './Main/Packages';
-
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('page'));
 
@@ -74580,6 +74585,11 @@ var Nav = function (_React$Component) {
                 path: '/orders',
                 icon: 'drafts'
 
+            }, {
+                name: '环保袋使用率',
+                path: '/package',
+                icon: 'drafts'
+
             }]
 
         };
@@ -76266,6 +76276,405 @@ function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
 
 module.exports = hoistNonReactStatics;
 
+
+/***/ }),
+/* 580 */,
+/* 581 */,
+/* 582 */,
+/* 583 */,
+/* 584 */,
+/* 585 */,
+/* 586 */,
+/* 587 */,
+/* 588 */,
+/* 589 */,
+/* 590 */,
+/* 591 */,
+/* 592 */,
+/* 593 */,
+/* 594 */,
+/* 595 */,
+/* 596 */,
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */,
+/* 601 */,
+/* 602 */,
+/* 603 */,
+/* 604 */,
+/* 605 */,
+/* 606 */,
+/* 607 */,
+/* 608 */,
+/* 609 */,
+/* 610 */,
+/* 611 */,
+/* 612 */,
+/* 613 */,
+/* 614 */,
+/* 615 */,
+/* 616 */,
+/* 617 */,
+/* 618 */,
+/* 619 */,
+/* 620 */,
+/* 621 */,
+/* 622 */,
+/* 623 */,
+/* 624 */,
+/* 625 */,
+/* 626 */,
+/* 627 */,
+/* 628 */,
+/* 629 */,
+/* 630 */,
+/* 631 */,
+/* 632 */,
+/* 633 */,
+/* 634 */,
+/* 635 */,
+/* 636 */,
+/* 637 */,
+/* 638 */,
+/* 639 */,
+/* 640 */,
+/* 641 */,
+/* 642 */,
+/* 643 */,
+/* 644 */,
+/* 645 */,
+/* 646 */,
+/* 647 */,
+/* 648 */,
+/* 649 */,
+/* 650 */,
+/* 651 */,
+/* 652 */,
+/* 653 */,
+/* 654 */,
+/* 655 */,
+/* 656 */,
+/* 657 */,
+/* 658 */,
+/* 659 */,
+/* 660 */,
+/* 661 */,
+/* 662 */,
+/* 663 */,
+/* 664 */,
+/* 665 */,
+/* 666 */,
+/* 667 */,
+/* 668 */,
+/* 669 */,
+/* 670 */,
+/* 671 */,
+/* 672 */,
+/* 673 */,
+/* 674 */,
+/* 675 */,
+/* 676 */,
+/* 677 */,
+/* 678 */,
+/* 679 */,
+/* 680 */,
+/* 681 */,
+/* 682 */,
+/* 683 */,
+/* 684 */,
+/* 685 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _getPrototypeOf = __webpack_require__(16);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(17);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(18);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(19);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(20);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__(7);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(33);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _EventEmitter = __webpack_require__(34);
+
+var _server = __webpack_require__(53);
+
+var _reactDatepicker = __webpack_require__(93);
+
+var _reactDatepicker2 = _interopRequireDefault(_reactDatepicker);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _core = __webpack_require__(104);
+
+var _core2 = _interopRequireDefault(_core);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Main = function (_React$Component) {
+    (0, _inherits3.default)(Main, _React$Component);
+
+    function Main(props) {
+        (0, _classCallCheck3.default)(this, Main);
+
+        var _this = (0, _possibleConstructorReturn3.default)(this, (Main.__proto__ || (0, _getPrototypeOf2.default)(Main)).call(this, props));
+
+        _this.state = {
+            openGroup: false,
+            params: {
+                btime: '',
+                etime: ''
+            },
+            viewData: [],
+            vtitle: '包使用情况'
+
+        };
+        return _this;
+    }
+
+    (0, _createClass3.default)(Main, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {}
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+
+            this.getData();
+        }
+    }, {
+        key: 'getData',
+        value: function getData() {
+            var _this2 = this;
+
+            var params = this.state.params;
+
+            if (!params.btime) {
+                _EventEmitter.emitter.emit(_EventEmitter.SNACKBAR, '请选择开始时间');
+
+                return;
+            }
+            if (!params.etime) {
+                _EventEmitter.emitter.emit(_EventEmitter.SNACKBAR, '请选择结束时间');
+
+                return;
+            }
+            _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, true);
+
+            _server.axios.post('/api/count/package', params).then(function (response) {
+
+                var resData = response.data;
+                _EventEmitter.emitter.emit(_EventEmitter.PAGELOADING, false);
+
+                if (resData.code == 200) {
+
+                    var data = resData.data;
+                    _this2.setState({
+                        viewData: data
+                    });
+                } else {
+                    _EventEmitter.emitter.emit(_EventEmitter.SNACKBAR, resData.msg);
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    }, {
+        key: 'getOption',
+        value: function getOption() {
+            var _state = this.state,
+                viewData = _state.viewData,
+                params = _state.params;
+
+            var option = {
+                title: {
+                    text: '华北转运中心环保袋使用情况',
+                    subtext: params.btime + '-' + params.etime,
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: viewData.map(function (m) {
+                        return m.group;
+                    })
+
+                },
+                series: [{
+                    name: '使用量',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: viewData.map(function (m) {
+                        return {
+                            name: m.group,
+                            value: m.count
+                        };
+                    }),
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+            return option;
+        }
+    }, {
+        key: 'echarsClick',
+        value: function echarsClick(e) {
+            console.log(e.name);
+            if (e.name) {}
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            var params = this.state.params;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'views' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'filter-control' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'filter-item' },
+                        '\u5F00\u59CB\u65F6\u95F4\uFF1A',
+                        _react2.default.createElement(_reactDatepicker2.default, {
+                            todayButton: "今天",
+                            timeFormat: 'HH:mm',
+                            selected: params.btime ? new Date(params.btime) : null,
+                            showTimeSelect: true,
+                            onChange: function onChange(date) {
+
+                                if (params.etime && !(0, _moment2.default)(date).isBefore(params.etime)) {
+
+                                    _EventEmitter.emitter.emit(_EventEmitter.SNACKBAR, '结束时间不能早于开始时间');
+                                    params.btime = '';
+                                } else {
+                                    params.btime = (0, _moment2.default)(date).format('yyyy/MM/DD HH:mm');
+                                }
+
+                                _this3.setState({
+                                    params: params
+                                });
+                            },
+                            customInput: _react2.default.createElement(
+                                'button',
+                                { className: 'mdc-button' },
+                                _react2.default.createElement('div', { className: 'mdc-button__ripple' }),
+                                _react2.default.createElement(
+                                    'span',
+                                    { className: 'pick-button' },
+                                    params.btime || '请选择'
+                                )
+                            ),
+                            dateFormat: 'yyyy/MM/dd HH:mm'
+
+                        })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'filter-item' },
+                        '\u7ED3\u675F\u65F6\u95F4\uFF1A',
+                        _react2.default.createElement(_reactDatepicker2.default, {
+                            todayButton: "今天",
+                            timeFormat: 'HH:mm',
+                            selected: params.etime ? new Date(params.etime) : null,
+                            showTimeSelect: true,
+                            onChange: function onChange(date) {
+
+                                if (params.btime && !(0, _moment2.default)(params.btime).isBefore(date)) {
+                                    _EventEmitter.emitter.emit(_EventEmitter.SNACKBAR, '开始时间不能晚于结束时间');
+                                    params.etime = '';
+                                } else {
+                                    params.etime = (0, _moment2.default)(date).format('yyyy/MM/DD HH:mm');
+                                }
+
+                                _this3.setState({
+                                    params: params
+                                });
+                            },
+                            customInput: _react2.default.createElement(
+                                'button',
+                                { className: 'mdc-button' },
+                                _react2.default.createElement('div', { className: 'mdc-button__ripple' }),
+                                _react2.default.createElement(
+                                    'span',
+                                    { className: 'pick-button' },
+                                    params.etime || '请选择'
+                                )
+                            ),
+                            dateFormat: 'yyyy/MM/dd HH:mm'
+                        })
+                    ),
+                    _react2.default.createElement(
+                        'button',
+                        { className: 'mdc-button mdc-button--raised',
+                            onClick: this.getData.bind(this)
+                        },
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'mdc-button__label' },
+                            '\u67E5\u770B'
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'echart-box' },
+                    _react2.default.createElement(_core2.default, {
+                        echarts: echarts,
+                        option: this.getOption(),
+                        style: { height: '100%', width: '100%' },
+                        notMerge: true,
+                        lazyUpdate: true,
+                        theme: "theme_name"
+                    })
+                )
+            );
+        }
+    }]);
+    return Main;
+}(_react2.default.Component);
+
+exports.default = Main;
 
 /***/ })
 /******/ ]);

@@ -11,8 +11,6 @@ const { gipda, gipdaView } = require('../config/gipda.json')
 
 const Moment = require('moment')
 const mysql = require('mysql');
-const { result } = require('underscore');
-
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
 
 
