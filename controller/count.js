@@ -486,7 +486,7 @@ module.exports = {
             let totals = countGroup(result).filter(m => m.group == '总数');
 
             arr.push(useds)
-            arr.push({ "group": "未使用", "count": (totals.count || 0) - useds.count })
+            arr.push({ "group": "未使用", "count":totals[0].count - useds[0].count })
             // pool.end()
             res.send({ code: 200, data: arr })
         }).catch((error) => {
