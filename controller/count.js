@@ -449,7 +449,7 @@ module.exports = {
         for (let i = 0; i < list.length; i++) {
             let u = `select COUNT(0) from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#98%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
             let t = `select COUNT(0) from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
-            totalList.push({ g: 'total', sql: t }, { g: 'used', sql: u })
+            totalList.push({ g: '总数', sql: t }, { g: '已使用', sql: u })
         }
 
 
@@ -468,7 +468,7 @@ module.exports = {
                             return resolve({ g, count: 0 })
 
                         }
-                        // console.log(result[0]["count(0)"]);
+                        console.log(result);
                         return resolve({ g, count: result[0]["count(0)"] })
 
                     });
