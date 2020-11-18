@@ -415,7 +415,7 @@ module.exports = {
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             for (let j = 0; j < group.length; j++) {
-                let ips = [group[j]].join("','")
+                let ips = gipda[group[j]].join("','")
                 let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
                 totalList.push({ g: group[j], sql })
 

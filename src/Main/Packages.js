@@ -33,7 +33,6 @@ export default class Main extends React.Component {
 
     componentDidMount() {
 
-        this.getData()
     }
 
     getData() {

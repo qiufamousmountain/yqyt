@@ -76465,10 +76465,7 @@ var Main = function (_React$Component) {
         value: function componentWillMount() {}
     }, {
         key: 'componentDidMount',
-        value: function componentDidMount() {
-
-            this.getData();
-        }
+        value: function componentDidMount() {}
     }, {
         key: 'getData',
         value: function getData() {
