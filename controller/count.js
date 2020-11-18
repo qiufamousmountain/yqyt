@@ -98,7 +98,7 @@ const connectionIPPromise = ({ ip, sql }) => {
 
     })
 }
-   
+
 const countIP = (result, view) => {
     let data = {}
     for (let i = 0; i < result.length; i++) {
@@ -445,7 +445,6 @@ module.exports = {
             return;
         }
 
-        res.send({ code: 200, data: [] })
         let totalList = [];
         for (let i = 0; i < list.length; i++) {
             let u = `select COUNT(0) from ${list[i]}  where OP_CODE='110' and MODIFY_USER_NAME LIKE '%#98%' AND (CREATE_TIME between '${btime}' and '${etime}')`;
@@ -453,7 +452,31 @@ module.exports = {
             totalList.push({ g: 'total', sql: t }, { g: 'used', sql: u })
         }
 
-        let promistList = totalList.map(m => connectionPromise(m))
+
+        let connectionPro = ({ g, sql }) => {
+            let connection = mysql.createConnection(sql_m);
+            return new Promise(function (resolve, reject) {
+                connection.connect(function (err) {
+                    if (err) {
+                        console.log(err)
+                        return resolve({ g, count: 0 })
+                    }
+                    connection.query(sql, function (err, result) {
+                        connection.end();
+                        if (err2) {
+                            console.log('查询数据库失败' + sql);
+                            return resolve({ g, count: 0 })
+
+                        }
+                        // console.log(result[0]["count(0)"]);
+                        return resolve({ g, count: result[0]["count(0)"] })
+
+                    });
+                });
+
+            })
+        }
+        let promistList = totalList.map(m => connectionPro(m))
         Promise.all(promistList).then((result) => {
             //console.log(result,)               //['成功了', 'success']
 
