@@ -485,7 +485,7 @@ module.exports = {
             let useds = countGroup(result).filter(m => m.group == '已使用')
             let totals = countGroup(result).filter(m => m.group == '总数');
 
-            arr.push(useds)
+            arr.push(useds[0])
             arr.push({ "group": "未使用", "count":totals[0].count - useds[0].count })
             // pool.end()
             res.send({ code: 200, data: arr })
