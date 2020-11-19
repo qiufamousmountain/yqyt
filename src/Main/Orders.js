@@ -9,7 +9,7 @@ import {
 import { axios } from '../util/server'
 import Moment from 'moment'
 
-import { order, orderViews,dViews } from '../../config/order.json'
+import { order, orderViews, dViews } from '../../config/order.json'
 
 
 export default class Orders extends React.Component {
@@ -92,9 +92,10 @@ export default class Orders extends React.Component {
                             </span>
                             <input type="text" className="mdc-text-field__input" aria-labelledby="my-label-id" value={ids}
                                 onChange={(e) => {
-                                    this.setState({
-                                        ids: e.target.value
-                                    })
+                                    var re = /select|update|delete|exec|count|'|"|=|;|>|<|%/i;
+                                    let ids = (e.target.value || '').replace(re, '');
+                                    
+                                    this.setState({ ids })
                                 }}></input>
                         </label>
 
@@ -133,7 +134,7 @@ export default class Orders extends React.Component {
 
 
                                                 let ips = m['MODIFY_TERMINAL'];
-                                                
+
 
                                                 return (<tr className="mdc-data-table__row" key={'table__row' + i}>
 
@@ -157,7 +158,7 @@ export default class Orders extends React.Component {
 
                                                     }
 
-                                                    <th className="mdc-data-table__header-cell" role="columnheader" scope="col">{dViews[ips] }</th>
+                                                    <th className="mdc-data-table__header-cell" role="columnheader" scope="col">{dViews[ips]}</th>
 
 
                                                 </tr>)
