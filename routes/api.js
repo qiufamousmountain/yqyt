@@ -26,40 +26,40 @@ router.post('/userout', (req, res) => {
 // });
 
 
-// router.use((req, res, next) => {
+router.use((req, res, next) => {
 
 
-//     if (!req.session.yto_u) {
-//         res.json({ code: 302, data: '/' });
-//         return
-//     }
-//     let { id, clientID } = req.session.yto_u;
+    if (!req.session.yto_u) {
+        res.json({ code: 302, data: '/' });
+        return
+    }
+    let { id, clientID } = req.session.yto_u;
 
-//     client.get(id, async (err, reply) => {
-//         if (err) {
-//             next(err);
-//         } else {
-//             if (reply) {
-//                 let r = JSON.parse(reply);
-//                 if (clientID != r.clientID) {
-//                     req.session.destroy((err) => {
-//                         res.json({ code: 402, data: '/' })
-//                         return
-//                     })
-//                 } else {
-//                     next();
+    client.get(id, async (err, reply) => {
+        if (err) {
+            next(err);
+        } else {
+            if (reply) {
+                let r = JSON.parse(reply);
+                if (clientID != r.clientID) {
+                    req.session.destroy((err) => {
+                        res.json({ code: 402, data: '/' })
+                        return
+                    })
+                } else {
+                    next();
 
-//                 }
-//             } else {
+                }
+            } else {
 
-//                 res.json({ code: 302, data: '/' });
-//                 return
+                res.json({ code: 302, data: '/' });
+                return
 
-//             }
-//         }
-//     });
+            }
+        }
+    });
 
-// });
+});
 
 //下车
 router.post('/count/gotc', (req, res) => {
