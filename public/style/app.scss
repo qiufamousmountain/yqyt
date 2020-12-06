@@ -133,8 +133,24 @@ p {
             height: calc(100% - 100px);
             padding: 20px 20px 0 20px;
             background-color: #fff;
-        }
-    }
+		}
+
+
+
+		
+		&.data-screen{
+			padding: 0;
+			display: flex;
+			 .echart-box{
+				 width: 100%;
+				 height: 100%
+					 }
+				 }
+				 .total-change{
+					 color:#4d63bc;
+					 font-size: 40px;
+				 }
+		}
 
     .mdc-menu{
         position: relative;

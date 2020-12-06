@@ -12,8 +12,11 @@ import Moment from 'moment'
 
 import ReactEchartsCore from 'echarts-for-react/lib/core';
 
-import { gitc } from '../../config/gitc.json'
+import echarts from 'echarts/lib/echarts';
 
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/chart/bar';
 export default class Gitc extends React.Component {
     constructor(props) {
         super(props);
@@ -36,19 +39,25 @@ export default class Gitc extends React.Component {
 
     componentWillMount() {
 
+        axios.get(`/api/settings/gitc`
+        ).then((response) => {
 
-        let gitcList = []
-        for (let i in gitc) {
-            if (gitc.hasOwnProperty(i)) {
-                gitcList.push({
-                    check: false,
-                    name: i,
+            let resData = response.data
+
+            if (resData.code == 200) {
+                
+                this.setState({
+                    gitcList:resData.data
                 })
+            } else {
+                emitter.emit(SNACKBAR, resData.msg)
+
             }
-        }
-        this.setState({
-            gitcList
         })
+            .catch((error) => {
+                console.log(error);
+            });
+
     }
 
 

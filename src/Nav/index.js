@@ -7,16 +7,16 @@ export default class Nav extends React.Component {
             nav: [{
                 name: '下车操作统计',
                 path: '/',
-                icon: 'inbox'
+                icon: 'train'
             }, {
                 name: '上车狂扫统计',
                 path: '/gitc',
-                icon: 'drafts'
+                icon: 'local_taxi'
 
             }, , {
                 name: '上车PDA统计',
                 path: '/gipda',
-                icon: 'drafts'
+                icon: 'dock'
 
             }, {
                 name: '详单查询',
@@ -27,7 +27,14 @@ export default class Nav extends React.Component {
              {
                 name: '环保袋使用率',
                 path: '/package',
-                icon: 'drafts'
+                icon: 'rotate_left'
+
+            }
+            ,
+             {
+                name: '吞吐地图',
+                path: '/maps',
+                icon: 'desktop_mac'
 
             }
         ]

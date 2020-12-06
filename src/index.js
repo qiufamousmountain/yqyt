@@ -10,6 +10,7 @@ import Order from './Main/Orders';
 import Gitc from './Main/Gitc';
 import GiPda from './Main/GiPda';
 import Packages from './Main/Packages';
+import Maps from './Main/Maps';
 
 
 
@@ -47,6 +48,11 @@ class App extends React.Component {
                 {
                     path: '/package',
                     component: Packages,
+                }
+                ,
+                {
+                    path: '/maps',
+                    component: Maps,
                 }
             ]
         }

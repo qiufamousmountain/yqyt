@@ -12,8 +12,11 @@ import Moment from 'moment'
 
 import ReactEchartsCore from 'echarts-for-react/lib/core';
 
-import { gipda } from '../../config/gipda.json'
+import echarts from 'echarts/lib/echarts';
 
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/chart/bar';
 export default class GiPda extends React.Component {
     constructor(props) {
         super(props);
@@ -37,18 +40,26 @@ export default class GiPda extends React.Component {
     componentWillMount() {
 
 
-        let gipdaList = []
-        for (let i in gipda) {
-            if (gipda.hasOwnProperty(i)) {
-                gipdaList.push({
-                    check: false,
-                    name: i,
+        axios.get(`/api/settings/gipda`
+        ).then((response) => {
+
+            let resData = response.data
+
+            if (resData.code == 200) {
+                
+                this.setState({
+                    gipdaList:resData.data
                 })
+            } else {
+                emitter.emit(SNACKBAR, resData.msg)
+
             }
-        }
-        this.setState({
-            gipdaList
         })
+            .catch((error) => {
+                console.log(error);
+            });
+
+
     }
 
 

@@ -10,7 +10,10 @@ import { axios } from '../util/server'
 import DatePickers from 'react-datepicker'
 import Moment from 'moment'
 import ReactEchartsCore from 'echarts-for-react/lib/core';
-export default class Main extends React.Component {
+
+import echarts from 'echarts/lib/echarts';
+
+export default class Packages extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

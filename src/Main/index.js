@@ -11,9 +11,11 @@ import DatePickers from 'react-datepicker'
 import Moment from 'moment'
 
 import ReactEchartsCore from 'echarts-for-react/lib/core';
+import echarts from 'echarts/lib/echarts';
 
-import { gotc } from '../../config/gotc.json'
-
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/chart/bar';
 export default class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -37,18 +39,25 @@ export default class Main extends React.Component {
     componentWillMount() {
 
 
-        let gotcList = []
-        for (let i in gotc) {
-            if (gotc.hasOwnProperty(i)) {
-                gotcList.push({
-                    check: false,
-                    name: i,
+
+        axios.get(`/api/settings/gotc`
+        ).then((response) => {
+
+            let resData = response.data
+
+            if (resData.code == 200) {
+                
+                this.setState({
+                    gotcList:resData.data
                 })
+            } else {
+                emitter.emit(SNACKBAR, resData.msg)
+
             }
-        }
-        this.setState({
-            gotcList
         })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
 

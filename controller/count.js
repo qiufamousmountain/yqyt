@@ -1,8 +1,11 @@
 /**
- * Created by zhengliuyang on 2018/10/9.
+ * Created by zhangyuntao on 2018/10/9.
  */
 
 const { pool } = require('../models/sql')
+const fs = require('fs')
+const path = require('path')
+
 const { sql_m, sql_moni } = require('../config/config.json');
 
 const { gotc, gotcView } = require('../config/gotc.json')
@@ -123,6 +126,8 @@ const countIP = (result, view) => {
     }
     return arr
 }
+
+
 module.exports = {
 
     //下车
@@ -486,7 +491,7 @@ module.exports = {
             let totals = countGroup(result).filter(m => m.group == '总数');
 
             arr.push(useds[0])
-            arr.push({ "group": "未使用", "count":totals[0].count - useds[0].count })
+            arr.push({ "group": "未使用", "count": totals[0].count - useds[0].count })
             // pool.end()
             res.send({ code: 200, data: arr })
         }).catch((error) => {
@@ -496,4 +501,46 @@ module.exports = {
         })
 
     },
+
+    getSettings: async (req, res) => {
+
+        let { settings } = req.params;
+        if (!settings) {
+            res.send({
+                code: 500,
+                msg: 'query is invaid'
+            })
+            return;
+        }
+
+        try {
+            let settingData = fs.readFileSync(path.join(__dirname, '../config') + `/${settings}.json`, 'utf-8')
+
+            settingData = JSON.parse(settingData)
+
+            let data = []
+            for (let i in settingData[settings]) {
+                if (settingData[settings].hasOwnProperty(i)) {
+                    data.push({
+                        check: false,
+                        name: i,
+                    })
+                }
+            }
+
+            res.send({ code: 200, data })
+            settingData = null;
+
+        } catch (e) {
+            console.log(e)
+            res.send({ code: 500, msg: 'has none' })
+
+        }
+
+
+
+
+
+    },
 };
+
