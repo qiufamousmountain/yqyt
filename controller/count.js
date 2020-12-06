@@ -159,14 +159,16 @@ module.exports = {
         let promistList = totalList.map(m => connectionIPPromise(m))
         Promise.all(promistList).then((result) => {
             // console.log(result,)               //['成功了', 'success']
-
             // pool.end()
 
             res.send({ code: 200, data: countIP(result, gotcView[group]), group })
+            promistList = null;
+            totalList = null;
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
-
+            promistList = null;
+            totalList = null;
         })
 
     },
@@ -204,10 +206,13 @@ module.exports = {
 
             // pool.end()
             res.send({ code: 200, data: countGroup(result) })
+            promistList=null;
+            totalList=null;
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
-
+            promistList=null;
+            totalList=null;
         })
 
     },
@@ -323,9 +328,13 @@ module.exports = {
             // pool.end()
 
             res.send({ code: 200, data: countIP(result, gitcView[group]), group })
+            promistList=null;
+            totalList=null;
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
+            promistList=null;
+            totalList=null;
 
         })
 
@@ -365,9 +374,13 @@ module.exports = {
 
             // pool.end()
             res.send({ code: 200, data: countGroup(result) })
+            promistList=null;
+            totalList=null;
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
+            promistList=null;
+            totalList=null;
 
         })
 
@@ -396,9 +409,13 @@ module.exports = {
         let promistList = totalList.map(m => connectionIPPromise(m))
         Promise.all(promistList).then((result) => {
             res.send({ code: 200, data: countIP(result, gipdaView[group]), group })
+            promistList=null;
+            totalList=null;
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
+            promistList=null;
+            totalList=null;
         })
 
     },
@@ -430,9 +447,13 @@ module.exports = {
         let promistList = totalList.map(m => connectionPromise(m))
         Promise.all(promistList).then((result) => {
             res.send({ code: 200, data: countGroup(result) })
+            promistList=null;
+            totalList=null;
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
+            promistList=null;
+            totalList=null;
 
         })
 
@@ -494,10 +515,13 @@ module.exports = {
             arr.push({ "group": "未使用", "count": totals[0].count - useds[0].count })
             // pool.end()
             res.send({ code: 200, data: arr })
+            promistList=null;
+            totalList=null;
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
-
+            promistList=null;
+            totalList=null;
         })
 
     },
