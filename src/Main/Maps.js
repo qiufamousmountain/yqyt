@@ -14,7 +14,7 @@ import 'echarts/lib/chart/map'
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/chart/bar';
-import beijing from '../../config/beijing.json'
+import beijing from '../../config/country.json'
 import CountUp from 'react-countup';
 export default class Maps extends React.Component {
     constructor(props) {

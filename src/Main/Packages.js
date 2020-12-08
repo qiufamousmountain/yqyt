@@ -12,7 +12,9 @@ import Moment from 'moment'
 import ReactEchartsCore from 'echarts-for-react/lib/core';
 
 import echarts from 'echarts/lib/echarts';
-
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
 export default class Packages extends React.Component {
     constructor(props) {
         super(props);
