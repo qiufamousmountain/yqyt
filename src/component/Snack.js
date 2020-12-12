@@ -13,7 +13,7 @@ export default class Snack extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         emitter.on(SNACKBAR, (text) => {
             this.snackbarOpen(text);
         });

@@ -3,15 +3,8 @@
  */
 
 const { pool } = require('../models/sql')
-const fs = require('fs')
-const path = require('path')
-
 const { sql_m, sql_moni } = require('../config/config.json');
-
-const { gotc, gotcView } = require('../config/gotc.json')
-const { gitc, gitcView } = require('../config/gitc.json')
-const { gipda, gipdaView } = require('../config/gipda.json')
-
+const groupConfig = require('../config/groups.json')
 const Moment = require('moment')
 const mysql = require('mysql');
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
@@ -46,30 +39,6 @@ const connectionPromise = ({ g, sql }) => {
     })
 }
 
-const countGroup = (result) => {
-    let data = {}
-
-    for (let i = 0; i < result.length; i++) {
-        if (data.hasOwnProperty(result[i].g)) {
-            data[result[i].g] = data[result[i].g] + result[i].count
-
-        } else {
-            data[result[i].g] = result[i].count
-
-        }
-    }
-    let arr = []
-    for (let g in data) {
-        if (data.hasOwnProperty(g)) {
-            arr.push({
-                group: g, count: data[g]
-            })
-        }
-
-    }
-
-    return arr
-}
 
 const connectionIPPromise = ({ ip, sql }) => {
 
@@ -101,122 +70,7 @@ const connectionIPPromise = ({ ip, sql }) => {
 
     })
 }
-
-const countIP = (result, view) => {
-    let data = {}
-    for (let i = 0; i < result.length; i++) {
-        if (data.hasOwnProperty(result[i].ip)) {
-            data[result[i].ip] = data[result[i].ip] + result[i].count
-
-        } else {
-            data[result[i].ip] = result[i].count
-
-        }
-    }
-    let arr = []
-    for (let ip in data) {
-        if (data.hasOwnProperty(ip)) {
-            arr.push({
-                ip: view[ip], count: data[ip]
-            })
-        }
-
-
-
-    }
-    return arr
-}
-
-
 module.exports = {
-
-    //下车
-    countgotcOne: async (req, res) => {
-
-        let { btime, etime, group } = req.query;
-
-        if (!btime || !etime || !gotc[group] || gotc[group].length < 1) {
-            res.send({
-                code: 500,
-                msg: 'params is invaid'
-            })
-            return;
-        }
-        btime = btime.split('/').join('-')
-
-        etime = etime.split('/').join('-')
-
-        let totalList = [];
-        for (let i = 0; i < list.length; i++) {
-            for (let j = 0; j < gotc[group].length; j++) {
-                let ip = gotc[group][j]
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL='${ip}' and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ ip, sql })
-
-            }
-        }
-
-        let promistList = totalList.map(m => connectionIPPromise(m))
-        Promise.all(promistList).then((result) => {
-            // console.log(result,)               //['成功了', 'success']
-            // pool.end()
-
-            res.send({ code: 200, data: countIP(result, gotcView[group]), group })
-            promistList = null;
-            totalList = null;
-        }).catch((error) => {
-            console.log(error)
-            res.send({ code: 500, msg: error })
-            promistList = null;
-            totalList = null;
-        })
-
-    },
-
-    countgotc: async (req, res) => {
-
-        let { btime, etime, group } = req.body;
-        console.log(btime, etime, group)
-        if (!btime || !etime || group.length < 1) {
-            res.send({
-                code: 500,
-                msg: 'params is invaid'
-            })
-            return;
-        }
-
-        btime = btime.split('/').join('-')
-        etime = etime.split('/').join('-')
-
-        // const pool = mysql.createPool(config.sql);
-        let totalList = [];
-        for (let i = 0; i < list.length; i++) {
-            for (let j = 0; j < group.length; j++) {
-
-                let ips = gotc[group[j]].join("','")
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ g: group[j], sql })
-
-            }
-        }
-
-        let promistList = totalList.map(m => connectionPromise(m))
-        Promise.all(promistList).then((result) => {
-            //console.log(result,)               //['成功了', 'success']
-
-            // pool.end()
-            res.send({ code: 200, data: countGroup(result) })
-            promistList=null;
-            totalList=null;
-        }).catch((error) => {
-            console.log(error)
-            res.send({ code: 500, msg: error })
-            promistList=null;
-            totalList=null;
-        })
-
-    },
-
     //详单查询
     orders: async (req, res) => {
         let { ids } = req.params;
@@ -295,170 +149,6 @@ module.exports = {
         res.send({ code: 200, data: mainData })
 
     },
-
-
-    //上车狂扫
-    countgitcOne: async (req, res) => {
-
-        let { btime, etime, group } = req.query;
-
-        if (!btime || !etime || !gitc[group] || gitc[group].length < 1) {
-            res.send({
-                code: 500,
-                msg: 'params is invaid'
-            })
-            return;
-        }
-        btime = btime.split('/').join('-')
-        etime = etime.split('/').join('-')
-        let totalList = [];
-        for (let i = 0; i < list.length; i++) {
-            for (let j = 0; j < gitc[group].length; j++) {
-                let ip = gitc[group][j]
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL='${ip}' and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ ip, sql })
-
-            }
-        }
-
-        let promistList = totalList.map(m => connectionIPPromise(m))
-        Promise.all(promistList).then((result) => {
-            // console.log(result,)               //['成功了', 'success']
-
-            // pool.end()
-
-            res.send({ code: 200, data: countIP(result, gitcView[group]), group })
-            promistList=null;
-            totalList=null;
-        }).catch((error) => {
-            console.log(error)
-            res.send({ code: 500, msg: error })
-            promistList=null;
-            totalList=null;
-
-        })
-
-    },
-
-    countgitc: async (req, res) => {
-
-        let { btime, etime, group } = req.body;
-        console.log(btime, etime, group)
-        if (!btime || !etime || group.length < 1) {
-            res.send({
-                code: 500,
-                msg: 'params is invaid'
-            })
-            return;
-        }
-
-        btime = btime.split('/').join('-')
-        etime = etime.split('/').join('-')
-
-        // const pool = mysql.createPool(config.sql);
-
-        let totalList = [];
-        for (let i = 0; i < list.length; i++) {
-            for (let j = 0; j < group.length; j++) {
-
-                let ips = gitc[group[j]].join("','")
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ g: group[j], sql })
-
-            }
-        }
-
-        let promistList = totalList.map(m => connectionPromise(m))
-        Promise.all(promistList).then((result) => {
-            //console.log(result,)               //['成功了', 'success']
-
-            // pool.end()
-            res.send({ code: 200, data: countGroup(result) })
-            promistList=null;
-            totalList=null;
-        }).catch((error) => {
-            console.log(error)
-            res.send({ code: 500, msg: error })
-            promistList=null;
-            totalList=null;
-
-        })
-
-    },
-    //上车pda
-    countgipdaOne: async (req, res) => {
-        let { btime, etime, group } = req.query;
-        if (!btime || !etime || !gipda[group] || gipda[group].length < 1) {
-            res.send({
-                code: 500,
-                msg: 'params is invaid'
-            })
-            return;
-        }
-        btime = btime.split('/').join('-')
-        etime = etime.split('/').join('-')
-        let totalList = [];
-        for (let i = 0; i < list.length; i++) {
-            for (let j = 0; j < gipda[group].length; j++) {
-                let ip = gipda[group][j]
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL='${ip}' and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ ip, sql })
-            }
-        }
-
-        let promistList = totalList.map(m => connectionIPPromise(m))
-        Promise.all(promistList).then((result) => {
-            res.send({ code: 200, data: countIP(result, gipdaView[group]), group })
-            promistList=null;
-            totalList=null;
-        }).catch((error) => {
-            console.log(error)
-            res.send({ code: 500, msg: error })
-            promistList=null;
-            totalList=null;
-        })
-
-    },
-    countgipda: async (req, res) => {
-
-        let { btime, etime, group } = req.body;
-        console.log(btime, etime, group)
-        if (!btime || !etime || group.length < 1) {
-            res.send({
-                code: 500,
-                msg: 'params is invaid'
-            })
-            return;
-        }
-
-        btime = btime.split('/').join('-')
-        etime = etime.split('/').join('-')
-
-        let totalList = [];
-        for (let i = 0; i < list.length; i++) {
-            for (let j = 0; j < group.length; j++) {
-                let ips = gipda[group[j]].join("','")
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ g: group[j], sql })
-
-            }
-        }
-
-        let promistList = totalList.map(m => connectionPromise(m))
-        Promise.all(promistList).then((result) => {
-            res.send({ code: 200, data: countGroup(result) })
-            promistList=null;
-            totalList=null;
-        }).catch((error) => {
-            console.log(error)
-            res.send({ code: 500, msg: error })
-            promistList=null;
-            totalList=null;
-
-        })
-
-    },
-
     //包使用量
     countPackage: async (req, res) => {
 
@@ -515,17 +205,16 @@ module.exports = {
             arr.push({ "group": "未使用", "count": totals[0].count - useds[0].count })
             // pool.end()
             res.send({ code: 200, data: arr })
-            promistList=null;
-            totalList=null;
+            promistList = null;
+            totalList = null;
         }).catch((error) => {
             console.log(error)
             res.send({ code: 500, msg: error })
-            promistList=null;
-            totalList=null;
+            promistList = null;
+            totalList = null;
         })
 
     },
-
     getSettings: async (req, res) => {
 
         let { settings } = req.params;
@@ -537,34 +226,210 @@ module.exports = {
             return;
         }
 
-        try {
-            let settingData = fs.readFileSync(path.join(__dirname, '../config') + `/${settings}.json`, 'utf-8')
 
-            settingData = JSON.parse(settingData)
-
-            let data = []
-            for (let i in settingData[settings]) {
-                if (settingData[settings].hasOwnProperty(i)) {
-                    data.push({
-                        check: false,
-                        name: i,
-                    })
-                }
+        let settingData = groupConfig[settings]
+        let data=[]
+        for (let i in settingData) {
+            if (settingData.hasOwnProperty(i)) {
+                data.push({
+                    check: false,
+                    name: i,
+                })
             }
-
-            res.send({ code: 200, data })
-            settingData = null;
-
-        } catch (e) {
-            console.log(e)
-            res.send({ code: 500, msg: 'has none' })
-
         }
+
+        res.send({ code: 200, data })
+        settingData = null;
+
+        // try {
+        //     let settingData = fs.readFileSync(path.join(__dirname, '../config') + `/${settings}.json`, 'utf-8')
+
+        //     settingData = JSON.parse(settingData)
+
+        //     let data = []
+
+        //     for (let i in settingData[settings]) {
+        //         if (settingData[settings].hasOwnProperty(i)) {
+        //             data.push({
+        //                 check: false,
+        //                 name: i,
+        //             })
+        //         }
+        //     }
+
+        //     res.send({ code: 200, data })
+        //     settingData = null;
+
+        // } catch (e) {
+        //     console.log(e)
+        //     res.send({ code: 500, msg: 'has none' })
+
+        // }
 
 
 
 
 
     },
+    countgroupOne: async (req, res) => {
+
+        let { btime, etime, group, type } = req.query;
+        let groups = groupConfig[type] || {};
+        if (!btime || !etime || !groups[group]) {
+            res.send({
+                code: 500,
+                msg: 'params is invaid'
+            })
+            return;
+        }
+        btime = btime.split('/').join('-')
+
+        etime = etime.split('/').join('-')
+
+        let totalList = [];
+
+
+
+        if (!groups.hasOwnProperty(group)) {
+            res.send({ code: 200, msg: 'this group is invaid' })
+            return
+        }
+
+
+        let ips = []
+        let currentGroup = groups[group]
+        for (let i in currentGroup) {
+            if (currentGroup.hasOwnProperty(i)) {
+                ips.push(i)
+            }
+        }
+
+        for (let j = 0; j < ips.length; j++) {
+            let ip = ips[j]
+            for (let i = 0; i < list.length; i++) {
+
+                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL='${ip}' and (create_time between '${btime}' and '${etime}')`
+                totalList.push({ ip, sql })
+
+            }
+        }
+
+        let promistList = totalList.map(m => connectionIPPromise(m))
+        Promise.all(promistList).then((result) => {
+            // console.log(result,)               //['成功了', 'success']
+            // pool.end()
+            let data = {}
+
+
+            for (let i = 0; i < result.length; i++) {
+                let cur = result[i]
+                if (data.hasOwnProperty(cur.ip)) {
+                    data[cur.ip] = data[cur.ip] + cur.count
+
+                } else {
+                    data[cur.ip] = cur.count
+
+                }
+            }
+            let arr = []
+            for (let ip in data) {
+                if (data.hasOwnProperty(ip)) {
+                    arr.push({
+                        ip: currentGroup[ip], count: data[ip]
+                    })
+                }
+
+
+
+            }
+            res.send({ code: 200, data: arr, group })
+            promistList = null;
+            totalList = null;
+        }).catch((error) => {
+            console.log(error)
+            res.send({ code: 500, msg: error })
+            promistList = null;
+            totalList = null;
+        })
+
+    },
+
+    countgroup: async (req, res) => {
+
+        let { btime, etime, group, type } = req.body;
+        let groups = groupConfig[type] || {};
+
+        if (!btime || !etime || group.length < 1) {
+            res.send({
+                code: 500,
+                msg: 'params is invaid'
+            })
+            return;
+        }
+
+        btime = btime.split('/').join('-')
+        etime = etime.split('/').join('-')
+
+        let totalList = [];
+        for (let j = 0; j < group.length; j++) {
+
+            let g = group[j];
+            if (!groups.hasOwnProperty(group[j])) continue
+            let ipsList = groups[g];
+            let ips = []
+            for (let i in ipsList) {
+                if (ipsList.hasOwnProperty(i)) {
+                    ips.push(i)
+                }
+            }
+            ips = ips.join("','")
+            for (let i = 0; i < list.length; i++) {
+
+                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
+                totalList.push({ g, sql })
+            }
+
+        }
+
+        let promistList = totalList.map(m => connectionPromise(m))
+        Promise.all(promistList).then((result) => {
+            console.log(result,)               //['成功了', 'success']
+
+            // pool.end()
+
+            let data = {}
+
+            for (let i = 0; i < result.length; i++) {
+
+                let cur = result[i]
+                if (data.hasOwnProperty(cur.g)) {
+                    data[cur.g] = data[cur.g] + cur.count
+
+                } else {
+                    data[cur.g] = cur.count
+
+                }
+            }
+            let arr = []
+            for (let g in data) {
+                if (data.hasOwnProperty(g)) {
+                    arr.push({
+                        group: g, count: data[g]
+                    })
+                }
+
+            }
+            res.send({ code: 200, data: arr })
+            promistList = null;
+            totalList = null;
+        }).catch((error) => {
+            console.log(error)
+            res.send({ code: 500, msg: error })
+            promistList = null;
+            totalList = null;
+        })
+
+    },
+
 };
 

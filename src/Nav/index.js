@@ -42,11 +42,6 @@ export default class Nav extends React.Component {
         }
     }
 
-    componentWillMount() {
-        this.setState({
-            pages: location.pathname,
-        })
-    }
     handleRouter(path) {
         this.props.history.push(path);
         this.setState({
@@ -56,7 +51,9 @@ export default class Nav extends React.Component {
 
 
     componentDidMount() {
-
+        this.setState({
+            pages: location.pathname,
+        })
     }
 
 

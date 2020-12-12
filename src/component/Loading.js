@@ -12,7 +12,7 @@ export default class Loading extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         emitter.on(PAGELOADING, (status) => {
             console.log(status)
             this.loadState(status);
@@ -21,6 +21,7 @@ export default class Loading extends React.Component {
     componentWillUnmount() {
         emitter.removeListener(PAGELOADING);
     }
+
     loadState(a) {
         this.setState({
             pageLoading: a

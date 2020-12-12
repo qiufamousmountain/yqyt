@@ -24,7 +24,8 @@ export default class Main extends React.Component {
             params: {
                 group: [],
                 btime: '',
-                etime: ''
+                etime: '',
+                type:'gotc'
             },
             viewData: [],
             showDetail: false,
@@ -88,11 +89,12 @@ export default class Main extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.get(`/api/count/egotc`, {
+        axios.get(`/api/countgroup`, {
             params: {
                 group: groupDetail,
                 btime: params.btime,
                 etime: params.etime,
+                type: params.type,
             }
         }
         ).then((response) => {
@@ -134,7 +136,7 @@ export default class Main extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.post(`/api/count/gotc`, params
+        axios.post(`/api/countgroup`, params
         ).then((response) => {
 
             let resData = response.data

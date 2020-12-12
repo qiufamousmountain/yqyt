@@ -15,9 +15,6 @@ export default class Top extends React.Component {
         }
     }
 
-    componentWillMount() {
-
-    }
 
 
 

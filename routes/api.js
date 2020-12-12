@@ -62,28 +62,33 @@ router.use((req, res, next) => {
 });
 
 //下车
-router.post('/count/gotc', (req, res) => {
-    count.countgotc(req, res);
+router.post('/countgroup', (req, res) => {
+    count.countgroup(req, res);
 });
-router.get('/count/egotc', (req, res) => {
-    count.countgotcOne(req, res);
+router.get('/countgroup', (req, res) => {
+    count.countgroupOne(req, res);
 });
 
-//上车狂扫
-router.post('/count/gitc', (req, res) => {
-    count.countgitc(req, res);
-});
-router.get('/count/egitc', (req, res) => {
-    count.countgitcOne(req, res);
-});
-//上车pda
 
-router.post('/count/gipda', (req, res) => {
-    count.countgipda(req, res);
-});
-router.get('/count/egipda', (req, res) => {
-    count.countgipdaOne(req, res);
-});
+
+
+// //上车狂扫
+// router.post('/count/gitc', (req, res) => {
+//     count.countgitc(req, res);
+// });
+// router.get('/count/egitc', (req, res) => {
+//     count.countgitcOne(req, res);
+// });
+// //上车pda
+
+// router.post('/count/gipda', (req, res) => {
+//     count.countgipda(req, res);
+// });
+// router.get('/count/egipda', (req, res) => {
+//     count.countgipdaOne(req, res);
+// });
+
+
 
 router.get('/settings/:settings', (req, res) => {
     count.getSettings(req, res);

@@ -25,7 +25,8 @@ export default class Gitc extends React.Component {
             params: {
                 group: [],
                 btime: '',
-                etime: ''
+                etime: '',
+                type: 'gitc'
             },
             viewData: [],
             showDetail: false,
@@ -45,9 +46,9 @@ export default class Gitc extends React.Component {
             let resData = response.data
 
             if (resData.code == 200) {
-                
+
                 this.setState({
-                    gitcList:resData.data
+                    gitcList: resData.data
                 })
             } else {
                 emitter.emit(SNACKBAR, resData.msg)
@@ -88,11 +89,13 @@ export default class Gitc extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.get(`/api/count/egitc`, {
+        axios.get(`/api/countgroup`, {
             params: {
                 group: groupDetail,
                 btime: params.btime,
                 etime: params.etime,
+                type: params.type
+
             }
         }
         ).then((response) => {
@@ -134,7 +137,7 @@ export default class Gitc extends React.Component {
         }
         emitter.emit(PAGELOADING, true)
 
-        axios.post(`/api/count/gitc`, params
+        axios.post(`/api/countgroup`, params
         ).then((response) => {
 
             let resData = response.data
@@ -449,7 +452,7 @@ export default class Gitc extends React.Component {
 
 
                                         emitter.emit(SNACKBAR, '结束时间不能早于开始时间');
-                                        params.btime=''
+                                        params.btime = ''
 
                                     } else {
                                         params.btime = Moment(date).format('yyyy/MM/DD HH:mm');
@@ -490,7 +493,7 @@ export default class Gitc extends React.Component {
 
                                     if (params.btime && !Moment(params.btime).isBefore(date)) {
                                         emitter.emit(SNACKBAR, '开始时间不能晚于结束时间');
-                                        params.etime=''
+                                        params.etime = ''
 
                                     } else {
                                         params.etime = Moment(date).format('yyyy/MM/DD HH:mm');
