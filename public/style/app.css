@@ -155,14 +155,13 @@ p {
   background-color: #040d32;
 }
 
-#main .main-box .views .echart-box.screen-main .screen-field {
-  position: relative;
+#main .main-box .views .echart-box.screen-main .fpointborder {
   border-radius: 8px;
   background: rgba(1, 19, 67, 0.7);
   border: 2px solid #00a1ff;
 }
 
-#main .main-box .views .echart-box.screen-main .screen-field::before {
+#main .main-box .views .echart-box.screen-main .fpointborder::before {
   position: absolute;
   top: -2px;
   bottom: -2px;
@@ -174,7 +173,7 @@ p {
   z-index: 0;
 }
 
-#main .main-box .views .echart-box.screen-main .screen-field::after {
+#main .main-box .views .echart-box.screen-main .fpointborder::after {
   position: absolute;
   top: 30px;
   right: -2px;
@@ -186,30 +185,36 @@ p {
   z-index: 0;
 }
 
+#main .main-box .views .echart-box.screen-main .screen-field {
+  position: relative;
+}
+
 #main .main-box .views .echart-box.screen-main .screen-field.map-main {
   width: calc(100% - 380px);
   height: 100%;
 }
 
 #main .main-box .views .echart-box.screen-main .screen-field.map-total {
-  background-color: #018786;
   width: 350px;
   height: 100%;
   margin-left: 30px;
 }
 
 #main .main-box .views .echart-box.screen-main .screen-field.map-total .total-run {
-  height: 300px;
-  width: 300px;
+  height: 280px;
+  width: 100%;
   margin-bottom: 30px;
   position: relative;
+  background-color: #013954;
+  padding: 30px;
 }
 
 #main .main-box .views .echart-box.screen-main .screen-field.map-total .total-moment {
-  height: 49.5%;
+  height: calc( 100% - 310px);
   width: 100%;
-  margin-top: 0.5%;
   position: relative;
+  background-color: #013954;
+  padding: 10px;
 }
 
 #main .main-box .views.data-screen {
@@ -222,9 +227,16 @@ p {
   height: 100%;
 }
 
-#main .main-box .views .total-change {
-  color: #4d63bc;
+#main .main-box .views .justitle {
+  color: #fff;
   font-size: 40px;
+  text-align: center;
+}
+
+#main .main-box .views .total-change {
+  color: #1DE9B6;
+  font-size: 40px;
+  text-align: center;
 }
 
 #main .main-box .mdc-menu {

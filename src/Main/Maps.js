@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Outmap from '../component/Outmap'
-import CountUp from 'react-countup';
+import Countups from '../component/Countups'
+import MiniMap from '../component/MiniMap'
 export default class Maps extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             viewData: [],
-            start: 0,
-            end: 160527
+
         }
     }
 
@@ -17,34 +17,7 @@ export default class Maps extends React.Component {
 
 
 
-    componentDidMount() {
-        this.timer = setTimeout(
-            () => {
-                this.setState({ content: '我是定时器打印的内容...One' })
-            },
-            1000
-        );
-    }
-    componentWillUnmount() {
-        this.timer && clearInterval(this.timer)
-    }
-    addCount() {
 
-        let that = this
-        setTimeout(() => {
-
-            that.setState({
-                start: that.state.end,
-                end: parseInt(that.state.end) + parseInt(Math.floor(Math.random() * 10000))
-            }, () => {
-                console.log(that.state.end, that.state.start)
-                that.addCount()
-                // this.countup.restart()
-            })
-
-        }, 5000)
-
-    }
 
 
     // getOption() {
@@ -162,39 +135,20 @@ export default class Maps extends React.Component {
 
 
     render() {
-        console.log(this.state.end)
-        const { end, start } = this.state
         return (
             <div className='views data-screen'>
                 <div className="echart-box screen-main">
-                    <div className='screen-field map-main'>
+                    <div className='screen-field map-main fpointborder'>
                         <Outmap />
                     </div>
                     <div className='screen-field map-total'>
-                        <div className='total-run '>
-
-                            <CountUp
-                                ref={el => this.countup = el}
-                                start={start}
-                                end={end}
-                                duration={5}
-                                delay={0}
-                                redraw={true}
-
-                            >
-                                {({ countUpRef }) => (
-
-                                    <div
-                                        className={'total-change'}
-                                    >
-                                        <span ref={countUpRef} />
-                                    </div>
-                                )}
-                            </CountUp>
+                        <div className='total-run fpointborder'>
+                            <div className="justitle">中心日吞吐总量</div>
+                            <Countups />
                         </div>
-                        <div className='total-moment'>
+                        <div className='total-moment fpointborder'>
 
-                            {/* <div className="bb"></div> */}
+                            <MiniMap />
                         </div>
                     </div>
 
