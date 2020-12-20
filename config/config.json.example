@@ -9,7 +9,7 @@
     "timezone": "SYSTEM"
   },
   "sql_s": {
-    "host": "172.19.4.245",
+    "host": "172.19.4.246",
     "user": "admin",
     "password": "yto12345",
     "database": "ytodb",
@@ -31,11 +31,21 @@
   },
   "webConfig": {
     "env": "dev",
-    "port": "8100"
+    "port": "80"
   },
   "users": {
     "yto": {
       "id": "yto",
+      "user": "华北转运中心",
+      "password": "Yto@100901"
+    },
+    "yto1": {
+      "id": "yto1",
+      "user": "华北转运中心",
+      "password": "Yto@100901"
+    },
+    "yto2": {
+      "id": "yto2",
       "user": "华北转运中心",
       "password": "Yto@100901"
     }
