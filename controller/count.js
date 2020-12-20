@@ -215,6 +215,8 @@ module.exports = {
         })
 
     },
+
+    
     getSettings: async (req, res) => {
 
         let { settings } = req.params;

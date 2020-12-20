@@ -1,40 +1,60 @@
 import React from 'react';
 import CountUp from 'react-countup';
+import { axios } from '../util/server'
 
 export default class Countups extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             start: 0,
-            end: 160527
+            end: 1000
         }
     }
 
     componentDidMount() {
-        this.addCount()
+        this.pollingData()
+    }
+    shouldComponentUpdate(nesPro, nestState) {
+        let { start, end } = this.state
+        return nestState.start != start || nestState.end != end
     }
     componentWillUnmount() {
-        this.timer && clearInterval(this.timer)
+        this.clearTimers()
     }
 
-    addCount() {
+    pollingData() {
+        this.clearTimers()
+        this.getData()
+        this.timer = setInterval(() => {
+            this.getData('add')
+        }, 600000)
+    }
 
-        let { start, end } = this.state
+    clearTimers() {
         this.timer && clearInterval(this.timer)
-
-        this.timer = setTimeout(() => {
-
-            this.setState({
-                start: end,
-                end: parseInt(end) + parseInt(Math.floor(Math.random() * 10000))
-            }, () => {
-                this.addCount()
+    }
+    getData(type = 'all') {
+        axios.get(`/api/totalcount`, { params: { type } })
+            .then((response) => {
+                let resData = response.data
+                if (resData.code == 200) {
+                    let data = resData.data;
+                    let end = data;
+                    let start = data - parseInt(data / 10);
+                    if (type == 'add') {
+                        start = this.state.end;
+                        end = this.state.end + data
+                    }
+                    this.setState({
+                        start,
+                        end
+                    })
+                }
             })
-
-        }, 5000)
-
+            .catch((error) => {
+                console.log(error);
+            });
     }
-
     render() {
         const { end, start } = this.state
 
@@ -43,7 +63,7 @@ export default class Countups extends React.Component {
                 ref={el => this.countup = el}
                 start={start}
                 end={end}
-                duration={5}
+                duration={600}
                 delay={0}
                 redraw={true}
 

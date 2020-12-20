@@ -7,6 +7,7 @@ const router = express.Router();
 
 const count = require('../controller/count');
 const user = require('../controller/user');
+const views = require('../controller/views');
 const client = require('../models/redis');
 
 //users 
@@ -27,8 +28,6 @@ router.post('/userout', (req, res) => {
 
 
 router.use((req, res, next) => {
-
-
     if (!req.session.yto_u) {
         res.json({ code: 302, data: '/' });
         return
@@ -61,6 +60,21 @@ router.use((req, res, next) => {
 
 });
 
+
+router.get('/every10Min', (req, res) => {
+    views.every10Min(req, res);
+});
+router.get('/totalcount', (req, res) => {
+    views.totalCount(req, res);
+});
+router.get('/outVol', (req, res) => {
+    views.outVol(req, res);
+});
+
+
+
+
+
 //下车
 router.post('/countgroup', (req, res) => {
     count.countgroup(req, res);
@@ -68,26 +82,6 @@ router.post('/countgroup', (req, res) => {
 router.get('/countgroup', (req, res) => {
     count.countgroupOne(req, res);
 });
-
-
-
-
-// //上车狂扫
-// router.post('/count/gitc', (req, res) => {
-//     count.countgitc(req, res);
-// });
-// router.get('/count/egitc', (req, res) => {
-//     count.countgitcOne(req, res);
-// });
-// //上车pda
-
-// router.post('/count/gipda', (req, res) => {
-//     count.countgipda(req, res);
-// });
-// router.get('/count/egipda', (req, res) => {
-//     count.countgipdaOne(req, res);
-// });
-
 
 
 router.get('/settings/:settings', (req, res) => {

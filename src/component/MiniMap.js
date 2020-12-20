@@ -1,6 +1,5 @@
 import React from 'react';
 import { axios } from '../util/server'
-import Moment from 'moment'
 import ReactEchartsCore from 'echarts-for-react/lib/core';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
@@ -17,74 +16,26 @@ export default class Outmap extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            u: (function () {
-                var res = [];
-                var len = 0;
-                while (len < 10) {
-                    res.push(parseInt(Math.random() * 10000));
-                    len++;
-                }
-                return res;
-            })(),
-            d: (function () {
-                var res = [];
-                var len = 0;
-                while (len < 10) {
-                    res.push(parseInt(Math.random() * 10000));
-                    len++;
-                }
-                return res;
-            })(),
-            t: (function () {
-                var now = new Date();
-                var res = [];
-                var len = 10;
-                while (len--) {
-                    res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
-                    now = new Date(now - 2000);
-                }
-                return res;
-            })()
+
+            dataJson: []
         }
     }
 
     componentDidMount() {
-        this.getNewData()
+        this.pollingData()
     }
-    // shouldComponentUpdate() {
-    //     // return false
-    // }
+    shouldComponentUpdate(nesPro, nestState) {
+        let { dataJson } = this.state
+        return nestState.dataJson != dataJson
+    }
+
 
     componentWillUnmount() {
-        this.timer && clearInterval(this.timer)
-    }
-    getNewData() {
-        this.timer && clearInterval(this.timer)
-        let { u, d, t } = this.state
-        this.timer = setTimeout(() => {
-            let axisData = (new Date()).toLocaleTimeString().replace(/^\D*/, '');
-
-            u.shift();
-            u.push(parseInt(Math.random() * 10000));
-
-            d.shift();
-            d.push(parseInt(Math.random() * 10000));
-
-            t.shift();
-            t.push(axisData);
-            this.setState({
-                t, u, d
-            }, () => {
-                this.getNewData()
-            });
-        }, 2100);
-    }
-    componentWillUnmount() {
-        this.timer && clearInterval(this.timer)
+        this.clearTimers()
 
     }
     getOption() {
-        let { u, d, t } = this.state
+        let { dataJson } = this.state
         let option = {
             title: {
                 text: '上下车操作对比',
@@ -127,7 +78,7 @@ export default class Outmap extends React.Component {
                 {
                     type: 'category',
                     boundaryGap: true,
-                    data: t,
+                    data: dataJson.map(m => m.t),
 
                 },
             ],
@@ -172,14 +123,14 @@ export default class Outmap extends React.Component {
                     type: 'line',
 
                     itemStyle: { color: '#1DE9B6' },
-                    data: d
+                    data: dataJson.map(m => m.u)
                 },
                 {
                     name: '下车',
                     type: 'line',
                     itemStyle: { color: '#FFC809' },
 
-                    data: u
+                    data: dataJson.map(m => m.d)
                 }
             ]
         }
@@ -187,8 +138,36 @@ export default class Outmap extends React.Component {
         return option
     }
 
+
+
+    pollingData() {
+        this.clearTimers()
+        this.getData()
+        this.timer = setInterval(() => {
+            this.getData('add')
+        }, 600000)
+    }
+
+    clearTimers() {
+        this.timer && clearInterval(this.timer)
+    }
+    getData() {
+        axios.get(`/api/every10Min`)
+            .then((response) => {
+                let resData = response.data
+                if (resData.code == 200) {
+                    let data = resData.data;
+
+                    this.setState({
+                        dataJson: data,
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     render() {
-        let { option } = this.state
         return (
             <ReactEchartsCore
                 echarts={echarts}

@@ -1,15 +1,34 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
 
-var apiRouter = require('./routes/api');
-var pageRouter = require('./routes/page');
+const apiRouter = require('./routes/api');
+const pageRouter = require('./routes/page');
 
-var app = express();
-const expressSession = require('express-session');
+const session = require('express-session');
+const redis = require('redis');
+const client = redis.createClient();//这里填写redis的密码
+const RedisStore = require('connect-redis')(session);
+
+
+client.on("error", function (err) {
+    console.log("Error " + err);//用于提示错误信息
+});
+
+let options = {
+    client: client,
+    port: 6379,//端口号
+    host: "127.0.0.1"//主机
+};
+
+
+const app = express();
+
+
+
 
 process.on('unhandledRejection', (reason, promise) => {
     console.log(reason)
@@ -29,12 +48,22 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(expressSession({
+// const expressSession = require('express-session');
+
+
+
+
+app.use(session({
+    store: new RedisStore(options),
+    secret: "123456",//以此字符串加密
     resave: true,   //是指每次请求都重新设置session cookie，假设你的cookie是10分钟过期，每次请求都会再设置10分钟
     saveUninitialized: false,   //是指无论有没有session cookie，每次请求都设置个session cookie ，默认给个标示为 connect.sid
-    secret: '123456',
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
+
+
+//
+
 
 
 app.use('/', express.static(path.join(__dirname, 'public')));

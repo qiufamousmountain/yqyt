@@ -12,14 +12,11 @@ router.get('/login', async (req, res, next) => {
 
 
 router.use((req, res, next) => {
-
-
     if (!req.session.yto_u) {
         res.redirect('/login');
         return
     }
     let { id, clientID } = req.session.yto_u;
-
     client.get(id, async (err, reply) => {
         if (err) {
             next(err);

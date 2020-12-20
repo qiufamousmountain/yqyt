@@ -229,13 +229,21 @@ p {
 
 #main .main-box .views .justitle {
   color: #fff;
-  font-size: 40px;
+  font-size: 30px;
   text-align: center;
 }
 
 #main .main-box .views .total-change {
   color: #1DE9B6;
   font-size: 40px;
+  margin: 30px;
+  text-align: center;
+}
+
+#main .main-box .views .time-count {
+  color: #fff;
+  font-size: 25px;
+  margin: 30px;
   text-align: center;
 }
 
