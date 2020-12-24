@@ -3,7 +3,7 @@
  */
 
 const { pool } = require('../models/sql')
-const { sql_m, sql_moni } = require('../config/config.json');
+const { sql_m, sql_moni, sql_jg } = require('../config/config.json');
 const groupConfig = require('../config/groups.json')
 const Moment = require('moment')
 const mysql = require('mysql');
@@ -70,6 +70,7 @@ const connectionIPPromise = ({ ip, sql }) => {
 
     })
 }
+
 module.exports = {
     //详单查询
     orders: async (req, res) => {
@@ -127,8 +128,6 @@ module.exports = {
         mainData = mainData.map(m => {
 
             m['latticeNo'] = ''
-
-
             if (!(oData.code == 500)) {
                 for (let i = 0; i < oData.length; i++) {
 
@@ -215,8 +214,6 @@ module.exports = {
         })
 
     },
-
-    
     getSettings: async (req, res) => {
 
         let { settings } = req.params;
@@ -230,7 +227,7 @@ module.exports = {
 
 
         let settingData = groupConfig[settings]
-        let data=[]
+        let data = []
         for (let i in settingData) {
             if (settingData.hasOwnProperty(i)) {
                 data.push({
@@ -284,9 +281,6 @@ module.exports = {
             })
             return;
         }
-        btime = btime.split('/').join('-')
-
-        etime = etime.split('/').join('-')
 
         let totalList = [];
 
@@ -356,7 +350,7 @@ module.exports = {
 
     },
 
-    countgroup: async (req, res) => {
+    countgroupBB: async (req, res) => {
 
         let { btime, etime, group, type } = req.body;
         let groups = groupConfig[type] || {};
@@ -368,9 +362,6 @@ module.exports = {
             })
             return;
         }
-
-        btime = btime.split('/').join('-')
-        etime = etime.split('/').join('-')
 
         let totalList = [];
         for (let j = 0; j < group.length; j++) {
@@ -430,6 +421,197 @@ module.exports = {
             promistList = null;
             totalList = null;
         })
+
+    },
+
+    countgroup: async (req, res) => {
+
+        let { btime, etime, group, type } = req.body;
+        let groups = groupConfig[type] || {};
+
+        if (!btime || !etime || group.length < 1) {
+            res.send({
+                code: 500,
+                msg: 'params is invaid'
+            })
+            return;
+        }
+
+        let totalList = [];
+        for (let j = 0; j < group.length; j++) {
+
+            let g = group[j];
+            if (!groups.hasOwnProperty(group[j])) continue
+            let ipsList = groups[g];
+            let ips = []
+            for (let i in ipsList) {
+                if (ipsList.hasOwnProperty(i)) {
+                    ips.push(i)
+                }
+            }
+            ips = ips.join("','")
+            for (let i = 0; i < list.length; i++) {
+
+                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
+                totalList.push({ g, sql })
+            }
+
+        }
+
+        let promistList = totalList.map(m => connectionPromise(m))
+        Promise.all(promistList).then((result) => {
+            console.log(result,)               //['成功了', 'success']
+
+            // pool.end()
+
+            let data = {}
+
+            for (let i = 0; i < result.length; i++) {
+
+                let cur = result[i]
+                if (data.hasOwnProperty(cur.g)) {
+                    data[cur.g] = data[cur.g] + cur.count
+
+                } else {
+                    data[cur.g] = cur.count
+
+                }
+            }
+            let arr = []
+            for (let g in data) {
+                if (data.hasOwnProperty(g)) {
+                    arr.push({
+                        group: g, count: data[g]
+                    })
+                }
+
+            }
+            res.send({ code: 200, data: arr })
+            promistList = null;
+            totalList = null;
+        }).catch((error) => {
+            console.log(error)
+            res.send({ code: 500, msg: error })
+            promistList = null;
+            totalList = null;
+        })
+
+    },
+
+    repeated: async (req, res) => {
+
+        let { btime, etime } = req.query;
+
+        if (!btime || !etime) {
+            res.send({
+                code: 500,
+                msg: 'params is invaid'
+            })
+            return;
+        }
+        let sql = `select num,COUNT(0) as cc from(select COUNT(0) as num from t_yto_scan where TIMEDCT>'${btime}' AND TIMEDCT<'${etime}' GROUP BY BARCODE HAVING num>2) a GROUP BY num`
+
+
+        let connectionPromise = (db, sql) => {
+            let connection = mysql.createConnection(db);
+            return new Promise(function (resolve, reject) {
+                connection.connect(function (err) {
+                    if (err) {
+                        console.log(err)
+                        return resolve({ code: 500, msg: 'connect db error' })
+                    }
+
+                });
+                connection.query(sql, function (err, result) {
+                    connection.end();
+                    if (err) {
+                        console.log('查询数据库失败' + sql);
+                        console.log(err);
+
+                        return resolve({ code: 500, msg: 'select db error' })
+                    }
+                    return resolve(result)
+
+                });
+            })
+        }
+
+        let mainData = await connectionPromise(sql_jg, sql)
+
+        if (mainData.code == 500) {
+            res.send(mainData)
+            return
+        }
+
+        res.send({ code: 200, data: mainData })
+
+
+    },
+
+    repeateddetail: async (req, res) => {
+
+        let { btime, etime, repeated } = req.query;
+
+        if (!btime || !etime || !repeated) {
+            res.send({
+                code: 500,
+                msg: 'params is invaid'
+            })
+            return;
+        }
+        let sql = `select BARCODE,COUNT(0) as num from t_yto_scan where TIMEDCT>'${btime}' AND TIMEDCT<'${etime}' GROUP BY BARCODE HAVING num=${repeated} `
+
+        let connectionPromise = (db, sql) => {
+            let connection = mysql.createConnection(db);
+            return new Promise(function (resolve, reject) {
+                connection.connect(function (err) {
+                    if (err) {
+                        console.log(err)
+                        return resolve({ code: 500, msg: 'connect db error' })
+                    }
+
+                });
+                connection.query(sql, function (err, result) {
+                    connection.end();
+                    if (err) {
+                        console.log('查询数据库失败' + sql);
+                        console.log(err);
+
+                        return resolve({ code: 500, msg: 'select db error' })
+                    }
+                    return resolve(result)
+
+                });
+            })
+        }
+
+        let mainData = await connectionPromise(sql_jg, sql)
+
+        if (mainData.code == 500) {
+            res.send(mainData)
+            return
+        }
+
+        console.log(mainData)
+        let arr = []
+        for (let b in mainData) {
+            if (mainData.hasOwnProperty(b)) {
+                arr.push(mainData[b].BARCODE)
+            }
+        }
+        arr = arr.join("','")
+        let tosql = `select BARCODE,TIMEDCT,IPADDR from t_yto_scan where TIMEDCT>'${btime}' AND TIMEDCT<'${etime}' and BARCODE in ('${arr}')`
+        console.log(tosql,'-------------------------------------')
+
+        let detailData = await connectionPromise(sql_jg, tosql)
+        if (detailData.code == 500) {
+            res.send(detailData)
+            return
+        }
+        console.log(detailData,'-------------------------------------')
+
+        res.send({ code: 200, data: detailData })
+
 
     },
 

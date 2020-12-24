@@ -210,11 +210,53 @@ p {
 }
 
 #main .main-box .views .echart-box.screen-main .screen-field.map-total .total-moment {
-  height: calc( 100% - 310px);
+  height: calc(100% - 310px);
   width: 100%;
   position: relative;
   background-color: #013954;
   padding: 10px;
+}
+
+#main .main-box .views .echart-box.screen-main .screen-field .control-box {
+  position: absolute;
+  bottom: 28px;
+  left: 20px;
+  z-index: 200;
+}
+
+#main .main-box .views .echart-box.screen-main .screen-field .control-box .control-item {
+  padding: 10px;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 20px;
+  opacity: .8;
+}
+
+#main .main-box .views .echart-box.screen-main .screen-field .control-box .control-item:hover {
+  border: 1px solid aqua;
+  color: aqua;
+  cursor: pointer;
+}
+
+#main .main-box .views .echart-box.screen-main .screen-field .control-box-bottom {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  z-index: 1;
+}
+
+#main .main-box .views .echart-box.screen-main .screen-field .control-box-bottom .control-item {
+  padding: 10px;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 20px;
+  opacity: .8;
+}
+
+#main .main-box .views .echart-box.screen-main .screen-field .control-box-bottom .control-item:hover {
+  border: 1px solid aqua;
+  color: aqua;
+  cursor: pointer;
 }
 
 #main .main-box .views.data-screen {
@@ -1015,4 +1057,9 @@ p {
 
 .menu-detail .userbox .logout:hover {
   background: #DDD;
+}
+
+.list-boxs {
+  width: 800px;
+  max-width: 800px !important;
 }

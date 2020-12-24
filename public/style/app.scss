@@ -209,22 +209,67 @@ p {
 							// justify-content: space-between;
 
 							.total-run {
-								height       : 280px;
-								width        : 100%;
-								margin-bottom: 30px;
-								position     : relative;
-								background-color  : #013954;
-								padding:30px
+								height          : 280px;
+								width           : 100%;
+								margin-bottom   : 30px;
+								position        : relative;
+								background-color: #013954;
+								padding         : 30px
 							}
 
 							.total-moment {
-								height    : calc( 100% - 310px);
-								width     : 100%;
-								position  : relative;
-								background-color  : #013954;
-								padding:10px;
+								height          : calc(100% - 310px);
+								width           : 100%;
+								position        : relative;
+								background-color: #013954;
+								padding         : 10px;
 							}
 
+						}
+
+
+						.control-box {
+							position: absolute;
+							bottom  : 28px;
+							left    : 20px;
+							z-index : 200;
+
+							.control-item {
+								padding         : 10px;
+								border          : 1px solid #fff;
+								// background   : #eee;
+								color           : #fff;
+								border-radius   : 20px;
+								opacity         : .8;
+
+								&:hover {
+									border: 1px solid aqua;
+									color : aqua;
+									cursor: pointer;
+								}
+							}
+						}
+
+						.control-box-bottom {
+							position: absolute;
+							bottom  : 50px;
+							right   : 50px;
+							z-index : 1;
+
+							.control-item {
+								padding         : 10px;
+								border          : 1px solid #fff;
+								// background   : #eee;
+								color           : #fff;
+								border-radius   : 20px;
+								opacity         : .8;
+
+								&:hover {
+									border: 1px solid aqua;
+									color : aqua;
+									cursor: pointer;
+								}
+							}
 						}
 					}
 
@@ -247,21 +292,23 @@ p {
 			}
 
 			.justitle {
-				color    : #fff;
-				font-size: 30px;
+				color     : #fff;
+				font-size : 30px;
 				text-align: center;
 			}
+
 			.total-change {
-				color    : #1DE9B6;
-				font-size: 40px;
-				margin:30px;
+				color     : #1DE9B6;
+				font-size : 40px;
+				margin    : 30px;
 				text-align: center;
 
 			}
-			.time-count{
-				color    : #fff;
-				font-size: 25px;
-				margin:30px;
+
+			.time-count {
+				color     : #fff;
+				font-size : 25px;
+				margin    : 30px;
 				text-align: center;
 			}
 		}
@@ -1048,82 +1095,7 @@ p {
 
 }
 
-
-// .bb,
-// .bb::before,
-// .bb::after {
-// 	position: absolute;
-// 	top     : 0;
-// 	bottom  : 0;
-// 	left    : 0;
-// 	right   : 0;
-// }
-
-// .bb {
-// 	width: 300px;
-// 	height: 300px;
-// 	margin    : auto;
-// 	box-shadow: inset 0 0 0 1px #016886;
-// }
-
-// .bb::before,
-// .bb::after {
-// 	content   : '';
-// 	z-index   : 1;
-// 	margin    : -5%;
-// 	width     : 340px;
-// 	height    : 340px;
-// 	top       : -20px;
-// 	left      : -20px;
-// 	box-shadow: inset 0 0 0 2px;
-// 	animation : clipMe 8s linear infinite;
-// }
-
-// .bb::before {
-// 	animation-delay: -4s;
-// }
-
-// .bb:hover::after,
-// .bb:hover::before {
-// 	background-color: rgba(255, 0, 0, 0.3);
-// }
-
-// // @keyframes clipMe {
-
-// // 	0%,
-// // 	100% {
-// // 		clip: rect(0px, calc(110%), 2px, 0px);
-// // 	}
-
-// // 	25% {
-// // 		clip: rect(0px, 2px, calc(110%), 0px);
-// // 	}
-
-// // 	50% {
-// // 		clip: rect(calc(110%-2px), calc(110%), calc(110%), 0px);
-// // 	}
-
-// // 	75% {
-// // 		clip: rect(0px, calc(110%), calc(110%), calc(110%-2px));
-// // 	}
-// // }
-
-// @keyframes clipMe {
-
-// 	0%,
-// 	100% {
-// 		clip: rect(0px, 340.0px, 2px, 0px);
-// 	}
-
-// 	25% {
-// 		clip: rect(0px, 2px, 340.0px, 0px);
-// 	}
-
-// 	50% {
-// 		clip: rect(338.0px, 340.0px, 340.0px, 0px);
-// 	}
-
-// 	75% {
-// 		clip: rect(0px, 340.0px, 340.0px, 338.0px);
-// 	}
-// }
+.list-boxs {
+	width    : 800px;
+	max-width: 800px !important;
+}

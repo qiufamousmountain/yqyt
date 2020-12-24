@@ -149,7 +149,7 @@ export default class Packages extends React.Component {
                                     params.btime = ''
 
                                 } else {
-                                    params.btime = Moment(date).format('yyyy/MM/DD HH:mm');
+                                    params.btime = Moment(date).format('yyyy-MM-DD HH:mm');
 
 
                                 }
@@ -172,7 +172,7 @@ export default class Packages extends React.Component {
 
 
                                 </span></button>}
-                            dateFormat='yyyy/MM/dd HH:mm'
+                            dateFormat='yyyy-MM-dd HH:mm'
 
                         />
                     </div>
@@ -190,7 +190,7 @@ export default class Packages extends React.Component {
                                     params.etime = ''
 
                                 } else {
-                                    params.etime = Moment(date).format('yyyy/MM/DD HH:mm');
+                                    params.etime = Moment(date).format('yyyy-MM-DD HH:mm');
 
                                 }
 
@@ -209,7 +209,7 @@ export default class Packages extends React.Component {
 
 
                                 </span></button>}
-                            dateFormat='yyyy/MM/dd HH:mm'
+                            dateFormat='yyyy-MM-dd HH:mm'
                         />
 
 

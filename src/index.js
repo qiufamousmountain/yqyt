@@ -11,6 +11,7 @@ import Gitc from './Main/Gitc';
 import GiPda from './Main/GiPda';
 import Packages from './Main/Packages';
 import Maps from './Main/Maps';
+import Repeated from './Main/Repeated';
 
 
 
@@ -53,6 +54,11 @@ class App extends React.Component {
                 {
                     path: '/maps',
                     component: Maps,
+                }
+                ,
+                {
+                    path: '/repeated',
+                    component: Repeated,
                 }
             ]
         }

@@ -2,7 +2,7 @@ const schedule = require('node-schedule');
 const client = require('./redis');
 const { pool } = require('../models/sql')
 const Moment = require('moment')
-const {jg,chg} = require('../config/flow-net.json')
+const { jg, chg } = require('../config/flow-net.json')
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
 
 const connectionPromise = (sql) => {
@@ -259,9 +259,9 @@ const getOutTotal = () => {
   let count = Moment(late).diff(Moment(begin), 'minute')
   if (count < 0) return
   // let str = [];
-  // for (let i in jg) {
-  //   if (jg.hasOwnProperty(i)) {
-  //     str.push(` sum(NEXT_ORG_CODE in ('${jg[i].join("','")}')) as ${i} `)
+  // for (let i in chg) {
+  //   if (chg.hasOwnProperty(i)) {
+  //     str.push(` sum(NEXT_ORG_CODE in ('${chg[i].join("','")}')) as ${i} `)
   //   }
   // }
 
@@ -302,8 +302,21 @@ const getOutTotal = () => {
 
     let timeList = {}
 
+    for (let c in chg) {
+      if (chg.hasOwnProperty(c)) {
+        let centers = chg[c];
+        for (let i = 0; i < centers.length; i++) {
+          if (dataJson.hasOwnProperty(centers[i])) {
+            if (!timeList[c]) {
+              timeList[c] = dataJson[centers[i]]
+            }
+            timeList[c] = parseInt(timeList[c]) + parseInt(dataJson[centers[i]])
+          }
+        }
+      }
+    }
     for (let c in jg) {
-      if (jg.hasOwnProperty(c) && !(c == '北京市' || c == '河北')) {
+      if (jg.hasOwnProperty(c)) {
         let centers = jg[c];
         for (let i = 0; i < centers.length; i++) {
           if (dataJson.hasOwnProperty(centers[i])) {
@@ -431,9 +444,11 @@ const scheduleCronstyle = () => {
 
   });
   //每天00:00定时执行一次:
-  schedule.scheduleJob('0 0 0 * *', () => {
+  schedule.scheduleJob('56 59 23 * *', () => {
+    console.log('tonight cache must be clear ' + new Date())
 
     clearCache()
+
   });
 }
 

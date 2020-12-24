@@ -84,6 +84,17 @@ router.get('/countgroup', (req, res) => {
 });
 
 
+//重复
+router.get('/repeat', (req, res) => {
+    count.repeated(req, res);
+});
+router.get('/repeateddetail', (req, res) => {
+    count.repeateddetail(req, res);
+});
+
+
+
+
 router.get('/settings/:settings', (req, res) => {
     count.getSettings(req, res);
 });

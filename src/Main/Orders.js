@@ -145,7 +145,7 @@ export default class Orders extends React.Component {
 
                                                             let views = m[mm];
                                                             if (mm === 'CREATE_TIME') {
-                                                                views = Moment(views).format('yyyy/MM/DD HH:mm')
+                                                                views = Moment(views).format('yyyy-MM-DD HH:mm')
                                                             }
                                                             return (
                                                                 <th className="mdc-data-table__header-cell" role="columnheader" key={'trsss' + ii + 'tr' + i} scope="col">{views}</th>

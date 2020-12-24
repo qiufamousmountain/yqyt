@@ -37,6 +37,13 @@ export default class Nav extends React.Component {
                 icon: 'desktop_mac'
 
             }
+            ,
+             {
+                name: '重复操作',
+                path: '/repeated',
+                icon: 'error'
+
+            }
         ]
 
         }

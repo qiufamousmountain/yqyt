@@ -2,8 +2,9 @@
  * Created by zhangyuntao on 2018/10/9.
  */
 
-const { pool } = require('../models/sql')
+// const { pool } = require('../models/sql')
 const client = require('../models/redis')
+const { jg, chg } = require('../config/flow-net.json')
 const Moment = require('moment')
 module.exports = {
     every10Min: async (req, res) => {
@@ -96,7 +97,19 @@ module.exports = {
             }
 
             console.log(reply)
-            res.send({ code: 200, data: { d1: reply } })
+            let d1 = {}
+            let d2 = {}
+            for (let dd1 in chg) {
+                if (chg.hasOwnProperty(dd1)) {
+                    d1[dd1] = reply[dd1] || 0
+                }
+            }
+            for (let dd2 in jg) {
+                if (jg.hasOwnProperty(dd2)) {
+                    d2[dd2] = reply[dd2] || 0
+                }
+            }
+            res.send({ code: 200, data: { d1, d2 } })
 
         });
 
