@@ -8,15 +8,15 @@ const { jg, chg } = require('../config/flow-net.json')
 const Moment = require('moment')
 module.exports = {
     every10Min: async (req, res) => {
-        let time = new Date()
-        let times = [];
-        for (let i = 1; i < 11; i++) {
-            times.unshift(Moment(time).subtract(Moment(time).minute() % 10 + 10 * i, "minutes").format('yyyy-MM-DD HH:mm'))
-        }
+        // let time = new Date()
+        // let times = [];
+        // for (let i = 1; i < 11; i++) {
+        //     times.unshift(Moment(time).subtract(Moment(time).minute() % 10 + 10 * i, "minutes").format('yyyy-MM-DD HH:mm'))
+        // }
 
-        times = times.map(m => m.split(' ')[1])
+        // times = times.map(m => m.split(' ')[1])
 
-        client.hmget('todaymin10', times, (err, reply) => {
+        client.hgetall('todaymin10', (err, reply) => {
             if (err || !reply) {
                 console.log(err)
                 res.send({ code: 500, msg: 'redis fail' })
@@ -27,7 +27,7 @@ module.exports = {
                 if (reply.hasOwnProperty(j) && reply[j]) {
                     let t = reply[j].split('-')
                     data.push({
-                        t: times[j],
+                        t: j,
                         d: parseInt(t[0]),
                         u: parseInt(t[1]),
 
@@ -37,6 +37,7 @@ module.exports = {
                 }
             }
 
+            console.log(data)
             res.send({ code: 200, data })
 
         });
