@@ -32,7 +32,30 @@ const connectionPromise = (sql) => {
 
     })
 }
+const countGroup = (result) => {
+    let data = {}
 
+    for (let i = 0; i < result.length; i++) {
+        if (data.hasOwnProperty(result[i].g)) {
+            data[result[i].g] = data[result[i].g] + result[i].count
+
+        } else {
+            data[result[i].g] = result[i].count
+
+        }
+    }
+    let arr = []
+    for (let g in data) {
+        if (data.hasOwnProperty(g)) {
+            arr.push({
+                group: g, count: data[g]
+            })
+        }
+
+    }
+
+    return arr
+}
 
 module.exports = {
     //详单查询
