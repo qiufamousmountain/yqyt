@@ -14,7 +14,7 @@ import ReactEchartsCore from 'echarts-for-react/lib/core';
 
 import echarts from 'echarts/lib/echarts';
 
-import { repeat, repeatViews, dViews } from '../../config/order.json';
+import { repeat, repeatViews, rViews } from '../../config/order.json';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/chart/bar';
@@ -356,7 +356,7 @@ export default class Repeated extends React.Component {
                                                     order.map((m, i) => {
 
 
-                                                        let ips = m['MODIFY_TERMINAL'];
+                                                        let ips = m['IPADDR'];
 
                                                         return (<tr className="mdc-data-table__row" key={'table__row' + i}>
 
@@ -372,14 +372,9 @@ export default class Repeated extends React.Component {
                                                                     )
                                                                 })
 
-
-
-
                                                             }
 
-                                                            {/* <th className="mdc-data-table__header-cell" role="columnheader" scope="col">{dViews[ips]}</th> */}
-
-
+                                                            <th className="mdc-data-table__header-cell" role="columnheader" scope="col">{rViews[ips]}</th>
                                                         </tr>)
                                                     })
                                                 }

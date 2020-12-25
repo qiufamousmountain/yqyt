@@ -398,10 +398,10 @@ const get10Min = () => {
 }
 const clearCache = () => {
   client.del('todaymin10', (err, object) => {
-    console.log('cache has already del at ' + new Date())
+    console.log('todaymin10 cache has already del at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
   })
   client.del('todaymin30', (err, object) => {
-    console.log('cache has already del at ' + new Date())
+    console.log('todaymin30 cache has already del at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
   })
 }
 const scheduleCronstyle = () => {
@@ -412,27 +412,27 @@ const scheduleCronstyle = () => {
   getTotal()
   getOutTotal()
 
-  client.hgetall('todaymin30', (err, reply) => {
-    if (err) {
-      console.log(err)
-      return
-    }
-    console.log(reply)
+  // client.hgetall('todaymin30', (err, reply) => {
+  //   if (err) {
+  //     console.log(err)
+  //     return
+  //   }
+  //   console.log(reply)
 
-  });
-  client.hgetall('todaymin10', (err, reply) => {
-    if (err) {
-      console.log(err)
-      return
-    }
-    console.log(reply)
+  // });
+  // client.hgetall('todaymin10', (err, reply) => {
+  //   if (err) {
+  //     console.log(err)
+  //     return
+  //   }
+  //   console.log(reply)
 
-  });
+  // });
 
   //每10分钟定时执行一次:
   schedule.scheduleJob('*/10 * * * *', () => {
     get10Min()
-    console.log('get10Min at ' + new Date())
+    console.log('get10Min at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
 
 
   });
@@ -440,12 +440,12 @@ const scheduleCronstyle = () => {
   //每30分钟定时执行一次:
   schedule.scheduleJob('*/30 * * * *', () => {
     getOutTotal()
-    console.log('getOutTotal at ' + new Date())
+    console.log('getOutTotal at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
 
   });
   //每天00:00定时执行一次:
-  schedule.scheduleJob('56 59 23 * *', () => {
-    console.log('tonight cache must be clear ' + new Date())
+  schedule.scheduleJob('59 23 ? * *', () => {
+    console.log('tonight cache must be clear ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
 
     clearCache()
 

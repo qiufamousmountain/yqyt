@@ -9,29 +9,23 @@ const Moment = require('moment')
 const mysql = require('mysql');
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
 
-
-const connectionPromise = ({ g, sql }) => {
+const connectionPromise = (sql) => {
     return new Promise(function (resolve, reject) {
-
         pool.getConnection((err, conn) => {
             if (err) {
                 // console.log('和mysql数据库建立连接失败' + sql)
                 console.log(err)
-                return resolve({ g, count: 0 })
-
+                return resolve(null)
             }
             // console.log('和mysql数据库连接成功');
             conn.query(sql, (err2, result) => {
                 conn.release();
-
                 if (err2) {
                     console.log('查询数据库失败' + sql);
-                    return resolve({ g, count: 0 })
-
+                    console.log(err2)
+                    return resolve(null)
                 }
-                // console.log(result[0]["count(0)"]);
-                return resolve({ g, count: result[0]["count(0)"] })
-
+                return resolve(result)
             })
 
         });
@@ -39,37 +33,6 @@ const connectionPromise = ({ g, sql }) => {
     })
 }
 
-
-const connectionIPPromise = ({ ip, sql }) => {
-
-    return new Promise(function (resolve, reject) {
-
-        pool.getConnection((err, conn) => {
-            if (err) {
-                console.log('和mysql数据库建立连接失败' + sql)
-                console.log(err)
-                return resolve({ ip, count: 0 })
-
-            }
-            // console.log('和mysql数据库连接成功');
-            conn.query(sql, (err2, result) => {
-                conn.release();
-
-                if (err2) {
-                    console.log('查询数据库失败' + sql);
-                    return resolve({ ip, count: 0 })
-
-                }
-                return resolve({ ip, count: result[0]["count(0)"] })
-
-            })
-
-        });
-
-
-
-    })
-}
 
 module.exports = {
     //详单查询
@@ -270,10 +233,13 @@ module.exports = {
 
 
     },
+
     countgroupOne: async (req, res) => {
 
         let { btime, etime, group, type } = req.query;
         let groups = groupConfig[type] || {};
+        // console.log(groups, type, groupConfig)
+
         if (!btime || !etime || !groups[group]) {
             res.send({
                 code: 500,
@@ -283,16 +249,8 @@ module.exports = {
         }
 
         let totalList = [];
-
-
-
-        if (!groups.hasOwnProperty(group)) {
-            res.send({ code: 200, msg: 'this group is invaid' })
-            return
-        }
-
-
         let ips = []
+
         let currentGroup = groups[group]
         for (let i in currentGroup) {
             if (currentGroup.hasOwnProperty(i)) {
@@ -300,119 +258,63 @@ module.exports = {
             }
         }
 
-        for (let j = 0; j < ips.length; j++) {
-            let ip = ips[j]
-            for (let i = 0; i < list.length; i++) {
-
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL='${ip}' and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ ip, sql })
-
-            }
-        }
-
-        let promistList = totalList.map(m => connectionIPPromise(m))
-        Promise.all(promistList).then((result) => {
-            // console.log(result,)               //['成功了', 'success']
-            // pool.end()
-            let data = {}
-
-
-            for (let i = 0; i < result.length; i++) {
-                let cur = result[i]
-                if (data.hasOwnProperty(cur.ip)) {
-                    data[cur.ip] = data[cur.ip] + cur.count
-
-                } else {
-                    data[cur.ip] = cur.count
-
-                }
-            }
-            let arr = []
-            for (let ip in data) {
-                if (data.hasOwnProperty(ip)) {
-                    arr.push({
-                        ip: currentGroup[ip], count: data[ip]
-                    })
-                }
-
-
-
-            }
-            res.send({ code: 200, data: arr, group })
-            promistList = null;
-            totalList = null;
-        }).catch((error) => {
-            console.log(error)
-            res.send({ code: 500, msg: error })
-            promistList = null;
-            totalList = null;
-        })
-
-    },
-
-    countgroupBB: async (req, res) => {
-
-        let { btime, etime, group, type } = req.body;
-        let groups = groupConfig[type] || {};
-
-        if (!btime || !etime || group.length < 1) {
+        if (ips.length < 1) {
             res.send({
                 code: 500,
-                msg: 'params is invaid'
+                msg: 'no such group'
             })
             return;
         }
 
-        let totalList = [];
-        for (let j = 0; j < group.length; j++) {
+        ips = ips.join("','")
 
-            let g = group[j];
-            if (!groups.hasOwnProperty(group[j])) continue
-            let ipsList = groups[g];
-            let ips = []
-            for (let i in ipsList) {
-                if (ipsList.hasOwnProperty(i)) {
-                    ips.push(i)
-                }
-            }
-            ips = ips.join("','")
-            for (let i = 0; i < list.length; i++) {
-
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ g, sql })
-            }
-
-        }
+        totalList = list.map(m => {
+            return `select MODIFY_TERMINAL,count(MODIFY_TERMINAL) as num
+            from ${m}
+            where MODIFY_TERMINAL in ('${ips}') and (create_time>'${btime}' and create_time<'${etime}') and OP_CODE ='${type == 'gotc' ? 171 : 131}'
+            group by MODIFY_TERMINAL`
+        })
 
         let promistList = totalList.map(m => connectionPromise(m))
         Promise.all(promistList).then((result) => {
-            console.log(result,)               //['成功了', 'success']
 
-            // pool.end()
-
-            let data = {}
-
+            let data = []
+            let timeList = {}
             for (let i = 0; i < result.length; i++) {
-
-                let cur = result[i]
-                if (data.hasOwnProperty(cur.g)) {
-                    data[cur.g] = data[cur.g] + cur.count
-
-                } else {
-                    data[cur.g] = cur.count
-
+                let tlist = result[i] || [];
+                for (let j = 0; j < tlist.length; j++) {
+                    let ext = tlist[j];
+                    if (!ext || !ext.MODIFY_TERMINAL) continue;
+                    let t = ext.MODIFY_TERMINAL;
+                    if (!timeList[t]) {
+                        timeList[t] = ext.num
+                    }
+                    timeList[t] = parseInt(timeList[t]) + parseInt(ext.num)
                 }
             }
-            let arr = []
-            for (let g in data) {
-                if (data.hasOwnProperty(g)) {
-                    arr.push({
-                        group: g, count: data[g]
-                    })
+
+
+            for (let i in timeList) {
+
+                if (timeList.hasOwnProperty(i)) {
+                    let gg = {
+                        ip: currentGroup[i],
+                        count: timeList[i]
+                    }
+                    data.push(gg)
+
                 }
 
             }
-            res.send({ code: 200, data: arr })
+
+            data = data.sort((a, b) => {
+                let lt = a.ip.match(/\d+/g)
+                let bg = b.ip.match(/\d+/g)
+
+                return lt[0] - bg[0]
+            })
+
+            res.send({ code: 200, data })
             promistList = null;
             totalList = null;
         }).catch((error) => {
@@ -423,7 +325,6 @@ module.exports = {
         })
 
     },
-
     countgroup: async (req, res) => {
 
         let { btime, etime, group, type } = req.body;
@@ -438,55 +339,93 @@ module.exports = {
         }
 
         let totalList = [];
+        let ips = []
         for (let j = 0; j < group.length; j++) {
 
             let g = group[j];
             if (!groups.hasOwnProperty(group[j])) continue
             let ipsList = groups[g];
-            let ips = []
             for (let i in ipsList) {
                 if (ipsList.hasOwnProperty(i)) {
                     ips.push(i)
                 }
             }
-            ips = ips.join("','")
-            for (let i = 0; i < list.length; i++) {
 
-                let sql = `select count(0) from ${list[i]} where MODIFY_TERMINAL in ('${ips}') and (create_time between '${btime}' and '${etime}')`
-                totalList.push({ g, sql })
-            }
 
         }
+        if (ips.length < 1) {
+            res.send({
+                code: 500,
+                msg: 'no such group'
+            })
+            return;
+        }
+        ips = ips.join("','")
+
+        totalList = list.map(m => {
+            return `select MODIFY_TERMINAL,count(MODIFY_TERMINAL) as num
+            from ${m}
+            where MODIFY_TERMINAL in ('${ips}') and (create_time>'${btime}' and create_time<'${etime}') and OP_CODE ='${type == 'gotc' ? 171 : 131}'
+            group by MODIFY_TERMINAL`
+        })
 
         let promistList = totalList.map(m => connectionPromise(m))
         Promise.all(promistList).then((result) => {
-            console.log(result,)               //['成功了', 'success']
+            // console.log(result,)               //['成功了', 'success']
 
             // pool.end()
 
-            let data = {}
+            let data = []
 
+            let timeList = {}
             for (let i = 0; i < result.length; i++) {
-
-                let cur = result[i]
-                if (data.hasOwnProperty(cur.g)) {
-                    data[cur.g] = data[cur.g] + cur.count
-
-                } else {
-                    data[cur.g] = cur.count
-
+                let tlist = result[i] || [];
+                for (let j = 0; j < tlist.length; j++) {
+                    let ext = tlist[j];
+                    if (!ext || !ext.MODIFY_TERMINAL) continue;
+                    let t = ext.MODIFY_TERMINAL;
+                    if (!timeList[t]) {
+                        timeList[t] = ext.num
+                    }
+                    timeList[t] = parseInt(timeList[t]) + parseInt(ext.num)
                 }
             }
-            let arr = []
-            for (let g in data) {
-                if (data.hasOwnProperty(g)) {
-                    arr.push({
-                        group: g, count: data[g]
-                    })
+
+
+
+
+            for (let j = 0; j < group.length; j++) {
+
+                let g = group[j];
+                let gg = {
+                    group: g,
+                    count: 0
+                }
+                if (!groups.hasOwnProperty(group[j])) {
+                    data.push(gg)
+                    continue
+                }
+                let ips = groups[g];
+                let gips = []
+                for (let i in ips) {
+                    if (ips.hasOwnProperty(i)) {
+                        gips.push(i)
+                    }
                 }
 
+                for (let i = 0; i < gips.length; i++) {
+                    if (timeList.hasOwnProperty(gips[i])) {
+
+                        gg['count'] = parseInt(gg['count']) + parseInt(timeList[gips[i]])
+                    }
+                }
+
+                data.push(gg)
+
+
             }
-            res.send({ code: 200, data: arr })
+
+            res.send({ code: 200, data })
             promistList = null;
             totalList = null;
         }).catch((error) => {
@@ -601,14 +540,14 @@ module.exports = {
         }
         arr = arr.join("','")
         let tosql = `select BARCODE,TIMEDCT,IPADDR from t_yto_scan where TIMEDCT>'${btime}' AND TIMEDCT<'${etime}' and BARCODE in ('${arr}')`
-        console.log(tosql,'-------------------------------------')
+        console.log(tosql, '-------------------------------------')
 
         let detailData = await connectionPromise(sql_jg, tosql)
         if (detailData.code == 500) {
             res.send(detailData)
             return
         }
-        console.log(detailData,'-------------------------------------')
+        console.log(detailData, '-------------------------------------')
 
         res.send({ code: 200, data: detailData })
 
