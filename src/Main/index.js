@@ -25,7 +25,7 @@ export default class Main extends React.Component {
                 group: [],
                 btime: '',
                 etime: '',
-                type:'gotc'
+                type: 'gotc'
             },
             viewData: [],
             showDetail: false,
@@ -47,9 +47,9 @@ export default class Main extends React.Component {
             let resData = response.data
 
             if (resData.code == 200) {
-                
+
                 this.setState({
-                    gotcList:resData.data
+                    gotcList: resData.data
                 })
             } else {
                 emitter.emit(SNACKBAR, resData.msg)
@@ -164,7 +164,7 @@ export default class Main extends React.Component {
         }
         let option = {
             title: {
-                text: params.group,
+                text: '下车操作统计',
                 subtext: params.btime + '-' + params.etime,
                 // sublink: 'http://e.weibo.com/1341556070/Aj1J2x5a5'
             },
@@ -225,7 +225,7 @@ export default class Main extends React.Component {
         }
         let option = {
             title: {
-                text: groupDetail,
+                text: groupDetail + '下车操作统计',
                 subtext: params.btime + '-' + params.etime,
                 // sublink: 'http://e.weibo.com/1341556070/Aj1J2x5a5'
             },
@@ -451,7 +451,7 @@ export default class Main extends React.Component {
 
 
                                         emitter.emit(SNACKBAR, '结束时间不能早于开始时间');
-                                        params.btime=''
+                                        params.btime = ''
 
                                     } else {
                                         params.btime = Moment(date).format('yyyy-MM-DD HH:mm');
@@ -492,7 +492,7 @@ export default class Main extends React.Component {
 
                                     if (params.btime && !Moment(params.btime).isBefore(date)) {
                                         emitter.emit(SNACKBAR, '开始时间不能晚于结束时间');
-                                        params.etime=''
+                                        params.etime = ''
 
                                     } else {
                                         params.etime = Moment(date).format('yyyy-MM-DD HH:mm');

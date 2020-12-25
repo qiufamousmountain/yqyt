@@ -336,6 +336,16 @@ p {
 				position   : relative;
 				width      : 30%;
 
+				.mdc-button {
+					max-width: 70%;
+
+					.mdc-button__label {
+						white-space  : nowrap;
+						overflow     : hidden;
+						text-overflow: ellipsis;
+					}
+				}
+
 				.openGroupBox {
 					position: absolute;
 					left    : 105px;

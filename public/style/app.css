@@ -314,6 +314,16 @@ p {
   width: 30%;
 }
 
+#main .main-box .filter-control .filter-item .mdc-button {
+  max-width: 70%;
+}
+
+#main .main-box .filter-control .filter-item .mdc-button .mdc-button__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 #main .main-box .filter-control .filter-item .openGroupBox {
   position: absolute;
   left: 105px;

@@ -165,7 +165,7 @@ export default class Gitc extends React.Component {
         }
         let option = {
             title: {
-                text: params.group,
+                text: '上车狂扫操作统计',
                 subtext: params.btime + '-' + params.etime,
                 // sublink: 'http://e.weibo.com/1341556070/Aj1J2x5a5'
             },
@@ -226,7 +226,7 @@ export default class Gitc extends React.Component {
         }
         let option = {
             title: {
-                text: groupDetail,
+                text: groupDetail+'上车操作统计',
                 subtext: params.btime + '-' + params.etime,
                 // sublink: 'http://e.weibo.com/1341556070/Aj1J2x5a5'
             },
