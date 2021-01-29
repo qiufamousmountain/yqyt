@@ -725,7 +725,7 @@ export default class Outmap extends React.Component {
                         coordinateSystem: 'geo',
                         data: convertData(geoCoordMapJG, mapDataJG['data']),
                         symbolSize: function (val) {
-                            return val[2] / 10000;;
+                            return val[2] / 5000;;
                         },
                         label: {
                             normal: {
@@ -757,7 +757,7 @@ export default class Outmap extends React.Component {
                             return b.value - a.value;
                         }).slice(0, 20)),
                         symbolSize: function (val) {
-                            return val[2] / 10000;;
+                            return val[2] / 5000;;
                         },
                         showEffectOn: 'render',
                         rippleEffect: {

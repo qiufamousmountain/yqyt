@@ -32,7 +32,8 @@ router.use((req, res, next) => {
         res.json({ code: 302, data: '/' });
         return
     }
-    let { id, clientID } = req.session.yto_u;
+    let yto_u = req.session.yto_u;
+    let { id, clientID } = yto_u;
 
     client.get(id, async (err, reply) => {
         if (err) {
@@ -46,6 +47,7 @@ router.use((req, res, next) => {
                         return
                     })
                 } else {
+                    res.cookie('yto_u', yto_u, { signed: true, maxAge: 60 * 1000, httpOnly: true });
                     next();
 
                 }

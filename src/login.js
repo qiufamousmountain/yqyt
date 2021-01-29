@@ -65,7 +65,7 @@ $(document).ready(() => {
     //给整个窗口注册回车keydown事件
     $(window).keydown(function (event) {
         if (event.keyCode == 13) {
-            $("input[name=submit]").click();
+            $("#loginBtn").click();
         }
     });
     //让帐号文本框获得焦点
