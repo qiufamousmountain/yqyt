@@ -47,7 +47,9 @@ router.use((req, res, next) => {
                         return
                     })
                 } else {
-                    res.cookie('yto_u', yto_u, { signed: true, maxAge: 60 * 1000, httpOnly: true });
+                    client.set(id, JSON.stringify(yto_u), (err, reply) => {
+                        client.expire(id, 3600 * 24)
+                    });
                     next();
 
                 }
