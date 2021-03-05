@@ -3,7 +3,7 @@
  */
 
 const { pool } = require('../models/sql')
-const { sql_m, sql_moni, sql_jg } = require('../config/config.json');
+const { sql_m, sql_moni, sql_jg,sql_s } = require('../config/config.json');
 const groupConfig = require('../config/groups.json')
 const Moment = require('moment')
 const mysql = require('mysql');
@@ -101,7 +101,7 @@ module.exports = {
             })
         }
 
-        let mainData = await connectionPromise(sql_m, sql);
+        let mainData = await connectionPromise(sql_s, sql);
         let oData = await connectionPromise(sql_moni, osql);
         // console.log(mainData, '------------mainData------------------')
         // console.log(oData, '----------------oData--------------')
@@ -134,6 +134,9 @@ module.exports = {
         res.send({ code: 200, data: mainData })
 
     },
+
+
+
     //包使用量
     countPackage: async (req, res) => {
 

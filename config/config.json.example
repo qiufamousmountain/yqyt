@@ -25,6 +25,14 @@
     "port": "3306",
     "timezone": "SYSTEM"
   },
+  "sql_jg": {
+    "host": "172.19.6.205",
+    "user": "ytomsbag",
+    "password": "ytomsbag",
+    "database": "ytomsbag",
+    "port": "3306",
+    "timezone": "SYSTEM"
+  },
   "redis": {
     "host": "127.0.0.1",
     "port": 6379

@@ -69,6 +69,11 @@ router.get('/every10Min', (req, res) => {
     views.every10Min(req, res);
 });
 router.get('/totalcount', (req, res) => {
+    let yto_u = req.session.yto_u;
+    let { id, clientID } = yto_u;
+    client.set(id, JSON.stringify(yto_u), (err, reply) => {
+        client.expire(id, 3600 * 24)
+    });
     views.totalCount(req, res);
 });
 router.get('/outVol', (req, res) => {
