@@ -5,6 +5,8 @@ const Moment = require('moment')
 const { jg, chg } = require('../config/flow-net.json')
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
 
+
+
 const connectionPromise = (sql) => {
   return new Promise(function (resolve, reject) {
     pool.getConnection((err, conn) => {
@@ -341,61 +343,61 @@ const getOutTotal = () => {
   })
 }
 
+// const get10Min = () => {
+
+//   let totalList = []
+//   let time = new Date()
+//   let late = Moment(time).format('yyyy-MM-DD HH:mm')
+//   // console.log(late)
+//   let begin = Moment(time).subtract(Moment(time).minute() % 10 + 10, "minutes").format('yyyy-MM-DD HH:mm')
+//   totalList = list.map(m => {
+//     return `select
+//     DATE_FORMAT(concat( date( create_time ), ' ', HOUR ( create_time ), ':', floor( MINUTE ( create_time ) / 10 ) * 10 ),
+//       '%Y-%m-%d %H:%i' ) AS t ,
+//     sum(OP_CODE ='131') as u ,
+//     sum(OP_CODE ='171') as d
+//     from ${m}
+//     where (create_time>'${begin}' and create_time<'${late}') and (OP_CODE ='131' or OP_CODE='171')
+//     group by DATE_FORMAT( t, '%Y-%m-%d %H:%i' )  `
+//   })
+
+//   let promistList = totalList.map(m => connectionPromise(m))
+//   Promise.all(promistList).then((result) => {
+//     let timeList = {}
+
+//     for (let i = 0; i < result.length; i++) {
+//       let tlist = result[i] || [];
+//       for (let j = 0; j < tlist.length; j++) {
+//         let ext = tlist[j];
+//         if (!ext || !ext.t) continue;
+//         let t = ext.t.split(' ')[1];
+//         if (!timeList[t]) {
+//           timeList[t] = [ext.d, ext.u]
+//         }
+//         timeList[t][0] = parseInt(timeList[t][0]) + parseInt(ext.d)
+//         timeList[t][1] = parseInt(timeList[t][1]) + parseInt(ext.u)
+//       }
+//     }
+
+//     for (let t in timeList) {
+//       if (timeList.hasOwnProperty(t)) {
+//         timeList[t] = timeList[t].join('-')
+//       }
+//     }
+
+//     client.hmset('todaymin10', timeList, (err) => {
+//       if (err) {
+//         console.log(err)
+
+//       }
+//     })
+//   }).catch((error) => {
+//     console.log(error)
+
+//   })
+// }
 
 
-const get10Min = () => {
-
-  let totalList = []
-  let time = new Date()
-  let late = Moment(time).format('yyyy-MM-DD HH:mm')
-  // console.log(late)
-  let begin = Moment(time).subtract(Moment(time).minute() % 10 + 10, "minutes").format('yyyy-MM-DD HH:mm')
-  totalList = list.map(m => {
-    return `select
-    DATE_FORMAT(concat( date( create_time ), ' ', HOUR ( create_time ), ':', floor( MINUTE ( create_time ) / 10 ) * 10 ),
-      '%Y-%m-%d %H:%i' ) AS t ,
-    sum(OP_CODE ='131') as u ,
-    sum(OP_CODE ='171') as d
-    from ${m}
-    where (create_time>'${begin}' and create_time<'${late}') and (OP_CODE ='131' or OP_CODE='171')
-    group by DATE_FORMAT( t, '%Y-%m-%d %H:%i' )  `
-  })
-
-  let promistList = totalList.map(m => connectionPromise(m))
-  Promise.all(promistList).then((result) => {
-    let timeList = {}
-
-    for (let i = 0; i < result.length; i++) {
-      let tlist = result[i] || [];
-      for (let j = 0; j < tlist.length; j++) {
-        let ext = tlist[j];
-        if (!ext || !ext.t) continue;
-        let t = ext.t.split(' ')[1];
-        if (!timeList[t]) {
-          timeList[t] = [ext.d, ext.u]
-        }
-        timeList[t][0] = parseInt(timeList[t][0]) + parseInt(ext.d)
-        timeList[t][1] = parseInt(timeList[t][1]) + parseInt(ext.u)
-      }
-    }
-
-    for (let t in timeList) {
-      if (timeList.hasOwnProperty(t)) {
-        timeList[t] = timeList[t].join('-')
-      }
-    }
-
-    client.hmset('todaymin10', timeList, (err) => {
-      if (err) {
-        console.log(err)
-
-      }
-    })
-  }).catch((error) => {
-    console.log(error)
-
-  })
-}
 const clearCache = () => {
   client.del('todaymin10', (err, object) => {
     console.log('todaymin10 cache has already del at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
@@ -431,7 +433,7 @@ const scheduleCronstyle = () => {
 
   //每10分钟定时执行一次:
   schedule.scheduleJob('*/10 * * * *', () => {
-    get10Min()
+    getTotal()
     console.log('get10Min at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
 
 
@@ -443,18 +445,23 @@ const scheduleCronstyle = () => {
     console.log('getOutTotal at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
 
   });
+
+  //每1小时定时执行一次:
+  schedule.scheduleJob('*/30 * * * *', () => {
+    getOutTotal()
+    console.log('getOutTotal at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
+  });
+
   //每天00:00定时执行一次:
   schedule.scheduleJob('59 23 ? * *', () => {
     console.log('tonight cache must be clear ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
-
     clearCache()
-
   });
 }
 
 module.exports = scheduleCronstyle;
 
-
+// getDWS()
 // *    *    *    *    *    *
 // ┬    ┬    ┬    ┬    ┬    ┬
 // │    │    │    │    │    |

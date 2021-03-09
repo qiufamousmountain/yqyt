@@ -36,7 +36,13 @@ export default class Nav extends React.Component {
                 path: '/maps',
                 icon: 'desktop_mac'
 
-            }
+            },
+            {
+               name: '卸车口操作',
+               path: '/maps1',
+               icon: 'desktop_mac'
+
+           }
             ,
              {
                 name: '重复操作',
