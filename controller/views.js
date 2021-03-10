@@ -218,15 +218,20 @@ module.exports = {
 
         let begin = '';
         let clas = 'b'
-        let hh = [20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]
+        let hh = [20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7,8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
         if (Moment(time).isBefore(c8)) {
-            begin = Moment(c20).subtract(1, "days").format('yyyy-MM-DD HH:mm')
+            // begin = Moment(c20).subtract(1, "days").format('yyyy-MM-DD HH:mm')
+            begin = Moment(c8).subtract(1, "days").format('yyyy-MM-DD HH:mm')
         } else if (Moment(c8).isBefore(time) && Moment(time).isBefore(c20)) {
-            begin = c8
+            begin = Moment(c20).subtract(1, "days").format('yyyy-MM-DD HH:mm')
+
+            // begin = c8
             clas = 'a'
-            hh = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+            hh = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,20, 21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]
         } else {
-            begin = c20
+            begin = c8
+
+            // begin = c20
         }
 
         let late = Moment(time).subtract(Moment(time).minute(), "minute").format('yyyy-MM-DD HH:mm')
