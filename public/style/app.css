@@ -264,6 +264,10 @@ p {
   cursor: pointer;
 }
 
+#main .main-box .views .echart-box.screen-mainnot {
+  background-color: #fff;
+}
+
 #main .main-box .views.data-screen {
   padding: 0;
   display: flex;

@@ -33,6 +33,7 @@ export default class Countups extends React.Component {
     clearTimers() {
         this.timer && clearInterval(this.timer)
     }
+    
     getData(type = 'all') {
         axios.get(`/api/totalcount`, { params: { type } })
             .then((response) => {
@@ -55,6 +56,7 @@ export default class Countups extends React.Component {
                 console.log(error);
             });
     }
+
     render() {
         const { end, start } = this.state
 

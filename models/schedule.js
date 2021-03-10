@@ -1,6 +1,8 @@
 const schedule = require('node-schedule');
 const client = require('./redis');
 const { pool } = require('../models/sql')
+const { gotc } = require('../config/groups.json')
+
 const Moment = require('moment')
 const { jg, chg } = require('../config/flow-net.json')
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']

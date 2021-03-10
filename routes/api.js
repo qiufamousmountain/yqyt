@@ -74,7 +74,13 @@ router.get('/outVol', (req, res) => {
     views.outVol(req, res);
 });
 
+router.get('/viewjchg', (req, res) => {
+    views.getDWS10(req, res);
+});
 
+router.get('/viewjchgev', (req, res) => {
+    views.getDWS1H(req, res);
+});
 
 
 

@@ -16,6 +16,8 @@ import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/chart/bar';
+
+
 export default class Main extends React.Component {
     constructor(props) {
         super(props);

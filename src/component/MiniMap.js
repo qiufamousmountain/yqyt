@@ -37,6 +37,7 @@ export default class Outmap extends React.Component {
     }
     getOption() {
         let { dataJson } = this.state
+        console.log(dataJson)
         let option = {
             title: {
                 text: '上下车操作对比',
