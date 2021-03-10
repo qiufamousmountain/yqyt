@@ -139,13 +139,13 @@ export default class Maps2 extends React.Component {
             timeline: {
                 data: ["操作量", "时效"],
                 axisType: 'category',
-                // left: '10%',
+                left: '90%',
                 right: '10%',
                 top: '3%',
                 width: '20%',
                 autoPlay: true,
                 // currentIndex: 2,
-                playInterval: 100000,
+                playInterval: 300000,
             },
             baseOption: {
                 animation: true,
@@ -252,7 +252,7 @@ export default class Maps2 extends React.Component {
                 title: {
                     text: `${type == 'jg' ? '进港' : '出港'} ${clas == 'a' ? 'A组-8:00-' : 'B组-20:00-'}  时效`,
                     textStyle: {
-                        color: '#fff'
+                        // color: '#fff'
 
                     }
                 },
