@@ -300,19 +300,22 @@ module.exports = {
 
 
                 let curentd = timeList[m];
+                // console.log(curentd)
                 for (let dd2 in curentd) {
                     if (curentd.hasOwnProperty(dd2)) {
 
-                        bf1 = hh.map(m => {
-                            let ibfi = {
-                                t: m,
-                                c: Moment(dd2).hour() === m ? curentd[dd2] : 0
+                        bf1 = bf1.map(m => {
+                            // console.log(dd2, m)
+// console.log(Moment(dd2).hour() == m.t)
+                            if (Moment(dd2).hour() == m.t) {
+                                m.c = curentd[dd2]
                             }
-                            return ibfi
+
+                            return m
                         })
                     }
                 }
-
+console.log(bf1)
                 let obj = {
                     ip: m,
                     name: jg[m],
@@ -336,16 +339,16 @@ module.exports = {
                 let curentd = timeList[m];
                 for (let dd2 in curentd) {
                     if (curentd.hasOwnProperty(dd2)) {
-                        bf1 = hh.map(m => {
-                            let ibfi = {
-                                t: m,
-                                c: Moment(dd2).hour() === m ? curentd[dd2] : 0
+
+                        bf1 = bf1.map(m => {
+                            if (Moment(dd2).hour() == m.t) {
+                                m.c = curentd[dd2]
                             }
-                            return ibfi
+
+                            return m
                         })
                     }
                 }
-
 
                 let obj = {
                     ip: m,
