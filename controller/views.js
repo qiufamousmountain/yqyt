@@ -234,7 +234,7 @@ module.exports = {
 
             begin = c20
         }
-
+        hh = hh.slice(0, hh.indexOf(Moment(time).hour()) + 1)
         let late = Moment(time).subtract(Moment(time).minute(), "minute").format('yyyy-MM-DD HH:mm')
         // let before = Moment(late).subtract(1, "hour").format('yyyy-MM-DD HH:mm')
         let count = Moment(late).diff(Moment(begin), 'hour')
@@ -306,7 +306,7 @@ module.exports = {
 
                         bf1 = bf1.map(m => {
                             // console.log(dd2, m)
-// console.log(Moment(dd2).hour() == m.t)
+                            // console.log(Moment(dd2).hour() == m.t)
                             if (Moment(dd2).hour() == m.t) {
                                 m.c = curentd[dd2]
                             }
@@ -315,7 +315,7 @@ module.exports = {
                         })
                     }
                 }
-console.log(bf1)
+                console.log(bf1)
                 let obj = {
                     ip: m,
                     name: jg[m],
