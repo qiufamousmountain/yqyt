@@ -47,7 +47,7 @@ export default class Maps2 extends React.Component {
                 this.getListENV()
             }
 
-            if (Moment(t).second() === 0||Moment(t).second() === 30) {
+            if (Moment(t).second() === 0 || Moment(t).second() === 30) {
                 this.getList()
             }
             t = null;
@@ -135,6 +135,8 @@ export default class Maps2 extends React.Component {
         //     return {}
         // }
 
+        let cv = type == 'jg' ? jgviewData : chgviewData;
+        let cl = type == 'jg' ? jglinVdata : chglinVdata;
         let optionXyMap01 = {
             timeline: {
                 data: ["操作量", "时效"],
@@ -200,7 +202,7 @@ export default class Maps2 extends React.Component {
                 xAxis: [
                     {
                         type: 'category',
-                        data: (type == 'jg' ? jgviewData : chgviewData).map(m => m['name']),
+                        data: cv.map(m => m['name']),
                         axisTick: {
                             alignWithLabel: true
                         }
@@ -234,7 +236,7 @@ export default class Maps2 extends React.Component {
                             position: 'top'
                         },
                         barWidth: '60%',
-                        data: (type == 'jg' ? jgviewData : chgviewData).map(m => m['total'])
+                        data: cv.map(m => m['total'])
                     },
                     // {
                     //     name: '时效',
@@ -304,7 +306,7 @@ export default class Maps2 extends React.Component {
                     {
                         type: 'category',
                         boundaryGap: true,
-                        data: (((type == 'jg' ? jglinVdata : chglinVdata)[0] || {}).bf1 || []).map(m => m.t),
+                        data: ((cl[0] || {}).bf1 || []).map(m => m.t),
 
                     },
                 ],
@@ -339,7 +341,7 @@ export default class Maps2 extends React.Component {
                     containLabel: true
                     // left:"2%"
                 },
-                series: (type == 'jg' ? jglinVdata : chglinVdata).map((m, i) => {
+                series: cl.map((m, i) => {
 
                     return {
                         name: m.name,
