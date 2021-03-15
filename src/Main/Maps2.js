@@ -223,7 +223,7 @@ export default class Maps2 extends React.Component {
                     //     type: 'value',
                     //     name: '时效',
                     //     axisLabel: {
-                    //         formatter: '{value}'
+                    //         formatter: '{value}'+''
                     //     }
                     // }
                 ],
