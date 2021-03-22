@@ -141,7 +141,7 @@ export default class Maps2 extends React.Component {
             timeline: {
                 data: ["操作量", "时效"],
                 axisType: 'category',
-                left: '90%',
+                // left: '90%',
                 right: '10%',
                 top: '3%',
                 width: '20%',
