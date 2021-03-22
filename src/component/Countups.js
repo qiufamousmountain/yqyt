@@ -26,14 +26,15 @@ export default class Countups extends React.Component {
         this.clearTimers()
         this.getData()
         this.timer = setInterval(() => {
-            this.getData('add')
+            // this.getData('add')
+            this.getData()
         }, 600000)
     }
 
     clearTimers() {
         this.timer && clearInterval(this.timer)
     }
-    
+
     getData(type = 'all') {
         axios.get(`/api/totalcount`, { params: { type } })
             .then((response) => {
@@ -42,6 +43,7 @@ export default class Countups extends React.Component {
                     let data = resData.data;
                     let end = data;
                     let start = data - parseInt(data / 10);
+                    start = start < 0 ? 0 : start;
                     if (type == 'add') {
                         start = this.state.end;
                         end = this.state.end + data
