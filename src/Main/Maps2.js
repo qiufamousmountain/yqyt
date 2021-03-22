@@ -43,7 +43,7 @@ export default class Maps2 extends React.Component {
         this.timer && clearInterval(this.timer)
         this.timer = setTimeout(() => {
             let t = new Date()
-            if (Moment(t).minute() === 0 && Moment(t).second() === 0) {
+            if ((Moment(t).minute() === 0 || Moment(t).minute() === 30) && Moment(t).second() === 0) {
                 this.getListENV()
             }
 

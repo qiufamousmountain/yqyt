@@ -35,9 +35,6 @@ const connectionPromise = (sql) => {
     })
 }
 
-
-
-
 module.exports = {
     every10Min: async (req, res) => {
         // let time = new Date()
@@ -237,7 +234,8 @@ module.exports = {
             // begin = c20
         }
         hh = hh.slice(0, hh.indexOf(Moment(time).hour()) + 1)
-        let late = Moment(time).subtract(Moment(time).minute(), "minute").format('yyyy-MM-DD HH:mm')
+        // let late = Moment(time).subtract(Moment(time).minute(), "minute").format('yyyy-MM-DD HH:mm')
+        let late = Moment(time).format('yyyy-MM-DD HH:mm')
         // let before = Moment(late).subtract(1, "hour").format('yyyy-MM-DD HH:mm')
         let count = Moment(late).diff(Moment(begin), 'hour')
 
