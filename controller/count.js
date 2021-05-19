@@ -3,7 +3,7 @@
  */
 
 const { pool } = require('../models/sql')
-const { sql_m, sql_moni, sql_jg,sql_s } = require('../config/config.json');
+const { sql_m, sql_mc, sql_moni, sql_jg, sql_s } = require('../config/config.json');
 const groupConfig = require('../config/groups.json')
 const Moment = require('moment')
 const mysql = require('mysql');
@@ -135,7 +135,64 @@ module.exports = {
 
     },
 
+    stuffturnover: async (req, res) => {
+        let { btime, etime, group } = req.query;
+        if (!btime || !etime || Moment(new Date(etime)).isBefore(new Date(btime))) {
+            res.send({
+                code: 500,
+                msg: 'params is invaid'
+            })
+            return;
+        }
+        let connectionPromise = (db, sql) => {
+            let connection = mysql.createConnection(db);
+            return new Promise(function (resolve, reject) {
+                connection.connect(function (err) {
+                    if (err) {
+                        console.log(err)
+                        return resolve({ code: 500, msg: 'connect db error' })
+                    }
+                    console.log('连接到数据库' + db.host)
+                });
+                connection.query(sql, function (err, result) {
+                    connection.end();
+                    if (err) {
+                        console.log('查询数据库失败' + sql);
+                        console.log(err, '-------------------------')
+                        return resolve({ code: 500, msg: 'select db error' })
+                    }
+                    return resolve(result)
 
+                });
+            })
+        }
+        let sql = ''
+        for (let i = 0; i < 10; i++) {
+            sql = sql + 'select CREATE_USER_CODE as ucode,CREATE_USER_NAME as uname,OP_CODE as code,COUNT(*) as count from t_exp_waybill_check_' + i + '\n' +
+                'where CREATE_TIME> "' + btime + '" and CREATE_TIME< "' + etime + '" \n' +
+                ' and OP_CODE in ("171","131","110","111" )' + '\n' +
+                'GROUP BY MODIFY_USER_CODE,CREATE_USER_NAME,OP_CODE' + '\n'
+            if (i < 9) {
+                sql = sql +
+                    'UNION ALL' + '\n'
+
+            }
+
+        }
+        // console.log(sql)
+        let iData = connectionPromise(sql_m, sql);
+        // let oData = connectionPromise(sql_mc, sql);
+        Promise.all([iData]).then((result) => {
+            res.send({ code: 200, data: result[0] })
+            iData = null;
+            oData = null;
+        }).catch((error) => {
+            console.log(error)
+            res.send({ code: 500, msg: error })
+            iData = null;
+            oData = null;
+        })
+    },
 
     //包使用量
     countPackage: async (req, res) => {

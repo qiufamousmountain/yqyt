@@ -282,10 +282,50 @@ p {
 
 				}
 
-				&.screen-mainnot{
+				&.screen-mainnot {
 					background-color: #fff;
 
 				}
+
+				&.echart-box-turnover {
+					.mdc-data-table {
+						height      : 100%;
+						width       : 50%;
+						// .mdc-data-table__table {
+						// 	position: relative;
+
+						// 	thead {
+						// 		position: absolute;
+						// 		top     : 0;
+						// 		left    : 0;
+						// 	}
+
+						// 	tbody {
+						// 		padding-top: 56px;
+						// 	}
+						// }
+
+
+						.table-container-topP {
+							height: 56px;
+						}
+
+					}
+
+					.mdc-button-export {
+						font-size: 16px;
+						color    : #6200ee;
+
+						float : right;
+						cursor: pointer;
+
+						&:hover {
+							color: #016886;
+						}
+					}
+				}
+
+
 			}
 
 
@@ -361,7 +401,19 @@ p {
 					left    : 105px;
 					top     : 0
 				}
+
+				&.filter-item-turnover {
+					.react-datepicker-wrapper {
+						width: 70%;
+
+						.react-datepicker__input-container {
+							width: 100%;
+						}
+					}
+				}
 			}
+
+
 		}
 	}
 }

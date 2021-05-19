@@ -262,22 +262,6 @@ const getOutTotal = () => {
   let late = Moment(time).subtract(Moment(time).minute() % 30, "minutes").format('yyyy-MM-DD HH:mm')
   let count = Moment(late).diff(Moment(begin), 'minute')
   if (count < 0) return
-  // let str = [];
-  // for (let i in chg) {
-  //   if (chg.hasOwnProperty(i)) {
-  //     str.push(` sum(NEXT_ORG_CODE in ('${chg[i].join("','")}')) as ${i} `)
-  //   }
-  // }
-
-  // totalList = list.map(m => {
-  //   return `select
-  //   DATE_FORMAT(concat( date( create_time ), ' ', HOUR ( create_time ), ':', floor( MINUTE ( create_time ) / 30 ) * 30 ),
-  //     '%Y-%m-%d %H:%i' ) AS t ,
-  //     ${str.join(' , ')}
-  //   from ${m}
-  //   where (create_time>'${begin}' and create_time<'${late}') and OP_CODE ='131'
-  //   group by DATE_FORMAT( t, '%Y-%m-%d %H:%i' )  `
-  // })
   totalList = list.map(m => {
     return `select NEXT_ORG_CODE,count(NEXT_ORG_CODE) as n
     from ${m}

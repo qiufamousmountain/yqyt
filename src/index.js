@@ -6,13 +6,13 @@ import Main from './Main';
 
 
 
-import Order from './Main/Orders';
+// import Order from './Main/Orders';
 import Gitc from './Main/Gitc';
-import GiPda from './Main/GiPda';
-import Packages from './Main/Packages';
+// import GiPda from './Main/GiPda';
+// import Packages from './Main/Packages';
 import Maps from './Main/Maps';
-import Maps2 from './Main/Maps2';
-import Repeated from './Main/Repeated';
+// import Maps2 from './Main/Maps2';
+// import Repeated from './Main/Repeated';
 
 
 
@@ -24,6 +24,7 @@ import ErrorDialog from './component/ErrorDialog';
 
 import history from './util/history';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import Turnover from './Main/Turnover';
 
 class App extends React.Component {
     constructor(props) {
@@ -34,37 +35,45 @@ class App extends React.Component {
                     path: '/',
                     component: Main,
                 },
-                {
-                    path: '/orders',
-                    component: Order,
-                },
+                // {
+                //     path: '/orders',
+                //     component: Order,
+                // },
                 {
                     path: '/gitc',
                     component: Gitc,
                 },
 
-                {
-                    path: '/gipda',
-                    component: GiPda,
-                },
-                {
-                    path: '/package',
-                    component: Packages,
-                }
+                // {
+                //     path: '/gipda',
+                //     component: GiPda,
+                // },
+                // {
+                //     path: '/package',
+                //     component: Packages,
+                // }
                 ,
                 {
                     path: '/maps',
                     component: Maps,
                 },
-                {
-                    path: '/maps1',
-                    component: Maps2,
-                }
+                // {
+                //     path: '/maps1',
+                //     component: Maps2,
+                // }
+                // ,
+                // {
+                //     path: '/repeated',
+                //     component: Repeated,
+                // }
+
+
                 ,
                 {
-                    path: '/repeated',
-                    component: Repeated,
-                }
+                    path: '/turnover',
+                    component: Turnover,
+                },
+                
             ]
         }
     }

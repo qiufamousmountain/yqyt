@@ -77,7 +77,7 @@ export default class Top extends React.Component {
                 <div className="mdc-top-app-bar__row">
                     <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                         <button className="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Close">menu</button>
-                        <span className="mdc-top-app-bar__title">业务查询内部平台</span>
+                        <span className="mdc-top-app-bar__title">华北转运中心数据查询</span>
                     </section>
                     <section className="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
                         <button className="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Share">share</button>

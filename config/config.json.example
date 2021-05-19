@@ -8,6 +8,15 @@
     "connectionLimit": "180",
     "timezone": "SYSTEM"
   },
+  "sql_mc": {
+    "host": "172.19.4.235",
+    "user": "admin",
+    "password": "yto12345",
+    "database": "ytodb",
+    "port": "3306",
+    "connectionLimit": "180",
+    "timezone": "SYSTEM"
+  },
   "sql_s": {
     "host": "172.19.4.246",
     "user": "admin",
@@ -39,7 +48,7 @@
   },
   "webConfig": {
     "env": "dev",
-    "port": "80"
+    "port": "8100"
   },
   "users": {
     "yto": {
@@ -56,6 +65,36 @@
       "id": "yto2",
       "user": "华北转运中心",
       "password": "Yto@100901"
+    },
+    "01245887": {
+      "id": "01245887",
+      "user": "荆于琳",
+      "password": "01245887"
+    },
+    "00907964": {
+      "id": "00907964",
+      "user": "马新威",
+      "password": "00907964"
+    },
+    "01010024": {
+      "id": "01010024",
+      "user": "窦志伟",
+      "password": "01010024"
+    },
+    "00606614": {
+      "id": "00606614",
+      "user": "冯天水",
+      "password": "00606614"
+    },
+    "01325299": {
+      "id": "01325299",
+      "user": "郭康",
+      "password": "01325299"
+    },
+    "02086035": {
+      "id": "02086035",
+      "user": "张运涛",
+      "password": "02086035"
     }
   }
 }

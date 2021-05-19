@@ -8,29 +8,30 @@ export default class Nav extends React.Component {
                 name: '下车操作统计',
                 path: '/',
                 icon: 'train'
-            }, {
-                name: '上车狂扫统计',
-                path: '/gitc',
-                icon: 'local_taxi'
+            }, 
+            // {
+            //     name: '上车狂扫统计',
+            //     path: '/gitc',
+            //     icon: 'local_taxi'
 
-            }, , {
-                name: '上车PDA统计',
-                path: '/gipda',
-                icon: 'dock'
+            // }, , {
+            //     name: '上车PDA统计',
+            //     path: '/gipda',
+            //     icon: 'dock'
 
-            }, {
-                name: '详单查询',
-                path: '/orders',
-                icon: 'drafts'
+            // }, {
+            //     name: '详单查询',
+            //     path: '/orders',
+            //     icon: 'drafts'
 
-            },
-             {
-                name: '环保袋使用率',
-                path: '/package',
-                icon: 'rotate_left'
+            // },
+            //  {
+            //     name: '环保袋使用率',
+            //     path: '/package',
+            //     icon: 'rotate_left'
 
-            }
-            ,
+            // }
+            // ,
              {
                 name: '吞吐地图',
                 path: '/maps',
@@ -38,18 +39,24 @@ export default class Nav extends React.Component {
 
             },
             {
-               name: '卸车口操作',
-               path: '/maps1',
-               icon: 'desktop_mac'
+                name: '员工操作量',
+                path: '/turnover',
+                icon: 'build'
 
-           }
-            ,
-             {
-                name: '重复操作',
-                path: '/repeated',
-                icon: 'error'
+            },
+        //     {
+        //        name: '卸车口操作',
+        //        path: '/maps1',
+        //        icon: 'desktop_mac'
 
-            }
+        //    }
+        //     ,
+        //      {
+        //         name: '重复操作',
+        //         path: '/repeated',
+        //         icon: 'error'
+
+        //     }
         ]
 
         }

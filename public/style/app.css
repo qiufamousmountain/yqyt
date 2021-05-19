@@ -268,6 +268,26 @@ p {
   background-color: #fff;
 }
 
+#main .main-box .views .echart-box.echart-box-turnover .mdc-data-table {
+  height: 100%;
+  width: 50%;
+}
+
+#main .main-box .views .echart-box.echart-box-turnover .mdc-data-table .table-container-topP {
+  height: 56px;
+}
+
+#main .main-box .views .echart-box.echart-box-turnover .mdc-button-export {
+  font-size: 16px;
+  color: #6200ee;
+  float: right;
+  cursor: pointer;
+}
+
+#main .main-box .views .echart-box.echart-box-turnover .mdc-button-export:hover {
+  color: #016886;
+}
+
 #main .main-box .views.data-screen {
   padding: 0;
   display: flex;
@@ -337,6 +357,14 @@ p {
   position: absolute;
   left: 105px;
   top: 0;
+}
+
+#main .main-box .filter-control .filter-item.filter-item-turnover .react-datepicker-wrapper {
+  width: 70%;
+}
+
+#main .main-box .filter-control .filter-item.filter-item-turnover .react-datepicker-wrapper .react-datepicker__input-container {
+  width: 100%;
 }
 
 .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle,

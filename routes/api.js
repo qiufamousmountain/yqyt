@@ -118,6 +118,11 @@ router.get('/orders/:ids', (req, res) => {
 });
 
 
+router.get('/stuffturnover', (req, res) => {
+    count.stuffturnover(req, res);
+});
+
+
 
 
 
