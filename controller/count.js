@@ -181,9 +181,10 @@ module.exports = {
         }
         // console.log(sql)
         let iData = connectionPromise(sql_m, sql);
-        // let oData = connectionPromise(sql_mc, sql);
-        Promise.all([iData]).then((result) => {
-            res.send({ code: 200, data: result[0] })
+        let oData = connectionPromise(sql_mc, sql);
+        Promise.all([iData, oData]).then((result) => {
+            let data = (result[0] || []).concat((result[1] || []))
+            res.send({ code: 200, data })
             iData = null;
             oData = null;
         }).catch((error) => {
