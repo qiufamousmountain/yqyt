@@ -222,6 +222,8 @@ const getTotal = () => {
 
   let promistList = totalList.map(m => connectionPromise(m))
   Promise.all(promistList).then((result) => {
+    console.log(result,'this err')
+
     let timeList = {}
     for (let i = 0; i < result.length; i++) {
       let tlist = result[i] || [];
