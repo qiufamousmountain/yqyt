@@ -242,6 +242,7 @@ const getTotal = () => {
       }
     }
 
+    console.log(timeList,'this err')
     client.hmset('todaymin10', timeList, (err) => {
       if (err) {
         console.log(err)
