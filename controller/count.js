@@ -14,7 +14,7 @@ const connectionPromise = (sql) => {
             if (err) {
                 // console.log('和mysql数据库建立连接失败' + sql)
                 console.log(err)
-                return resolve(null)
+                return resolve([])
             }
             // console.log('和mysql数据库连接成功');
             conn.query(sql, (err2, result) => {
@@ -22,8 +22,10 @@ const connectionPromise = (sql) => {
                 if (err2) {
                     console.log('查询数据库失败' + sql);
                     console.log(err2)
-                    return resolve(null)
+                    return resolve([])
                 }
+
+
                 return resolve(result)
             })
 
@@ -46,10 +48,10 @@ module.exports = {
         }
         let sql = ''
         for (let i = 0; i < 10; i++) {
-            sql = sql + 'select CREATE_USER_CODE as ucode,CREATE_USER_NAME as uname,OP_CODE as code,COUNT(*) as count from t_exp_waybill_check_' + i + '\n' +
+            sql = sql + 'select CREATE_USER_CODE as ucode,CREATE_USER_NAME as uname,opCode as code,COUNT(*) as count from t_exp_waybill_check_' + i + '\n' +
                 'where createDate> "' + btime + '" and createDate< "' + etime + '" \n' +
-                ' and OP_CODE in ("171","131","110","111" )' + '\n' +
-                'GROUP BY MODIFY_USER_CODE,CREATE_USER_NAME,OP_CODE' + '\n'
+                ' and opCode in ("171","131","110","111" )' + '\n' +
+                'GROUP BY MODIFY_USER_CODE,CREATE_USER_NAME,opCode' + '\n'
             if (i < 9) {
                 sql = sql +
                     'UNION ALL' + '\n'
@@ -100,7 +102,6 @@ module.exports = {
             return;
         }
 
-        let totalList = [];
         let ips = []
 
         let currentGroup = groups[group]
@@ -122,8 +123,8 @@ module.exports = {
 
         let sql = ''
         for (let i = 0; i < 10; i++) {
-            sql = sql + `select compIP,count(compIP) as num from ${m}
-            where compIP in ('${ips}') and (createDate>'${btime}' and createDate<'${etime}') and OP_CODE ='${type == 'gotc' ? 171 : 131}'
+            sql = sql + `select compIP,count(compIP) as num from t_exp_waybill_check_${i}
+            where compIP in ('${ips}') and (createDate>'${btime}' and createDate<'${etime}') and opCode ='${type == 'gotc' ? 171 : 131}'
             group by compIP` + '\n'
             if (i < 9) {
                 sql = sql +
@@ -131,8 +132,49 @@ module.exports = {
             }
         }
         // console.log(sql)
-        let iData = connectionPromise(sql);
-        res.send({ code: 200, iData })
+        let iData = await connectionPromise(sql);
+
+        let ipbox = {}
+        let data = []
+        for (let j = 0; j < iData.length; j++) {
+
+            let extT = iData[j];
+
+            for (let b in extT) {
+                if (extT.hasOwnProperty(b)) {
+                    if (!extT.compIP) continue;
+                    let t = extT.compIP;
+                    if (!ipbox[t]) {
+                        ipbox[t] = extT.num || 0
+                    }
+                    ipbox[t] = parseInt(ipbox[t]) + parseInt(extT.num)
+                }
+            }
+
+
+        }
+
+        for (let i in ipbox) {
+
+            if (ipbox.hasOwnProperty(i)) {
+                let gg = {
+                    ip: currentGroup[i],
+                    count: ipbox[i]
+                }
+                data.push(gg)
+
+            }
+
+        }
+
+        data = data.sort((a, b) => {
+            let lt = a.ip.match(/\d+/g)
+            let bg = b.ip.match(/\d+/g)
+
+            return lt[0] - bg[0]
+        })
+
+        res.send({ code: 200, data })
 
     },
 
@@ -171,7 +213,7 @@ module.exports = {
         let sql = ''
         for (let i = 0; i < 10; i++) {
             sql = sql + `select compIP,count(compIP) as num from t_exp_waybill_check_${i}
-            where compIP in ('${ips}') and (createDate>'${btime}' and createDate<'${etime}') and OP_CODE ='${type == 'gotc' ? 171 : 131}'
+            where compIP in ('${ips}') and (createDate>'${btime}' and createDate<'${etime}') and opCode ='${type == 'gotc' ? 171 : 131}'
             group by compIP` + '\n'
             if (i < 9) {
                 sql = sql +
@@ -179,9 +221,99 @@ module.exports = {
             }
         }
         // console.log(sql)
-        let iData = connectionPromise(sql);
-        res.send({ code: 200, iData })
+        let iData = await connectionPromise(sql);
 
+
+        let ipbox = {}
+
+        for (let j = 0; j < iData.length; j++) {
+
+            let extT = iData[j];
+
+            for (let b in extT) {
+                if (extT.hasOwnProperty(b)) {
+                    if (!extT.compIP) continue;
+                    let t = extT.compIP;
+                    if (!ipbox[t]) {
+                        ipbox[t] = extT.num || 0
+                    }
+                    ipbox[t] = parseInt(ipbox[t]) + parseInt(extT.num)
+                }
+            }
+
+
+        }
+
+        let data = []
+
+        // let timeList = {}
+        // for (let i = 0; i < iData.length; i++) {
+        //     let tlist = iData[i] || [];
+
+        //     for (let j = 0; j < tlist.length; j++) {
+        //         let ext = tlist[j];
+        //         console.log('ttttttttt',ext)
+
+        //         if (!ext || !ext.compIP) continue;
+        //         let t = ext.compIP;
+        //         if (!timeList[t]) {
+        //             timeList[t] = ext.num
+        //         }
+        //         timeList[t] = parseInt(timeList[t]) + parseInt(ext.num)
+        //     }
+        // }
+
+        // console.log(timeList, 'tttttttlist')
+        for (let j = 0; j < group.length; j++) {
+
+            let g = group[j];
+            let gg = {
+                group: g,
+                count: 0
+            }
+            if (!groups.hasOwnProperty(group[j])) {
+                data.push(gg)
+                continue
+            }
+            let ips = groups[g];
+            let gips = []
+            for (let i in ips) {
+                if (ips.hasOwnProperty(i)) {
+                    gips.push(i)
+                }
+            }
+
+            for (let i = 0; i < gips.length; i++) {
+                if (ipbox.hasOwnProperty(gips[i])) {
+
+                    gg['count'] = parseInt(gg['count']) + parseInt(ipbox[gips[i]])
+                }
+            }
+
+            data.push(gg)
+
+
+        }
+        // let arr = []
+        // for (let b in ipbox) {
+        //     if (ipbox.hasOwnProperty(b)) {
+        //         arr.push({
+        //             group: b,
+        //             count: ipbox[b]
+        //         })
+        //     }
+        // }
+
+
+
+        // let ipbox2 = {}
+
+
+        // console.log('sql+', sql, arr)
+        // res.send({ code: 200, data: arr })
+        res.send({ code: 200, data })
+        // promistList = null;
+        // totalList = null;
 
     },
 
