@@ -1,8 +1,8 @@
 const schedule = require('node-schedule');
 const client = require('./redis');
 const { pool } = require('../models/sql')
-const { gotc } = require('../config/groups.json')
-
+const { sql_m, sql_mc } = require('../config/config.json');
+const mysql = require('mysql');
 const Moment = require('moment')
 const { jg, chg } = require('../config/flow-net.json')
 const list = ['t_exp_waybill_check_0', 't_exp_waybill_check_1', 't_exp_waybill_check_2', 't_exp_waybill_check_3', 't_exp_waybill_check_4', 't_exp_waybill_check_5', 't_exp_waybill_check_6', 't_exp_waybill_check_7', 't_exp_waybill_check_8', 't_exp_waybill_check_9']
@@ -202,41 +202,62 @@ const connectionPromise = (sql) => {
 
 
 const getTotal = () => {
-
-  let totalList = []
   let time = new Date()
   let begin = Moment(time).startOf('day').format('yyyy-MM-DD HH:mm')
   let late = Moment(time).subtract(Moment(time).minute() % 10, "minutes").format('yyyy-MM-DD HH:mm')
   let count = Moment(late).diff(Moment(begin), 'minute')
   if (count < 0) return
-  totalList = list.map(m => {
-    return `select
-    DATE_FORMAT(concat( date( create_time ), ' ', HOUR ( create_time ), ':', floor( MINUTE ( create_time ) / 10 ) * 10 ),
-      '%Y-%m-%d %H:%i' ) AS t ,
-    sum(OP_CODE ='131') as u ,
-    sum(OP_CODE ='171') as d
-    from ${m}
-    where (create_time>'${begin}' and create_time<'${late}') and (OP_CODE ='131' or OP_CODE='171')
-    group by DATE_FORMAT( t, '%Y-%m-%d %H:%i' )  `
-  })
 
-  let promistList = totalList.map(m => connectionPromise(m))
-  Promise.all(promistList).then((result) => {
-    console.log(result,'this err')
+  let connectionPromise = (db, sql) => {
+    let connection = mysql.createConnection(db);
+    return new Promise(function (resolve, reject) {
+      connection.connect(function (err) {
+        if (err) {
+          console.log(err)
+          return resolve({ code: 500, msg: 'connect db error' })
+        }
+        console.log('连接到数据库' + db.host)
+      });
+      connection.query(sql, function (err, result) {
+        connection.end();
+        if (err) {
+          console.log('查询数据库失败' + sql);
+          console.log(err, '-------------------------')
+          return resolve({ code: 500, msg: 'select db error' })
+        }
+        return resolve(result)
+      });
+    })
+  }
+
+  let sql = ''
+  for (let i = 0; i < 10; i++) {
+    sql = sql + `select DATE_FORMAT(concat( date( create_time ), ' ', HOUR ( create_time ), ':', floor( MINUTE ( create_time ) / 10 ) * 10 ), '%Y-%m-%d %H:%i' ) AS t ,
+    sum(OP_CODE ='131') as u , sum(OP_CODE ='171') as d from t_exp_waybill_check_${i} 
+    where CREATE_TIME>'${begin}' and CREATE_TIME< '${late}' and OP_CODE in ('131','171')
+    group by DATE_FORMAT( t, '%Y-%m-%d %H:%i' )  \n`
+    if (i < 9) {
+      sql = sql + `UNION ALL\n`
+    }
+  }
+  // console.log(sql)DATE_FORMAT( t, '%Y-%m-%d %H:%i' )
+  let iData = connectionPromise(sql_m, sql);
+  let oData = connectionPromise(sql_mc, sql);
+  Promise.all([iData, oData]).then((result) => {
+    let data1 = (result[0] || []).concat((result[1] || []))
 
     let timeList = {}
-    for (let i = 0; i < result.length; i++) {
-      let tlist = result[i] || [];
-      for (let j = 0; j < tlist.length; j++) {
-        let ext = tlist[j];
-        if (!ext || !ext.t) continue;
-        let t = ext.t.split(' ')[1];
-        if (!timeList[t]) {
-          timeList[t] = [ext.d, ext.u]
-        }
-        timeList[t][0] = parseInt(timeList[t][0]) + parseInt(ext.d)
-        timeList[t][1] = parseInt(timeList[t][1]) + parseInt(ext.u)
+
+    for (let j = 0; j < data1.length; j++) {
+      let ext = data1[j];
+      if (!ext || !ext.t) continue;
+      let t = ext.t.split(' ')[1];
+      if (!timeList[t]) {
+        timeList[t] = [ext.d, ext.u]
       }
+      timeList[t][0] = parseInt(timeList[t][0]) + parseInt(ext.d)
+      timeList[t][1] = parseInt(timeList[t][1]) + parseInt(ext.u)
+
     }
     for (let t in timeList) {
       if (timeList.hasOwnProperty(t)) {
@@ -244,7 +265,7 @@ const getTotal = () => {
       }
     }
 
-    console.log(timeList,'this err')
+    console.log(timeList, 'this err')
     client.hmset('todaymin10', timeList, (err) => {
       if (err) {
         console.log(err)
@@ -259,40 +280,61 @@ const getTotal = () => {
 
 const getOutTotal = () => {
 
-  let totalList = []
   let time = new Date()
   let begin = Moment(time).startOf('day').format('yyyy-MM-DD HH:mm')
   let late = Moment(time).subtract(Moment(time).minute() % 30, "minutes").format('yyyy-MM-DD HH:mm')
   let count = Moment(late).diff(Moment(begin), 'minute')
   if (count < 0) return
-  totalList = list.map(m => {
-    return `select NEXT_ORG_CODE,count(NEXT_ORG_CODE) as n
-    from ${m}
-    where (create_time>'${begin}' and create_time<'${late}') and OP_CODE ='131'
-    group by NEXT_ORG_CODE`
-  })
 
-  let promistList = totalList.map(m => connectionPromise(m))
-  Promise.all(promistList).then((result) => {
+  let connectionPromise = (db, sql) => {
+    let connection = mysql.createConnection(db);
+    return new Promise(function (resolve, reject) {
+      connection.connect(function (err) {
+        if (err) {
+          console.log(err)
+          return resolve({ code: 500, msg: 'connect db error' })
+        }
+        console.log('连接到数据库' + db.host)
+      });
+      connection.query(sql, function (err, result) {
+        connection.end();
+        if (err) {
+          console.log('查询数据库失败' + sql);
+          console.log(err, '-------------------------')
+          return resolve({ code: 500, msg: 'select db error' })
+        }
+        return resolve(result)
+      });
+    })
+  }
+
+  let sql = ''
+  for (let i = 0; i < 10; i++) {
+    sql = sql + `select NEXT_ORG_CODE,count(NEXT_ORG_CODE) as n from t_exp_waybill_check_${i}
+    where (create_time>'${begin}' and create_time<'${late}') and OP_CODE ='131'
+    group by NEXT_ORG_CODE \n`
+    if (i < 9) {
+      sql = sql + `UNION ALL\n`
+    }
+  }
+  // console.log(sql)DATE_FORMAT( t, '%Y-%m-%d %H:%i' )
+  let iData = connectionPromise(sql_m, sql);
+  let oData = connectionPromise(sql_mc, sql);
+  Promise.all([iData, oData]).then((result) => {
+    let data1 = (result[0] || []).concat((result[1] || []))
 
     // console.log(result)
     let dataJson = {}
+    for (let j = 0; j < data1.length; j++) {
+      let ext = data1[j];
+      if (!ext || !ext.NEXT_ORG_CODE) continue;
 
-    for (let i = 0; i < result.length; i++) {
-      let tlist = result[i] || [];
-      for (let j = 0; j < tlist.length; j++) {
-        let ext = tlist[j];
-        if (!ext || !ext.NEXT_ORG_CODE) continue;
-
-        if (!dataJson[ext.NEXT_ORG_CODE]) {
-          dataJson[ext.NEXT_ORG_CODE] = ext.n
-        }
-        dataJson[ext.NEXT_ORG_CODE] = parseInt(dataJson[ext.NEXT_ORG_CODE]) + parseInt(ext.n)
+      if (!dataJson[ext.NEXT_ORG_CODE]) {
+        dataJson[ext.NEXT_ORG_CODE] = ext.n
       }
+      dataJson[ext.NEXT_ORG_CODE] = parseInt(dataJson[ext.NEXT_ORG_CODE]) + parseInt(ext.n)
     }
-
     let timeList = {}
-
     for (let c in chg) {
       if (chg.hasOwnProperty(c)) {
         let centers = chg[c];
@@ -332,61 +374,6 @@ const getOutTotal = () => {
   })
 }
 
-// const get10Min = () => {
-
-//   let totalList = []
-//   let time = new Date()
-//   let late = Moment(time).format('yyyy-MM-DD HH:mm')
-//   // console.log(late)
-//   let begin = Moment(time).subtract(Moment(time).minute() % 10 + 10, "minutes").format('yyyy-MM-DD HH:mm')
-//   totalList = list.map(m => {
-//     return `select
-//     DATE_FORMAT(concat( date( create_time ), ' ', HOUR ( create_time ), ':', floor( MINUTE ( create_time ) / 10 ) * 10 ),
-//       '%Y-%m-%d %H:%i' ) AS t ,
-//     sum(OP_CODE ='131') as u ,
-//     sum(OP_CODE ='171') as d
-//     from ${m}
-//     where (create_time>'${begin}' and create_time<'${late}') and (OP_CODE ='131' or OP_CODE='171')
-//     group by DATE_FORMAT( t, '%Y-%m-%d %H:%i' )  `
-//   })
-
-//   let promistList = totalList.map(m => connectionPromise(m))
-//   Promise.all(promistList).then((result) => {
-//     let timeList = {}
-
-//     for (let i = 0; i < result.length; i++) {
-//       let tlist = result[i] || [];
-//       for (let j = 0; j < tlist.length; j++) {
-//         let ext = tlist[j];
-//         if (!ext || !ext.t) continue;
-//         let t = ext.t.split(' ')[1];
-//         if (!timeList[t]) {
-//           timeList[t] = [ext.d, ext.u]
-//         }
-//         timeList[t][0] = parseInt(timeList[t][0]) + parseInt(ext.d)
-//         timeList[t][1] = parseInt(timeList[t][1]) + parseInt(ext.u)
-//       }
-//     }
-
-//     for (let t in timeList) {
-//       if (timeList.hasOwnProperty(t)) {
-//         timeList[t] = timeList[t].join('-')
-//       }
-//     }
-
-//     client.hmset('todaymin10', timeList, (err) => {
-//       if (err) {
-//         console.log(err)
-
-//       }
-//     })
-//   }).catch((error) => {
-//     console.log(error)
-
-//   })
-// }
-
-
 const clearCache = () => {
   client.del('todaymin10', (err, object) => {
     console.log('todaymin10 cache has already del at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
@@ -399,26 +386,26 @@ const scheduleCronstyle = () => {
   //运行即请求
   //轮子
 
-  clearCache()
-  getTotal()
-  getOutTotal()
+  // clearCache()
+  // getTotal()
+  // getOutTotal()
 
-  // client.hgetall('todaymin30', (err, reply) => {
-  //   if (err) {
-  //     console.log(err)
-  //     return
-  //   }
-  //   console.log(reply)
+  client.hgetall('todaymin30', (err, reply) => {
+    if (err) {
+      console.log(err)
+      return
+    }
+    console.log(reply)
 
-  // });
-  // client.hgetall('todaymin10', (err, reply) => {
-  //   if (err) {
-  //     console.log(err)
-  //     return
-  //   }
-  //   console.log(reply)
+  });
+  client.hgetall('todaymin10', (err, reply) => {
+    if (err) {
+      console.log(err)
+      return
+    }
+    console.log(reply)
 
-  // });
+  });
 
   //每10分钟定时执行一次:
   schedule.scheduleJob('*/10 * * * *', () => {
@@ -433,12 +420,6 @@ const scheduleCronstyle = () => {
     getOutTotal()
     console.log('getOutTotal at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
 
-  });
-
-  //每1小时定时执行一次:
-  schedule.scheduleJob('*/30 * * * *', () => {
-    getOutTotal()
-    console.log('getOutTotal at ' + Moment(new Date()).format('yyyy-MM-DD HH:mm'))
   });
 
   //每天00:00定时执行一次:

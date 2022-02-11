@@ -94,12 +94,12 @@ router.get('/countgroup', (req, res) => {
 
 
 //重复
-router.get('/repeat', (req, res) => {
-    count.repeated(req, res);
-});
-router.get('/repeateddetail', (req, res) => {
-    count.repeateddetail(req, res);
-});
+// router.get('/repeat', (req, res) => {
+//     count.repeated(req, res);
+// });
+// router.get('/repeateddetail', (req, res) => {
+//     count.repeateddetail(req, res);
+// });
 
 
 
@@ -110,12 +110,12 @@ router.get('/settings/:settings', (req, res) => {
 
 
 //环保袋使用量
-router.get('/count/package', (req, res) => {
-    count.countPackage(req, res);
-});
-router.get('/orders/:ids', (req, res) => {
-    count.orders(req, res);
-});
+// router.get('/count/package', (req, res) => {
+//     count.countPackage(req, res);
+// });
+// router.get('/orders/:ids', (req, res) => {
+//     count.orders(req, res);
+// });
 
 
 router.get('/stuffturnover', (req, res) => {

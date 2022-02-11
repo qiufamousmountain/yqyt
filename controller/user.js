@@ -18,11 +18,7 @@ module.exports = {
             });
             return
         }
-
-
-
         let user = users[id]
-
         if (!user) {
             res.json({
                 code: 500,
@@ -43,13 +39,9 @@ module.exports = {
             //     } else {
             //         if (reply) {
             //             let r = JSON.parse(reply);
-
             //         } else {
-
             //             let clientID = uuidv1();
-
             //             req.session.yto_u = { id, clientID, USER }
-
             //             client.set(redisKey, JSON.stringify({ id, clientID, USER }), (err, reply) => {
             //                 client.expire(redisKey, 300)
             //             });

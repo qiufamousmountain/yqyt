@@ -1,27 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import Main from './Main';
-
-
-
-
 // import Order from './Main/Orders';
 import Gitc from './Main/Gitc';
-// import GiPda from './Main/GiPda';
 // import Packages from './Main/Packages';
 import Maps from './Main/Maps';
-// import Maps2 from './Main/Maps2';
 // import Repeated from './Main/Repeated';
-
-
-
 import Top from './Top';
 import Nav from './Nav';
 import Snack from './component/Snack';
 import Loading from './component/Loading';
 import ErrorDialog from './component/ErrorDialog';
-
 import history from './util/history';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Turnover from './Main/Turnover';
@@ -43,11 +32,6 @@ class App extends React.Component {
                     path: '/gitc',
                     component: Gitc,
                 },
-
-                // {
-                //     path: '/gipda',
-                //     component: GiPda,
-                // },
                 // {
                 //     path: '/package',
                 //     component: Packages,
@@ -57,10 +41,6 @@ class App extends React.Component {
                     path: '/maps',
                     component: Maps,
                 },
-                // {
-                //     path: '/maps1',
-                //     component: Maps2,
-                // }
                 // ,
                 // {
                 //     path: '/repeated',
